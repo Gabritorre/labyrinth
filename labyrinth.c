@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 void title() {
@@ -12,8 +13,9 @@ void print_map() {
 
 	ptr = fopen("maps.txt", "r");
 	if (NULL == ptr) {
-		printf("dio scroto");
+		printf("Errore nell'apertura del file");
 	}
+
 	char map[10][19];
 	char character = fgetc(ptr);
 
@@ -37,8 +39,49 @@ void print_map() {
 			printf("%c", map[row][column]);
 		}
 	}
-
 }
+
+void hello() {
+	int row = 10;
+	int* p = (int*)calloc(row, sizeof(int));
+	for (int i = 0; i < row; i++) {
+		p[i] = i;
+	}
+
+	for (int i = 0; i < row + 1; i++) {
+		if(i == row) {
+			p = realloc(p, row+1*sizeof(int));
+			p[i] = i;
+		}
+		printf("%d\n", p[i]);
+	}
+}
+
+void matrix() {
+	int row = 10;
+	int column = 10;
+
+	int **p = (int**) calloc(row, sizeof(int*));
+	for (int i = 0; i < row; i++) {
+		p[i] = (int*) calloc(column, sizeof(int));
+	}
+
+	int counter = 1;
+	for (int i = 0; i < row; i++) {
+		for (int j = 0; j < column; j++) {
+			p[i][j] = counter;
+			counter++;
+			printf("%d:%d = %d\n",i, j, p[i][j]);
+			if (i == 7 && j == column - 1) {
+				p[i] = realloc(p[i], (column + 1) * sizeof(int));
+				p[i][column] = counter;
+				counter++;
+				printf("%d:%d = %d\n",i, column, p[i][column]);
+			}
+		}
+	}
+}
+
 
 int main() {
 
@@ -61,6 +104,8 @@ int main() {
 
 		else if (game_mode[0] == '2' && game_mode[1] == 0) {
 			printf("hai selezionato modalita' IA\n");
+			//hello();
+			matrix();
 		}
 
 		else if (game_mode[0] == '3' && game_mode[1] == 0) {
