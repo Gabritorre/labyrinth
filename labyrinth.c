@@ -18,14 +18,14 @@ bool list_maps(FILE *file) {
 	int map_counter = 1;
 	printf("MAPPE\n");
 
-	if(character != EOF){
+	if(character != EOF) {
 		printf("%d)\n", map_counter++);
 		int new_line_counter = 0;
-		while(character != EOF){
+		while(character != EOF) {
 			if(new_line_counter >= 2) {
 				printf("%d)\n", map_counter++);
 			}
-			if (character == '\n'){
+			if (character == '\n') {
 				new_line_counter++;
 			}
 			else {
@@ -38,7 +38,6 @@ bool list_maps(FILE *file) {
 		return true;
 	}
 	return false;
-
 }
 
 // questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente
@@ -63,7 +62,7 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 			map_start_char = i;
 		}
 
-		if (character == '\n'){
+		if (character == '\n') {
 			new_line_counter++;
 			if(saving) {
 				map_info->row++;
@@ -97,13 +96,12 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 
 void print_map(struct Map* map_info, char map[map_info->row][map_info->column]) {
 	printf("\nmappa:");
-	for (int row = 0; row < map_info->row; row++){
+	for (int row = 0; row < map_info->row; row++) {
 		printf("\n");
-		for (int column = 0; column < map_info->column; column++){
+		for (int column = 0; column < map_info->column; column++) {
 			printf("%c", map[row][column]);
 		}
 	}
-
 }
 
 void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info->row][map_info->column]) {
@@ -111,8 +109,8 @@ void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info-
 	char character = fgetc(file);
 
 	//salvo la mappa in una matrice
-	for (int row = 0; row < map_info->row; row++){
-		for (int column = 0; column < map_info->column; column++){
+	for (int row = 0; row < map_info->row; row++) {
+		for (int column = 0; column < map_info->column; column++) {
 			if (character == '\n'){
 				character = fgetc(file);
 			}
@@ -121,14 +119,13 @@ void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info-
 		}
 	}
 	print_map(map_info, map);
-
-	}
+}
 
 int main() {
 
 	bool play = true;
 	while(play) {
-		char game_mode[30];
+		char game_mode[50];
 		title();
 		printf("Scegli modalita' di gioco:\n");
 		printf("1: Modalita' interattiva\n");
@@ -140,7 +137,7 @@ int main() {
 		if (game_mode[0] == '1' && game_mode[1] == 0) {
 			printf("hai selezionato modalita' interattiva\n");
 			FILE *file;
-			file = fopen("maps.txt", "r");
+			file = fopen("hello.txt", "r");
 			if (NULL == file) {
 				printf("Errore nell'apertura del file");
 			}
