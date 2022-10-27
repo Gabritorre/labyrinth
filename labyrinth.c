@@ -13,10 +13,11 @@ void title() {
 	printf(" -------------------\n");
 }
 
-bool print_maps(FILE *file) {
+bool list_maps(FILE *file) {
 	char character = fgetc(file);
 	int map_counter = 1;
 	printf("MAPPE\n");
+
 	if(character != EOF){
 		printf("%d)\n", map_counter++);
 		int new_line_counter = 0;
@@ -42,8 +43,10 @@ bool print_maps(FILE *file) {
 
 // questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente
 int get_map_info(FILE *file, struct Map* map_info, int map_number) {
+	map_info->row = 1;
+	map_info->column = 1;
 	fseek(file, 0, SEEK_SET); //rileggo il file da capo
-	int map_start_char = -1;
+	int map_start_char = -1; //indice del caratte di partenza della matrice scelta dall'utente
 	char character = fgetc(file);
 	int map_counter = 1;
 	bool saving = false; // flag che: se vero allora stiamo leggendo la mappa scelta dall'utente
@@ -64,65 +67,62 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 			new_line_counter++;
 			if(saving) {
 				map_info->row++;
-
+				if (map_info->column < column_counter) { //bisogna prendere come colonna massima il punto più a destra della mappa (considerando delle sporgenze nel mezzo)
+					map_info->column = column_counter;
+				}
 			}
-			if (map_info->column < column_counter && saving) { //bisogna prendere come colonna massima il punto più a destra della mappa (considerando delle sporgenze nel mezzo)
-				map_info->column = column_counter;
+			if(new_line_counter >= 2) { // se si incontrano 2 '\n' di seguito allora si sta cambiando mappa
+				map_counter++;
+				if(saving) { // se si stava leggendo la mappa interessata allora la mappa è finita e si può terminare di leggere il file
+					searching = false;
+					map_info->row -= 2;	//rimuove le ultime due righe vuote dal conto
+					break;
+				}
+				if (map_counter == map_number) { // se stiamo leggendo la mappa scelta dall'utente attivo il flag
+					saving = true;
+				}
 			}
-			column_counter = 1;
+			column_counter = 0; //resetta il contatore delle colonne ad ogni a capo
 		}
 		else {
 			new_line_counter = 0;
 			column_counter++;
 		}
-		if(new_line_counter >= 2) { // se si incontrano 2 '\n' di seguito allora si sta cambiando mappa
-			map_counter++;
-			if(saving) { // se si stava leggendo la mappa interessata allora la mappa è finita e si può terminare di leggere il file
-				searching = false;
-				map_info->row-=2;	//rimuove le ultime due righe vuote dal conto
-				break;
-			}
-		}
-		if (map_counter == map_number) { // se stiamo leggendo la mappa scelta dall'utente attivo il flag
-			saving = true;
-		}
-
-		else {
-			saving = false;
-		}
-
 		character = fgetc(file);
 	}
+
 	printf("righe: %d colonne: %d\n", map_info->row, map_info->column);
 	return map_start_char;
 }
 
-void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info->row][map_info->column]) {
-
-	fseek(file, map_line, SEEK_SET); //rileggo il file dalla mappa scelta dall'utente
-	char character = fgetc(file);
-	printf("carattere: |%c|\n", character);
-
+void print_map(struct Map* map_info, char map[map_info->row][map_info->column]) {
+	printf("\nmappa:");
 	for (int row = 0; row < map_info->row; row++){
+		printf("\n");
 		for (int column = 0; column < map_info->column; column++){
-/*			if (character == '\n'){*/
-/*				character = fgetc(file);*/
-/*				break;*/
-/*			}*/
-			map[row][column] = character;
-			printf("%c", character);
-			character = fgetc(file);
+			printf("%c", map[row][column]);
 		}
 	}
 
-/*	printf("\n\nmappa:\n\n");*/
-/*	for (int row = 0; row<map_info->row; row++){*/
-/*		printf("\n");*/
-/*		for (int column = 0; column<map_info->column; column++){*/
-/*			printf("%c", map[row][column]);*/
-/*		}*/
-/*	}*/
 }
+
+void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info->row][map_info->column]) {
+	fseek(file, map_line, SEEK_SET); //rileggo il file dalla mappa scelta dall'utente
+	char character = fgetc(file);
+
+	//salvo la mappa in una matrice
+	for (int row = 0; row < map_info->row; row++){
+		for (int column = 0; column < map_info->column; column++){
+			if (character == '\n'){
+				character = fgetc(file);
+			}
+			map[row][column] = character;
+			character = fgetc(file);
+		}
+	}
+	print_map(map_info, map);
+
+	}
 
 int main() {
 
@@ -144,13 +144,12 @@ int main() {
 			if (NULL == file) {
 				printf("Errore nell'apertura del file");
 			}
-			if(print_maps(file)) {
+			if(list_maps(file)) {
 				printf("scegli la mappa con il numero corrispondente: ");
 				int map_number = 0;
 				scanf("%d", &map_number);
 				struct Map map_info;
-				map_info.row = 1;
-				map_info.column = 1;
+
 				int map_line = get_map_info(file, &map_info, map_number);
 				char map[map_info.row][map_info.column];
 				save_map(file, &map_info, map_line, map);
