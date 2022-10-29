@@ -1,17 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-struct Map{
-	int row;
-	int column;
-};
-
-void title() {
-	printf(" -------------------\n");
-	printf("|  SNAKE LABYRINTH  |\n");
-	printf(" -------------------\n");
-}
+#include "lib/game_info.h"
+#include "lib/game_mode/interactive.h"
 
 bool list_maps(FILE *file) {
 	char character = fgetc(file);
@@ -94,16 +85,6 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 	return map_start_char;
 }
 
-void print_map(struct Map* map_info, char map[map_info->row][map_info->column]) {
-	printf("\nmappa:");
-	for (int row = 0; row < map_info->row; row++) {
-		printf("\n");
-		for (int column = 0; column < map_info->column; column++) {
-			printf("%c", map[row][column]);
-		}
-	}
-}
-
 void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info->row][map_info->column]) {
 	fseek(file, map_line, SEEK_SET); //rileggo il file dalla mappa scelta dall'utente
 	char character = fgetc(file);
@@ -118,11 +99,9 @@ void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info-
 			character = fgetc(file);
 		}
 	}
-	print_map(map_info, map);
 }
 
 int main() {
-
 	bool play = true;
 	while(play) {
 		char game_mode[50];
@@ -130,17 +109,20 @@ int main() {
 		printf("Scegli modalita' di gioco:\n");
 		printf("1: Modalita' interattiva\n");
 		printf("2: Modalita' IA\n");
-		printf("3: Esci\n");
+		printf("3: Info sul gioco\n");
+		printf("4: Esci\n");
 		printf("Premi il numero corrispondente: ");
 		scanf(" %s", game_mode);
 
 		if (game_mode[0] == '1' && game_mode[1] == 0) {
 			printf("hai selezionato modalita' interattiva\n");
 			FILE *file;
-			file = fopen("hello.txt", "r");
+			file = fopen("maps.txt", "r");
 			if (NULL == file) {
-				printf("Errore nell'apertura del file");
+				printf("\n\tErrore nell'apertura del file\n");
+				exit(1);
 			}
+
 			if(list_maps(file)) {
 				printf("scegli la mappa con il numero corrispondente: ");
 				int map_number = 0;
@@ -150,6 +132,7 @@ int main() {
 				int map_line = get_map_info(file, &map_info, map_number);
 				char map[map_info.row][map_info.column];
 				save_map(file, &map_info, map_line, map);
+				start_interactive_mode(&map_info, map);
 			}
 			else {
 				printf("Nessuna mappa trovata");
@@ -164,6 +147,10 @@ int main() {
 		}
 
 		else if (game_mode[0] == '3' && game_mode[1] == 0) {
+			print_game_info();
+		}
+
+		else if (game_mode[0] == '4' && game_mode[1] == 0) {
 			printf("Ciao ciao!\n");
 			play = false;
 		}
