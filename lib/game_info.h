@@ -7,6 +7,12 @@ char QUIT = 'Z';
 struct Map {
 	int row;
 	int column;
+
+	int player_row;
+	int player_column;
+
+	int exit_row;
+	int exit_column;
 };
 
 void title() {

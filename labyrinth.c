@@ -75,14 +75,26 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 			}
 			column_counter = 0; //resetta il contatore delle colonne ad ogni a capo
 		}
+
 		else {
+			if (character == 'o') { // salvo le coordinate del giocatore
+				map_info->player_row = map_info->row-1; // map_info->row è un contatore di righe, ma dato che ho bisogno della posizione esatta (partendo da 0) sottraggo 1
+				map_info->player_column = column_counter;
+			}
+			if (character == '_') {
+				map_info->exit_row = map_info->row-1; // map_info->row è un contatore di righe, ma dato che ho bisogno della posizione esatta (partendo da 0) sottraggo 1
+				map_info->exit_column = column_counter;
+			}
 			new_line_counter = 0;
 			column_counter++;
 		}
 		character = fgetc(file);
 	}
 
-	printf("righe: %d colonne: %d\n", map_info->row, map_info->column);
+	printf("mappa: righe: %d colonne: %d\n", map_info->row, map_info->column);
+	printf("pos. player: righa: %d colonna: %d\n", map_info->player_row, map_info->player_column);
+	printf("pos. uscita: righa: %d colonna: %d\n", map_info->exit_row, map_info->exit_column);
+
 	return map_start_char;
 }
 

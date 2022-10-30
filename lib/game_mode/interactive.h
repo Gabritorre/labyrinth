@@ -25,6 +25,10 @@ int command_interpreter (char *command, char *moves, int *moves_index) {
 	return 0;
 }
 
+void run_moves(struct Map* map_info, char map[map_info->row][map_info->column], char *moves, int *moves_index) {
+	printf("\nHello\n");
+}
+
 void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_info->column]) {
 	bool playing = true;
 	int moves_index;
@@ -46,11 +50,12 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			printf("La sequenza inserita contiene valori non corretti, riprova");
 		}
 		else{
-			printf("numero di mosse: %d\n", moves_index);
-			printf("MOSSE: ");
-			for (int i = 0; i < moves_index; i++) {
-				printf("%c ", moves[i]);
-			}
+/*			printf("numero di mosse: %d\n", moves_index);*/
+/*			printf("MOSSE: ");*/
+/*			for (int i = 0; i < moves_index; i++) {*/
+/*				printf("%c ", moves[i]);*/
+/*			}*/
+			run_moves(map_info, map, moves, &moves_index);
 		}
 		free(moves);
 	}
