@@ -1,8 +1,8 @@
-char NORD = 'N';
-char SUD = 'S';
-char EST = 'E';
-char OVEST = 'O';
-char QUIT = 'Z';
+#define NORD 'N'
+#define  SUD 'S'
+#define EST 'E'
+#define OVEST 'O'
+#define QUIT 'Z'
 
 struct Map {
 	int row;

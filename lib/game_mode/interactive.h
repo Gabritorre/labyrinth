@@ -25,8 +25,66 @@ int command_interpreter (char *command, char *moves, int *moves_index) {
 	return 0;
 }
 
-void run_moves(struct Map* map_info, char map[map_info->row][map_info->column], char *moves, int *moves_index) {
-	printf("\nHello\n");
+int run_moves(struct Map* map_info, char map[map_info->row][map_info->column], char *moves, int *moves_index) {
+	bool win = false;
+	for (int i = 0; i < *moves_index; i++) {
+		switch (moves[i]) {
+			case NORD:
+				if(map_info->player_row - 1 >= 0){
+					if(map[(map_info->player_row - 1)][map_info->player_column] != '#') {
+						if (map[map_info->player_row - 1][map_info->player_column] == '_') {
+							win = true;
+						}
+						map[map_info->player_row][map_info->player_column] = ' ';
+						map_info->player_row -= 1;
+						map[map_info->player_row][map_info->player_column] = 'o';
+					}
+				}
+				break;
+			case EST:
+				if(map_info->player_column + 1 < map_info->column){
+					if(map[map_info->player_row][map_info->player_column + 1] != '#') {
+						if (map[map_info->player_row][map_info->player_column + 1] == '_') {
+							win = true;
+						}
+						map[map_info->player_row][map_info->player_column] = ' ';
+						map_info->player_column += 1;
+						map[map_info->player_row][map_info->player_column] = 'o';
+					}
+				}
+				break;
+			case SUD:
+				if(map_info->player_row + 1 < map_info->row){
+					if(map[map_info->player_row + 1][map_info->player_column] != '#') {
+						if (map[map_info->player_row + 1][map_info->player_column] == '_') {
+							win = true;
+						}
+						map[map_info->player_row][map_info->player_column] = ' ';
+						map_info->player_row += 1;
+						map[map_info->player_row][map_info->player_column] = 'o';
+					}
+				}
+				break;
+			case OVEST:
+				if(map_info->player_column - 1 >= 0){
+					if(map[map_info->player_row][map_info->player_column - 1] != '#') {
+						if (map[map_info->player_row][map_info->player_column - 1] == '_') {
+							win = true;
+						}
+						map[map_info->player_row][map_info->player_column] = ' ';
+						map_info->player_column -= 1;
+						map[map_info->player_row][map_info->player_column] = 'o';
+					}
+				}
+				break;
+			default:
+				break;
+		}
+		if (win) {
+			return 1;
+		}
+	}
+	return 0;
 }
 
 void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_info->column]) {
@@ -55,7 +113,10 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 /*			for (int i = 0; i < moves_index; i++) {*/
 /*				printf("%c ", moves[i]);*/
 /*			}*/
-			run_moves(map_info, map, moves, &moves_index);
+			if(run_moves(map_info, map, moves, &moves_index)) {
+				printf("\n\tHAI RAGGIUNTO L'USCITA!\n");
+				playing = false;
+			}
 		}
 		free(moves);
 	}
