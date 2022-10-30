@@ -1,3 +1,9 @@
+char NORD = 'N';
+char SUD = 'S';
+char EST = 'E';
+char OVEST = 'O';
+char QUIT = 'Z';
+
 struct Map {
 	int row;
 	int column;

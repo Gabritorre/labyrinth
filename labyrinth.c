@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include "lib/game_info.h"
 #include "lib/game_mode/interactive.h"
 
