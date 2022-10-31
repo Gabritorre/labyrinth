@@ -11,11 +11,11 @@ char list_maps(FILE *file) {
 	printf("MAPPE:\n");
 
 	if(character != EOF) {
-		printf("%d)\n", map_counter++);
+		printf("%d)\n", ++map_counter);
 		int new_line_counter = 0;
 		while(character != EOF) {
 			if(new_line_counter >= 2) {
-				printf("%d)\n", map_counter++);
+				printf("%d)\n", ++map_counter);
 			}
 			if (character == '\n') {
 				new_line_counter++;
@@ -36,6 +36,10 @@ char list_maps(FILE *file) {
 int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 	map_info->row = 1;
 	map_info->column = 1;
+	map_info->player_row = -1;
+	map_info->player_column = -1;
+	map_info->exit_row = -1;
+	map_info->exit_column = -1;
 	fseek(file, 0, SEEK_SET); //rileggo il file da capo
 	int map_start_char = -1; //indice del caratte di partenza della matrice scelta dall'utente
 	char character = fgetc(file);
@@ -77,11 +81,11 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 		}
 
 		else {
-			if (character == 'o') { // salvo le coordinate del giocatore
+			if (character == 'o' && saving) { // salvo le coordinate del giocatore
 				map_info->player_row = map_info->row-1; // map_info->row è un contatore di righe, ma dato che ho bisogno della posizione esatta (partendo da 0) sottraggo 1
 				map_info->player_column = column_counter;
 			}
-			if (character == '_') {
+			if (character == '_' && saving) {
 				map_info->exit_row = map_info->row-1; // map_info->row è un contatore di righe, ma dato che ho bisogno della posizione esatta (partendo da 0) sottraggo 1
 				map_info->exit_column = column_counter;
 			}
@@ -112,6 +116,22 @@ void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info-
 			character = fgetc(file);
 		}
 	}
+}
+
+int check_map_proprieties(struct Map *map_info) {
+	if (map_info->row <= 2 && map_info->column <= 2){
+		printf("\tDimensioni della mappa non sufficienti\n");
+		return 1;
+	}
+	if (map_info->player_row == -1 || map_info->player_column == -1) {
+		printf("\tGiocatore non trovato nella mappa\n");
+		return 1;
+	}
+	if (map_info->exit_row == -1 || map_info->exit_column == -1) {
+		printf("\tUscita non trovata nella mappa\n");
+		return 1;
+	}
+	return 0;
 }
 
 int main() {
@@ -162,6 +182,9 @@ int main() {
 				struct Map map_info;
 
 				int map_line = get_map_info(file, &map_info, user_map_number);
+				if (check_map_proprieties(&map_info)) {
+					continue;
+				}
 				char map[map_info.row][map_info.column];
 				save_map(file, &map_info, map_line, map);
 				start_interactive_mode(&map_info, map);
