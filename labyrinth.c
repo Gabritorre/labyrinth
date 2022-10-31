@@ -5,10 +5,10 @@
 #include "lib/game_info.h"
 #include "lib/game_mode/interactive.h"
 
-bool list_maps(FILE *file) {
+char list_maps(FILE *file) {
 	char character = fgetc(file);
-	int map_counter = 1;
-	printf("MAPPE\n");
+	int map_counter = 0;
+	printf("MAPPE:\n");
 
 	if(character != EOF) {
 		printf("%d)\n", map_counter++);
@@ -27,9 +27,9 @@ bool list_maps(FILE *file) {
 			printf("%c", character);
 			character = fgetc(file);
 		}
-		return true;
+		return map_counter;
 	}
-	return false;
+	return 0;
 }
 
 // questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente
@@ -135,14 +135,33 @@ int main() {
 				printf("\n\tErrore nell'apertura del file\n");
 				exit(1);
 			}
+			int map_quantity = list_maps(file);
+			int user_map_number;
+			printf("sono presenti %d mappe\n", map_quantity);
 
-			if(list_maps(file)) {
-				printf("scegli la mappa con il numero corrispondente: ");
-				int map_number = 0;
-				scanf("%d", &map_number);
+			if(map_quantity) {
+				bool choose_map = true;
+				short counter_error = 0; // in caso di input errato il programma resetta per evitare cicli infiniti
+				while(choose_map && counter_error != 10) {
+					printf("scegli la mappa con il numero corrispondente: ");
+					scanf(" %d", &user_map_number);
+					if (user_map_number > 0 && user_map_number <= map_quantity) {
+						choose_map = false;
+					}
+					else {
+						printf("valore inserito non valido. Riprova...\n");
+						counter_error++;
+					}
+				}
+				if (counter_error == 10) {
+					printf("Troppi valori errati inseriti\n");
+					getchar(); // pulisce l'input buffer
+					continue;
+				}
+
 				struct Map map_info;
 
-				int map_line = get_map_info(file, &map_info, map_number);
+				int map_line = get_map_info(file, &map_info, user_map_number);
 				char map[map_info.row][map_info.column];
 				save_map(file, &map_info, map_line, map);
 				start_interactive_mode(&map_info, map);
