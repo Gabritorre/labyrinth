@@ -14,7 +14,7 @@ char list_maps(FILE *file) {
 		printf("%d)\n", ++map_counter);
 		int new_line_counter = 0;
 		while(character != EOF) {
-			if(new_line_counter >= 2) {
+			if(new_line_counter >= 2 && character != '\n') {
 				printf("%d)\n", ++map_counter);
 			}
 			if (character == '\n') {
@@ -105,21 +105,30 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info->row][map_info->column]) {
 	fseek(file, map_line, SEEK_SET); //rileggo il file dalla mappa scelta dall'utente
 	char character = fgetc(file);
+	bool fill_columns = false;
 
 	//salvo la mappa in una matrice
 	for (int row = 0; row < map_info->row; row++) {
 		for (int column = 0; column < map_info->column; column++) {
-			if (character == '\n'){
+			if (!fill_columns){ // finchè si stanno riempiendo le colonne rimanenti non si va avanti a leggere la mappa
+				map[row][column] = character;
 				character = fgetc(file);
 			}
-			map[row][column] = character;
-			character = fgetc(file);
+			if (character == '\n'){
+				if(column+1 < map_info->column) { // nel caso in cui ci sia un a copo però non sono stato riempite tutte le colonne allora prima di continuare a leggere la mappa si riempiono di spazi le colonne rimanenti
+					map[row][column+1] = ' ';
+					fill_columns = true;
+					continue;
+				}
+				fill_columns = false;
+				character = fgetc(file);
+			}
 		}
 	}
 }
 
 int check_map_proprieties(struct Map *map_info) {
-	if (map_info->row <= 2 && map_info->column <= 2){
+	if (map_info->row <= 2 || map_info->column <= 2){
 		printf("\tDimensioni della mappa non sufficienti\n");
 		return 1;
 	}
@@ -157,7 +166,6 @@ int main() {
 			}
 			int map_quantity = list_maps(file);
 			int user_map_number;
-			printf("sono presenti %d mappe\n", map_quantity);
 
 			if(map_quantity) {
 				bool choose_map = true;
@@ -182,7 +190,7 @@ int main() {
 				struct Map map_info;
 
 				int map_line = get_map_info(file, &map_info, user_map_number);
-				if (check_map_proprieties(&map_info)) {
+				if (check_map_proprieties(&map_info)) { // ripeti se la mappa scelta non soddisfa i requisiti necessari
 					continue;
 				}
 				char map[map_info.row][map_info.column];
