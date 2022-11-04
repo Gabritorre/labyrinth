@@ -17,54 +17,102 @@ int command_interpreter (char command, char *moves) {
 	return 0;
 }
 
-int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *moves) {
+int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *moves, int *points) {
 	bool win = false;
 	switch (*moves) {
 		case NORD:
 			if(map_info->player_row - 1 >= 0){
-				if(map[(map_info->player_row - 1)][map_info->player_column] != '#') {
-					if (map[map_info->player_row - 1][map_info->player_column] == '_') {
+				if(map[map_info->player_row - 1][map_info->player_column] != WALL) {
+					if (map[map_info->player_row - 1][map_info->player_column] == EXIT) {
 						win = true;
 					}
-					map[map_info->player_row][map_info->player_column] = ' ';
+					if (map[map_info->player_row - 1][map_info->player_column] == BONUS_POINTS) {
+						*points += 4;
+					}
+					if (map[map_info->player_row - 1][map_info->player_column] == HALF_POINTS) {
+						if (*points < 0) {
+							*points = *points * 2;
+						}
+						else {
+							*points = (int) *points/2;
+						}
+					}
+					*points -= 1;
+					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row -= 1;
-					map[map_info->player_row][map_info->player_column] = 'o';
+					map[map_info->player_row][map_info->player_column] = PLAYER;
 				}
 			}
 			break;
 		case EST:
 			if(map_info->player_column + 1 < map_info->column){
-				if(map[map_info->player_row][map_info->player_column + 1] != '#') {
-					if (map[map_info->player_row][map_info->player_column + 1] == '_') {
+				if(map[map_info->player_row][map_info->player_column + 1] != WALL) {
+					if (map[map_info->player_row][map_info->player_column + 1] == EXIT) {
 						win = true;
 					}
-					map[map_info->player_row][map_info->player_column] = ' ';
+					if (map[map_info->player_row][map_info->player_column + 1] == BONUS_POINTS) {
+						*points += 4;
+					}
+					if (map[map_info->player_row][map_info->player_column + 1] == HALF_POINTS) {
+						if (*points < 0) {
+							*points = *points * 2;
+						}
+						else {
+							*points = (int) *points/2;
+						}
+					}
+					*points -= 1;
+					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column += 1;
-					map[map_info->player_row][map_info->player_column] = 'o';
+					map[map_info->player_row][map_info->player_column] = PLAYER;
 				}
 			}
 			break;
 		case SUD:
 			if(map_info->player_row + 1 < map_info->row){
-				if(map[map_info->player_row + 1][map_info->player_column] != '#') {
-					if (map[map_info->player_row + 1][map_info->player_column] == '_') {
+				if(map[map_info->player_row + 1][map_info->player_column] != WALL) {
+					if (map[map_info->player_row + 1][map_info->player_column] == EXIT) {
 						win = true;
 					}
-					map[map_info->player_row][map_info->player_column] = ' ';
+					if (map[map_info->player_row + 1][map_info->player_column] == BONUS_POINTS) {
+						*points += 4;
+					}
+					if (map[map_info->player_row + 1][map_info->player_column] == HALF_POINTS) {
+						if (*points < 0) {
+							*points = *points * 2;
+						}
+						else {
+							*points = (int) *points/2;
+						}
+					}
+					*points -= 1;
+					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row += 1;
-					map[map_info->player_row][map_info->player_column] = 'o';
+					map[map_info->player_row][map_info->player_column] = PLAYER;
 				}
 			}
 			break;
 		case OVEST:
 			if(map_info->player_column - 1 >= 0){
-				if(map[map_info->player_row][map_info->player_column - 1] != '#') {
-					if (map[map_info->player_row][map_info->player_column - 1] == '_') {
+				if(map[map_info->player_row][map_info->player_column - 1] != WALL) {
+					if (map[map_info->player_row][map_info->player_column - 1] == EXIT) {
 						win = true;
 					}
-					map[map_info->player_row][map_info->player_column] = ' ';
+					if (map[map_info->player_row][map_info->player_column - 1] == BONUS_POINTS) {
+						*points += 4;
+					}
+					if (map[map_info->player_row][map_info->player_column - 1] == HALF_POINTS) {
+						if (*points < 0) {
+							*points = *points * 2;
+						}
+						else {
+							*points = (int) *points/2;
+						}
+					}
+					*points -= 1;
+					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column -= 1;
-					map[map_info->player_row][map_info->player_column] = 'o';
+					map[map_info->player_row][map_info->player_column] = PLAYER;
 				}
 			}
 			break;
@@ -79,14 +127,14 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 
 void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_info->column]) {
 	bool playing = true;
-	int moves_index;
-
+	int points = 0;
 	while(playing) {
 		printf("\n\n---------------\n\n");
 		print_map(map_info, map);
+		printf("\nPUNTEGGIO: %d\n", points);
 		char *move = (char*) calloc(1, sizeof(char));
 		char command;
-		printf("\ninserisci mossa: ");
+		printf("Inserisci mossa: ");
 		scanf(" %c", &command);
 		int ci_result = command_interpreter(command, move);
 		if(ci_result == 1) {
@@ -97,8 +145,8 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			printf("La sequenza inserita contiene valori non corretti, riprova");
 		}
 		else{
-			if(run_move(map_info, map, move)) {
-				printf("\n\tHAI RAGGIUNTO L'USCITA!\n");
+			if(run_move(map_info, map, move, &points)) {
+				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
 				playing = false;
 			}
 		}

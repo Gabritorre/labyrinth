@@ -1,8 +1,18 @@
+//commands
 #define NORD 'N'
 #define  SUD 'S'
 #define EST 'E'
 #define OVEST 'O'
 #define QUIT 'Z'
+
+// map items
+#define WALL '#'
+#define STEP '.'
+#define BONUS_POINTS '$'
+#define HALF_POINTS '!'
+#define PLAYER 'o'
+#define EXIT '_'
+
 
 struct Map {
 	int row;
