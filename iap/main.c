@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <string.h>
 #include "lib/game_info.h"
 #include "lib/game_mode/interactive.h"
 
@@ -144,8 +145,34 @@ int check_map_proprieties(struct Map *map_info) {
 	return 0;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
 	bool play = true;
+	printf("%d%s\n", argc, argv[1]);
+	if (argc > 1 && strcmp(argv[1], "--challenge") == 0) {
+		struct Map map_info;
+		printf("Sei entrato in challenge mode\n");
+		printf("inserisci il numero di colonne: ");
+		scanf(" %d", &map_info.column);
+
+		printf("inserisci il numero di righe: ");
+		scanf(" %d", &map_info.row);
+
+		char map[map_info.row][map_info.column];
+
+		for (int i = 0; i < map_info.row; i++) {
+			char line[map_info.column];
+			scanf(" %[^\n]%*c", line); //leggi l'input finche non trovi \n e quando viene trovata non viene salvata
+			for (int j = 0; j < map_info.column; j++) {
+				map[i][j] = line[j];
+			}
+		}
+
+		printf("\nmappa:\n");
+		print_map(&map_info, map);
+		printf("\n");
+
+		play = false;
+	}
 	while(play) {
 		char game_mode[50];
 		title();
