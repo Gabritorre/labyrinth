@@ -27,7 +27,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 						win = true;
 					}
 					if (map[map_info->player_row - 1][map_info->player_column] == BONUS_POINTS) {
-						*points += 4;
+						*points += QUANTITY_BONUS;
 					}
 					if (map[map_info->player_row - 1][map_info->player_column] == HALF_POINTS) {
 						if (*points < 0) {
@@ -51,7 +51,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 						win = true;
 					}
 					if (map[map_info->player_row][map_info->player_column + 1] == BONUS_POINTS) {
-						*points += 4;
+						*points += QUANTITY_BONUS;
 					}
 					if (map[map_info->player_row][map_info->player_column + 1] == HALF_POINTS) {
 						if (*points < 0) {
@@ -75,7 +75,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 						win = true;
 					}
 					if (map[map_info->player_row + 1][map_info->player_column] == BONUS_POINTS) {
-						*points += 4;
+						*points += QUANTITY_BONUS;
 					}
 					if (map[map_info->player_row + 1][map_info->player_column] == HALF_POINTS) {
 						if (*points < 0) {
@@ -99,7 +99,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 						win = true;
 					}
 					if (map[map_info->player_row][map_info->player_column - 1] == BONUS_POINTS) {
-						*points += 4;
+						*points += QUANTITY_BONUS;
 					}
 					if (map[map_info->player_row][map_info->player_column - 1] == HALF_POINTS) {
 						if (*points < 0) {
@@ -127,7 +127,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 
 void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_info->column]) {
 	bool playing = true;
-	int points = 0;
+	int points = 1000;
 	while(playing) {
 		printf("\n\n---------------\n\n");
 		print_map(map_info, map);
@@ -146,6 +146,7 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 		}
 		else{
 			if(run_move(map_info, map, move, &points)) {
+				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
 				playing = false;
 			}
