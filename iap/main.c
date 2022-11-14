@@ -177,12 +177,16 @@ int main(int argc, char *argv[]) {
 		print_map(&map_info, map);
 		printf("\n");
 
-		int points1 = 0, points2 = 0;
-		points1 = no_wall_algorithm(&map_info, map, "points");
-		points2 = no_wall_coin_algorithm(&map_info, map, "points");
+		int points[3] = {1000, 1000, 1000};
+		char *sequence = no_wall_algorithm(&map_info, map, &points[0]);
+/*		no_wall_coin_algorithm(&map_info, map, &points[1]);*/
+/*		random_algorithm(&map_info, map, &points[2]);*/
 
-		printf("\npunteggio nwa: %d\n", points1);
-/*		printf("punteggio nwca: %d\n", points2);*/
+		printf("\npunteggio nwa: %d\n", points[0]);
+		printf("lunghezza: %ld\n", strlen(sequence));
+		printf("%s", sequence);
+/*		printf("punteggio nwca: %d\n", points[1]);*/
+/*		printf("punteggio ra: %d\n", points[2]);*/
 		play = false;
 	}
 	while(play) {

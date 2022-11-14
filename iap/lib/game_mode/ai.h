@@ -1,45 +1,44 @@
-void horizontal_move(struct Map* map_info, char *move, int *points, char map[map_info->row][map_info->column]) {
+void horizontal_move(struct Map* map_info, char *move, int *points, char *all_steps, char map[map_info->row][map_info->column]) {
 	if (map_info->exit_column > map_info->player_column) {
-		*move = 'E';
+		*move = EST;
 	}
 	else if (map_info->exit_column < map_info->player_column){
-		*move = 'O';
+		*move = OVEST;
 	}
 	else {
 		if(map_info->exit_column - 1 >= 0) {
-			*move = 'O';
+			*move = OVEST;
 		}
 		else {
-			*move = 'E';
+			*move = EST;
 		}
 	}
-	run_move(map_info, map, move, points, true);
+	run_move(map_info, map, move, points, all_steps, true);
 }
 
-void vertical_move(struct Map* map_info, char *move, int *points, char map[map_info->row][map_info->column]) {
+void vertical_move(struct Map* map_info, char *move, int *points, char *all_steps, char map[map_info->row][map_info->column]) {
 	if (map_info->exit_row > map_info->player_row) {
-		*move = 'S';
+		*move = SUD;
 	}
 	else if (map_info->exit_row < map_info->player_row) {
-		*move = 'N';
+		*move = NORD;
 	}
 	else {
 		if(map_info->exit_row - 1 >= 0){
-			*move = 'N';
+			*move = NORD;
 		}
 		else {
-			*move = 'S';
+			*move = SUD;
 		}
 	}
-	run_move(map_info, map, move, points, true);
+	run_move(map_info, map, move, points, all_steps, true);
 }
-
 
 /*Questo metodo funziona quando non sono presenti muri interni nella mappa.
  * Quello che fa è allineare la posizione del personaggio con l'uscita per poi procedere dritto verso l'uscita*/
-int no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->column], char* return_type) {
+char* no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->column], int *points) {
 
-	int points = 1000;
+	char *all_steps = (char *)malloc(sizeof(char) * (map_info->row + map_info->column));
 	char move;
 	char exit_direction = 'h'; // serve a capire da quale direzione (verticale od orizzontale) si può accedere all'uscita
 	char left_exit = '?', right_exit = '?';
@@ -54,7 +53,6 @@ int no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->co
 		exit_direction = 'v';
 		printf("sinistra:%c destra:%c", left_exit, right_exit);
 	}
-	printf("\n%c\n", exit_direction);
 	int counter = 0;
 	while (map_info->player_row != map_info->exit_row && map_info->player_column != map_info->exit_column || counter < 1) {
 		counter++;
@@ -62,17 +60,17 @@ int no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->co
 			if (map_info->exit_row > map_info->player_row) {
 				//mi sposto giù
 				move = 'S';
-				if(!run_move(map_info, map, &move, &points, true)) {
+				if(!run_move(map_info, map, &move, points, all_steps, true)) {
 					//se non è possibile controllo se l'uscita è più a destra o più a sinistra e mi sposto più vicino con la colonna
-					horizontal_move(map_info, &move, &points, map);
+					horizontal_move(map_info, &move, points, all_steps, map);
 				}
 			}
 			else {
 				//mi sposto sù
 				move = 'N';
-				if(!run_move(map_info, map, &move, &points, true)) {
+				if(!run_move(map_info, map, &move, points, all_steps, true)) {
 					//se non è possibile controllo se l'uscita è più a destra o più a sinistra e mi sposto più vicino con la colonna
-					horizontal_move(map_info, &move, &points, map);
+					horizontal_move(map_info, &move, points, all_steps, map);
 				}
 			}
 		}
@@ -80,24 +78,22 @@ int no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->co
 			if (map_info->exit_column > map_info->player_column) {
 				//mi sposto a destra
 				move = 'E';
-				if(!run_move(map_info, map, &move, &points, true)) {
+				if(!run_move(map_info, map, &move, points, all_steps,  true)) {
 					//se non è possibile controllo se l'uscita è più in alto o più in basso e mi sposto più vicino con la riga
-					vertical_move(map_info, &move, &points, map);
+					vertical_move(map_info, &move, points, all_steps, map);
 				}
 			}
 			else {
 				//mi sposto a sinistra
 				move = 'O';
-				if(!run_move(map_info, map, &move, &points, true)) {
+				if(!run_move(map_info, map, &move, points, all_steps, true)) {
 					//se non è possibile controllo se l'uscita è più in alto o più in basso e mi sposto più vicino con la riga
-					vertical_move(map_info, &move, &points, map);
+					vertical_move(map_info, &move, points, all_steps, map);
 				}
 			}
 		}
 		print_map(map_info, map);
-/*	printf("player [%d %d]\n", map_info->player_row, map_info->player_column);*/
 	}
-/*	printf("allineati player [%d %d] exit [%d %d]\n", map_info->player_row, map_info->player_column, map_info->exit_row, map_info->exit_column);*/
 
 	int steps_to_exit = 0;
 	if (exit_direction == 'h') {
@@ -111,27 +107,23 @@ int no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->co
 		if (exit_direction == 'h') {
 			if (map_info->exit_column > map_info->player_column) {
 				move = 'E';
-				run_move(map_info, map, &move, &points, true);
 			}
 			else {
 				move = 'O';
-				run_move(map_info, map, &move, &points, true);
 			}
 		}
 		else if (exit_direction == 'v') {
 			if (map_info->exit_row > map_info->player_row) {
 				move = 'S';
-				run_move(map_info, map, &move, &points, true);
 			}
 			else {
 				move = 'N';
-				run_move(map_info, map, &move, &points, true);
 			}
 		}
-/*		printf("player [%d %d]\n", map_info->player_row, map_info->player_column);*/
+		run_move(map_info, map, &move, points, all_steps, true);
 		print_map(map_info, map);
 	}
-	return points;
+	return all_steps;
 }
 
 

@@ -19,9 +19,9 @@ int command_interpreter (char command, char *moves) {
 
 /*se il flag ai è attivo ritorna 1 se la mossa è stata eseguita altrimenti ritorna 0*/
 /*se il flag ai è disattivo ritorna 1 se il giocatore ha raggiunto l'uscita altrimenti ritorna 0*/
-int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *moves, int *points, bool ai_flag) {
+int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *move, int *points, char *steps, bool ai_flag) {
 	bool win = false;
-	switch (*moves) {
+	switch (*move) {
 		case NORD:
 			if(map_info->player_row - 1 >= 0){
 				if(map[map_info->player_row - 1][map_info->player_column] != WALL) {
@@ -43,6 +43,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row -= 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+					steps = "NOS";
 					if(ai_flag) {
 						return 1;
 					}
@@ -73,6 +74,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column += 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+					steps = "NOS";
 					if(ai_flag) {
 						return 1;
 					}
@@ -103,6 +105,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row += 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+					steps = "NOS";
 					if(ai_flag) {
 						return 1;
 					}
@@ -133,6 +136,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column -= 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+					steps = "NOS";
 					if(ai_flag) {
 						return 1;
 					}
@@ -171,7 +175,7 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			printf("La sequenza inserita contiene valori non corretti, riprova");
 		}
 		else{
-			if(run_move(map_info, map, move, &points, false)) {
+			if(run_move(map_info, map, move, &points, "", false)) {
 				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
 				playing = false;
