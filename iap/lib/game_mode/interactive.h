@@ -17,7 +17,9 @@ int command_interpreter (char command, char *moves) {
 	return 0;
 }
 
-int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *moves, int *points) {
+/*se il flag ai è attivo ritorna 1 se la mossa è stata eseguita altrimenti ritorna 0*/
+/*se il flag ai è disattivo ritorna 1 se il giocatore ha raggiunto l'uscita altrimenti ritorna 0*/
+int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *moves, int *points, bool ai_flag) {
 	bool win = false;
 	switch (*moves) {
 		case NORD:
@@ -41,7 +43,13 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row -= 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+					if(ai_flag) {
+						return 1;
+					}
 				}
+			}
+			if(ai_flag) {
+				return 0;
 			}
 			break;
 		case EST:
@@ -65,7 +73,13 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column += 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+					if(ai_flag) {
+						return 1;
+					}
 				}
+			}
+			if(ai_flag) {
+				return 0;
 			}
 			break;
 		case SUD:
@@ -89,7 +103,13 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row += 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+					if(ai_flag) {
+						return 1;
+					}
 				}
+			}
+			if(ai_flag) {
+				return 0;
 			}
 			break;
 		case OVEST:
@@ -113,7 +133,13 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column -= 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+					if(ai_flag) {
+						return 1;
+					}
 				}
+			}
+			if(ai_flag) {
+				return 0;
 			}
 			break;
 		default:
@@ -145,7 +171,7 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			printf("La sequenza inserita contiene valori non corretti, riprova");
 		}
 		else{
-			if(run_move(map_info, map, move, &points)) {
+			if(run_move(map_info, map, move, &points, false)) {
 				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
 				playing = false;

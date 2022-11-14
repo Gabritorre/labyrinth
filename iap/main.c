@@ -6,6 +6,7 @@
 #include <string.h>
 #include "lib/game_info.h"
 #include "lib/game_mode/interactive.h"
+#include "lib/game_mode/ai.h"
 
 char list_maps(FILE *file) {
 	char character = fgetc(file);
@@ -147,14 +148,11 @@ int check_map_proprieties(struct Map *map_info) {
 
 int main(int argc, char *argv[]) {
 	bool play = true;
-	printf("%d%s\n", argc, argv[1]);
 	if (argc > 1 && strcmp(argv[1], "--challenge") == 0) {
 		struct Map map_info;
 		printf("Sei entrato in challenge mode\n");
-		printf("inserisci il numero di colonne: ");
+		printf("inserisci numero colonne, numero righe e la mappa:\n");
 		scanf(" %d", &map_info.column);
-
-		printf("inserisci il numero di righe: ");
 		scanf(" %d", &map_info.row);
 
 		char map[map_info.row][map_info.column];
@@ -164,6 +162,14 @@ int main(int argc, char *argv[]) {
 			scanf(" %[^\n]%*c", line); //leggi l'input finche non trovi \n e quando viene trovata non viene salvata
 			for (int j = 0; j < map_info.column; j++) {
 				map[i][j] = line[j];
+				if(map[i][j] == PLAYER) {
+					map_info.player_row = i;
+					map_info.player_column = j;
+				}
+				if(map[i][j] == EXIT) {
+					map_info.exit_row = i;
+					map_info.exit_column = j;
+				}
 			}
 		}
 
@@ -171,6 +177,12 @@ int main(int argc, char *argv[]) {
 		print_map(&map_info, map);
 		printf("\n");
 
+		int points1 = 0, points2 = 0;
+		points1 = no_wall_algorithm(&map_info, map, "points");
+		points2 = no_wall_coin_algorithm(&map_info, map, "points");
+
+		printf("punteggio nwa: %d\n", points1);
+/*		printf("punteggio nwca: %d\n", points2);*/
 		play = false;
 	}
 	while(play) {
