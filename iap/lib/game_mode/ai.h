@@ -1,23 +1,37 @@
 void horizontal_move(struct Map* map_info, char *move, int *points, char map[map_info->row][map_info->column]) {
 	if (map_info->exit_column > map_info->player_column) {
 		*move = 'E';
-		run_move(map_info, map, move, points, true);
+	}
+	else if (map_info->exit_column < map_info->player_column){
+		*move = 'O';
 	}
 	else {
-		*move = 'O';
-		run_move(map_info, map, move, points, true);
+		if(map_info->exit_column - 1 >= 0) {
+			*move = 'O';
+		}
+		else {
+			*move = 'E';
+		}
 	}
+	run_move(map_info, map, move, points, true);
 }
 
 void vertical_move(struct Map* map_info, char *move, int *points, char map[map_info->row][map_info->column]) {
 	if (map_info->exit_row > map_info->player_row) {
 		*move = 'S';
-		run_move(map_info, map, move, points, true);
+	}
+	else if (map_info->exit_row < map_info->player_row) {
+		*move = 'N';
 	}
 	else {
-		*move = 'N';
-		run_move(map_info, map, move, points, true);
+		if(map_info->exit_row - 1 >= 0){
+			*move = 'N';
+		}
+		else {
+			*move = 'S';
+		}
 	}
+	run_move(map_info, map, move, points, true);
 }
 
 
@@ -28,11 +42,22 @@ int no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->co
 	int points = 1000;
 	char move;
 	char exit_direction = 'h'; // serve a capire da quale direzione (verticale od orizzontale) si può accedere all'uscita
-	if (map[map_info->exit_row][map_info->exit_column - 1] == WALL || map[map_info->exit_row][map_info->exit_column + 1] == WALL) {
-		exit_direction = 'v';
+	char left_exit = '?', right_exit = '?';
+	if (map_info->exit_column - 1 >= 0) {
+		left_exit = map[map_info->exit_row][map_info->exit_column - 1];
 	}
-	printf("%c\n", exit_direction);
-	while (map_info->player_row != map_info->exit_row || map_info->player_column != map_info->exit_column) {
+	if (map_info->exit_column + 1 < map_info->column) {
+		right_exit = map[map_info->exit_row][map_info->exit_column + 1];
+	}
+
+	if (left_exit == WALL || right_exit == WALL) {
+		exit_direction = 'v';
+		printf("sinistra:%c destra:%c", left_exit, right_exit);
+	}
+	printf("\n%c\n", exit_direction);
+	int counter = 0;
+	while (map_info->player_row != map_info->exit_row && map_info->player_column != map_info->exit_column || counter < 1) {
+		counter++;
 		if (exit_direction == 'h') { // vogliamo far corrispondere la riga del giocatore con quella dell'uscita
 			if (map_info->exit_row > map_info->player_row) {
 				//mi sposto giù
@@ -69,9 +94,10 @@ int no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->co
 				}
 			}
 		}
-	printf("player [%d %d]\n", map_info->player_row, map_info->player_column);
+		print_map(map_info, map);
+/*	printf("player [%d %d]\n", map_info->player_row, map_info->player_column);*/
 	}
-	printf("allineati\n player [%d %d] exit [%d %d]\n", map_info->player_row, map_info->player_column, map_info->exit_row, map_info->exit_column);
+/*	printf("allineati player [%d %d] exit [%d %d]\n", map_info->player_row, map_info->player_column, map_info->exit_row, map_info->exit_column);*/
 
 	int steps_to_exit = 0;
 	if (exit_direction == 'h') {
@@ -84,28 +110,26 @@ int no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->co
 	for (int step = 0; step < steps_to_exit; step++) {
 		if (exit_direction == 'h') {
 			if (map_info->exit_column > map_info->player_column) {
-/*				map_info->player_column += 1;*/
 				move = 'E';
 				run_move(map_info, map, &move, &points, true);
 			}
 			else {
-/*				map_info->player_column -= 1;*/
 				move = 'O';
 				run_move(map_info, map, &move, &points, true);
 			}
 		}
 		else if (exit_direction == 'v') {
 			if (map_info->exit_row > map_info->player_row) {
-/*				map_info->player_row += 1;*/
 				move = 'S';
 				run_move(map_info, map, &move, &points, true);
 			}
 			else {
-/*				map_info->player_row -= 1;*/
 				move = 'N';
 				run_move(map_info, map, &move, &points, true);
 			}
 		}
+/*		printf("player [%d %d]\n", map_info->player_row, map_info->player_column);*/
+		print_map(map_info, map);
 	}
 	return points;
 }

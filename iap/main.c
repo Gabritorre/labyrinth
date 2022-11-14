@@ -181,7 +181,7 @@ int main(int argc, char *argv[]) {
 		points1 = no_wall_algorithm(&map_info, map, "points");
 		points2 = no_wall_coin_algorithm(&map_info, map, "points");
 
-		printf("punteggio nwa: %d\n", points1);
+		printf("\npunteggio nwa: %d\n", points1);
 /*		printf("punteggio nwca: %d\n", points2);*/
 		play = false;
 	}
