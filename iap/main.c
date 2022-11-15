@@ -184,7 +184,7 @@ int main(int argc, char *argv[]) {
 
 		printf("\npunteggio nwa: %d\n", points[0]);
 		printf("lunghezza: %ld\n", strlen(sequence));
-		printf("%s", sequence);
+		printf("sequenza: %s\n", sequence);
 /*		printf("punteggio nwca: %d\n", points[1]);*/
 /*		printf("punteggio ra: %d\n", points[2]);*/
 		play = false;
