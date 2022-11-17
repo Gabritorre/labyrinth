@@ -1,6 +1,6 @@
 # labyrinth
 
-## Execution on linux
+## Execution on linux and MacOS
 
 ### Normal
 
@@ -9,3 +9,13 @@
 ### Challenge
 
 	make challenge && ./iap --challenge
+
+## Execution on Windows
+
+### Normal
+
+	make && ./labyrinth.out
+
+### Challenge
+
+	gcc -std=c99 --pedantic *.c -o iap && iap.exe --challenge

@@ -175,18 +175,17 @@ int main(int argc, char *argv[]) {
 /*		print_map(&map_info, map);*/
 /*		printf("\n");*/
 
-		int points[3] = {1000, 1000, 1000};
-		char *sequence = no_wall_algorithm(&map_info, map, &points[0]);
-/*		no_wall_coin_algorithm(&map_info, map, &points[1]);*/
-/*		random_algorithm(&map_info, map, &points[2]);*/
+		int points = 1000;
+		int all_steps_size = map_info.row + map_info.column;
+		char *all_steps = (char *)malloc(sizeof(char) * all_steps_size);
+		no_wall_algorithm(&map_info, map, &all_steps, &all_steps_size, map_info.exit_column, map_info.exit_row, &points);
 
-/*		printf("\npunteggio nwa: %d\n", points[0]);*/
+/*		printf("\npunteggio nwa: %d\n", points);*/
 /*		printf("lunghezza: %ld\n", strlen(sequence));*/
-		printf("%s\n", sequence);
-/*		printf("punteggio nwca: %d\n", points[1]);*/
-/*		printf("punteggio ra: %d\n", points[2]);*/
+/*		printf("%s\n", sequence);*/
+		printf("%s\n", all_steps);
 		play = false;
-		free(sequence);
+/*		free(sequence);*/
 	}
 	while(play) {
 		char game_mode[50];
