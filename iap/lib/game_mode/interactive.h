@@ -19,8 +19,8 @@ int command_interpreter (char command, char *moves) {
 
 
 char* build_sequence (char **steps, int *step_size, char move) {
-	if (strlen(*steps) == *step_size - 5){
-		printf("\n\trealloco\n");
+	if (strlen(*steps) == *step_size){
+/*		printf("\n\trealloco\n");*/
 		*step_size += 5;
 	}
 
@@ -28,8 +28,8 @@ char* build_sequence (char **steps, int *step_size, char move) {
 	strncat(sequence, *steps, strlen(*steps));
 	strncat(sequence, &move, 1);
 	strcat(sequence, "\0");
-	printf("\nstep_size: %d\n", *step_size);
-	printf("str_len: %ld\n", strlen(*steps));
+/*	printf("\nstep_size: %d\n", *step_size);*/
+/*	printf("str_len: %ld\n", strlen(*steps));*/
 
 	return sequence;
 }

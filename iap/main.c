@@ -150,8 +150,6 @@ int main(int argc, char *argv[]) {
 	bool play = true;
 	if (argc > 1 && strcmp(argv[1], "--challenge") == 0) {
 		struct Map map_info;
-		printf("Sei entrato in challenge mode\n");
-		printf("inserisci numero colonne, numero righe e la mappa:\n");
 		scanf(" %d", &map_info.column);
 		scanf(" %d", &map_info.row);
 
@@ -173,21 +171,22 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
-		printf("\nmappa:\n");
-		print_map(&map_info, map);
-		printf("\n");
+/*		printf("\nmappa:\n");*/
+/*		print_map(&map_info, map);*/
+/*		printf("\n");*/
 
 		int points[3] = {1000, 1000, 1000};
 		char *sequence = no_wall_algorithm(&map_info, map, &points[0]);
 /*		no_wall_coin_algorithm(&map_info, map, &points[1]);*/
 /*		random_algorithm(&map_info, map, &points[2]);*/
 
-		printf("\npunteggio nwa: %d\n", points[0]);
-		printf("lunghezza: %ld\n", strlen(sequence));
-		printf("sequenza: %s\n", sequence);
+/*		printf("\npunteggio nwa: %d\n", points[0]);*/
+/*		printf("lunghezza: %ld\n", strlen(sequence));*/
+		printf("%s\n", sequence);
 /*		printf("punteggio nwca: %d\n", points[1]);*/
 /*		printf("punteggio ra: %d\n", points[2]);*/
 		play = false;
+		free(sequence);
 	}
 	while(play) {
 		char game_mode[50];

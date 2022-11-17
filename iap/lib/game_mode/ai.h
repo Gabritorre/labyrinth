@@ -93,7 +93,7 @@ char* no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->
 				}
 			}
 		}
-		print_map(map_info, map);
+/*		print_map(map_info, map);*/
 	}
 
 	int steps_to_exit = 0;
@@ -122,7 +122,7 @@ char* no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->
 			}
 		}
 		run_move(map_info, map, &move, points, &all_steps, &all_steps_size, true);
-		print_map(map_info, map);
+/*		print_map(map_info, map);*/
 	}
 	return all_steps;
 }
