@@ -36,7 +36,7 @@ void vertical_move(struct Map* map_info, char *move, int *points, char **all_ste
 
 /*Questo metodo funziona quando non sono presenti muri interni nella mappa.
  * Quello che fa è allineare la posizione del personaggio con l'uscita per poi procedere dritto verso l'uscita*/
-void no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int target_col, int target_row, int *points) {
+void goto_target(struct Map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int target_col, int target_row, int *points) {
 
 	char move;
 	char target_direction = 'h'; // serve a capire da quale direzione (verticale od orizzontale) si può accedere all'uscita
@@ -48,9 +48,19 @@ void no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->c
 		right_target = map[map_info->exit_row][target_col + 1];
 	}
 
-	if (left_target == WALL || right_target == WALL) {
+	if (left_target == WALL && right_target == WALL) {
 		target_direction = 'v';
 	}
+
+	if (map[target_row][target_col] == BONUS_POINTS) {
+		if(target_col == map_info->player_column){
+			target_direction = 'v';
+		}
+		else if (target_row == map_info->player_row) {
+			target_direction = 'h';
+		}
+	}
+/*	printf("target_direction %c\n", target_direction);*/
 	int counter = 0;
 	while (map_info->player_row != target_row && map_info->player_column != target_col || counter < 1) {
 		counter++;
@@ -96,16 +106,26 @@ void no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->c
 				}
 			}
 		}
-		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+/*		print_map(map_info, map);*/
+/*		printf("\nsequenza: %s\n", *all_steps);*/
 	}
 
 	int steps_to_target = 0;
 	if (target_direction == 'h') {
-		steps_to_target = abs(target_col - map_info->player_column);
+		if(target_col > map_info->player_column) {
+			steps_to_target = target_col - map_info->player_column;
+		}
+		else{
+			steps_to_target = map_info->player_column - target_col;
+		}
 	}
 	else if (target_direction == 'v') {
-		steps_to_target = abs(target_row - map_info->player_row);
+		if (target_row > map_info->player_row) {
+			steps_to_target = target_row - map_info->player_row;
+		}
+		else {
+			steps_to_target = map_info->player_row - target_row;
+		}
 	}
 
 	for (int step = 0; step < steps_to_target; step++) {
@@ -126,8 +146,8 @@ void no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->c
 			}
 		}
 		run_move(map_info, map, &move, points, all_steps, all_steps_size, true);
-		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+/*		print_map(map_info, map);*/
+/*		printf("\nsequenza: %s\n", *all_steps);*/
 	}
 }
 
@@ -138,20 +158,50 @@ void no_wall_coin_algorithm(struct Map* map_info, char map[map_info->row][map_in
 	 * in questo metodo viene scannerizzata la mappa dal player all'uscita e in caso si trovano delle moneti si chiama il metodo no_wall_algorithm con target la moneta*/
 
 	int column = map_info->player_column;
-	while(column != map_info->exit_column) {
+	int further_column = map_info->column - 1;
+	bool deep_inspect = false;
+
+	if (map_info->player_column < map_info->exit_column) {
+		column = map_info->player_column - 9;
+	}
+	else if (map_info->player_column > map_info->exit_column) {
+		column = map_info->player_column + 9;
+	}
+	else{
+		column = map_info->player_column - 9;
+		if(map_info->player_column + 9 < map_info->column - 1){
+			further_column = map_info->player_column + 9;
+		}
+		deep_inspect = true;
+	}
+
+	if(column <= 0) {
+		column = 1;
+	}
+	else if (column >= map_info->column) {
+		column = map_info->column - 1;
+	}
+
+	while(column != map_info->exit_column || deep_inspect) {
 		for(int row = 1; row < map_info->row - 1; row++) {
 			if(map[row][column] == BONUS_POINTS) {
-				no_wall_algorithm(map_info, map, all_steps, all_steps_size, column, row, points);
+/*				printf("MONETA IN %d %d", row, column);*/
+				goto_target(map_info, map, all_steps, all_steps_size, column, row, points);
 			}
 		}
-		if (column > map_info->exit_column) {
-			column -= 1;
+		if (column < map_info->exit_column || deep_inspect) {
+			column += 1;
 		}
 		else {
-			column += 1;
+			column -= 1;
+		}
+		if (deep_inspect) {
+			if (column == further_column || map[map_info->player_row][column] == WALL) {
+				deep_inspect = false;
+			}
 		}
 	}
 
-	no_wall_algorithm(map_info, map, all_steps, all_steps_size, map_info->exit_column, map_info->exit_row, points);
+	goto_target(map_info, map, all_steps, all_steps_size, map_info->exit_column, map_info->exit_row, points);
 }
 
