@@ -17,7 +17,8 @@ int command_interpreter (char command, char *moves) {
 	return 0;
 }
 
-
+/*appende la mossa appena fatta alla sequenza di mosse
+ * parametri: la sequenza di mosse fatte, la dimensione della stringa, la mossa da appendere*/
 char* build_sequence (char **steps, int *step_size, char move) {
 	if (strlen(*steps) == *step_size){
 /*		printf("\n\trealloco\n");*/
@@ -34,8 +35,10 @@ char* build_sequence (char **steps, int *step_size, char move) {
 	return sequence;
 }
 
-/*se il flag ai è attivo ritorna 1 se la mossa è stata eseguita altrimenti ritorna 0*/
-/*se il flag ai è disattivo ritorna 1 se il giocatore ha raggiunto l'uscita altrimenti ritorna 0*/
+/*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative invormazioni
+ * parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva
+ * Se la modalità ai è attiva il ritorno significa che la mossa è stata fatto correttamente
+ * altrimenti il ritorno indica se il giocatore ha vinto la partità o no*/
 int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *move, int *points, char **steps, int *step_size, bool ai_flag) {
 	bool win = false;
 	switch (*move) {
