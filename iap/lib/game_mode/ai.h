@@ -53,7 +53,6 @@ void no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->c
 	}
 	int counter = 0;
 	while (map_info->player_row != target_row && map_info->player_column != target_col || counter < 1) {
-		printf("parto");
 		counter++;
 		if (target_direction == 'h') { // vogliamo far corrispondere la riga del giocatore con quella dell'uscita
 			if (target_row > map_info->player_row) {
@@ -65,6 +64,9 @@ void no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->c
 				}
 			}
 			else {
+				if (target_row == map_info->player_row){
+					continue;
+				}
 				//mi sposto sù
 				move = 'N';
 				if(!run_move(map_info, map, &move, points, all_steps, all_steps_size, true)) {
@@ -83,6 +85,9 @@ void no_wall_algorithm(struct Map* map_info, char map[map_info->row][map_info->c
 				}
 			}
 			else {
+				if (target_col == map_info->player_column){
+					continue;
+				}
 				//mi sposto a sinistra
 				move = 'O';
 				if(!run_move(map_info, map, &move, points, all_steps, all_steps_size, true)) {
