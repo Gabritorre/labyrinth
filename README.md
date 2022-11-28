@@ -14,8 +14,8 @@
 
 ### Normal
 
-	gcc -o iap.exe && ./iap.exe
+	gcc *.c -o iap.exe && ./iap.exe
 
 ### Challenge
 
-	gcc -std=c99 --pedantic *.c -o iap && iap.exe --challenge
+	gcc -std=c99 --pedantic *.c -o iap.exe && iap.exe --challenge

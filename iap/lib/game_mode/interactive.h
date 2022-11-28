@@ -35,6 +35,7 @@ char* build_sequence (char **steps, int *step_size, char move) {
 	return sequence;
 }
 
+/*controlla il contenuto della prossima cella che si vuole visitare*/
 void check_next_step(struct Map* map_info, char next_step, bool *win, int *points) {
 	if (next_step == EXIT) {
 		*win = true;
@@ -54,6 +55,9 @@ void check_next_step(struct Map* map_info, char next_step, bool *win, int *point
 		map_info->drill_counter += 3;
 	}
 
+	if (next_step == WALL && map_info->drill_counter > 0) {
+		map_info->drill_counter -= 1;
+	}
 }
 
 /*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative invormazioni
@@ -67,7 +71,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 		case NORD:
 			if(map_info->player_row - 1 >= 0){
 				next_step = map[map_info->player_row - 1][map_info->player_column];
-				if(next_step != WALL) {
+				if(next_step != WALL || map_info->drill_counter > 0) {
 					check_next_step(map_info, next_step, &win, points);
 
 					*points -= 1;
@@ -88,7 +92,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 		case EST:
 			if(map_info->player_column + 1 < map_info->column){
 				next_step = map[map_info->player_row][map_info->player_column + 1];
-				if(next_step != WALL) {
+				if(next_step != WALL || map_info->drill_counter > 0) {
 					check_next_step(map_info, next_step, &win, points);
 
 					*points -= 1;
@@ -108,7 +112,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 		case SUD:
 			if(map_info->player_row + 1 < map_info->row){
 				next_step = map[map_info->player_row + 1][map_info->player_column];
-				if(next_step != WALL) {
+				if(next_step != WALL || map_info->drill_counter > 0) {
 					check_next_step(map_info, next_step, &win, points);
 
 					*points -= 1;
@@ -128,8 +132,9 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 		case OVEST:
 			if(map_info->player_column - 1 >= 0){
 				next_step = map[map_info->player_row][map_info->player_column - 1];
-				if(next_step != WALL) {
+				if(next_step != WALL || map_info->drill_counter > 0) {
 					check_next_step(map_info, next_step, &win, points);
+
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column -= 1;
