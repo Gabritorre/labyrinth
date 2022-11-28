@@ -10,8 +10,10 @@
 #define STEP '.'
 #define BONUS_POINTS '$'
 #define HALF_POINTS '!'
+#define DRILL 'T'
 #define PLAYER 'o'
 #define EXIT '_'
+
 
 #define QUANTITY_BONUS 11
 
@@ -21,6 +23,7 @@ struct Map {
 
 	int player_row;
 	int player_column;
+	int drill_counter;
 
 	int exit_row;
 	int exit_column;

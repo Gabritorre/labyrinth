@@ -2,7 +2,7 @@
 /* 1 = uscito dalla partita
  * 2 = comando inserito non valido
  * 0 = corretto*/
-int command_interpreter (char command, char *moves) {
+int command_interpreter (char command, char *move) {
 	printf("comando: %d\n", command);
 	if (command == QUIT) {
 		return 1;
@@ -12,7 +12,7 @@ int command_interpreter (char command, char *moves) {
 			printf("\nerrore dato da: %d %c\n", command, command);
 			return 2;
 		}
-		*moves = toupper(command);
+		*move = toupper(command);
 	}
 	return 0;
 }
@@ -35,30 +35,41 @@ char* build_sequence (char **steps, int *step_size, char move) {
 	return sequence;
 }
 
+void check_next_step(struct Map* map_info, char next_step, bool *win, int *points) {
+	if (next_step == EXIT) {
+		*win = true;
+	}
+	else if (next_step == BONUS_POINTS) {
+		*points += QUANTITY_BONUS;
+	}
+	else if (next_step == HALF_POINTS) {
+		if (*points < 0) {
+			*points = *points * 2;
+		}
+		else {
+			*points = (int) *points/2;
+		}
+	}
+	else if (next_step == DRILL) {
+		map_info->drill_counter += 3;
+	}
+
+}
+
 /*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative invormazioni
  * parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva
  * Se la modalità ai è attiva il ritorno significa che la mossa è stata fatto correttamente
  * altrimenti il ritorno indica se il giocatore ha vinto la partità o no*/
 int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *move, int *points, char **steps, int *step_size, bool ai_flag) {
 	bool win = false;
+	char next_step; //conterrà il contenuto della cella del passo successivo
 	switch (*move) {
 		case NORD:
 			if(map_info->player_row - 1 >= 0){
-				if(map[map_info->player_row - 1][map_info->player_column] != WALL) {
-					if (map[map_info->player_row - 1][map_info->player_column] == EXIT) {
-						win = true;
-					}
-					if (map[map_info->player_row - 1][map_info->player_column] == BONUS_POINTS) {
-						*points += QUANTITY_BONUS;
-					}
-					if (map[map_info->player_row - 1][map_info->player_column] == HALF_POINTS) {
-						if (*points < 0) {
-							*points = *points * 2;
-						}
-						else {
-							*points = (int) *points/2;
-						}
-					}
+				next_step = map[map_info->player_row - 1][map_info->player_column];
+				if(next_step != WALL) {
+					check_next_step(map_info, next_step, &win, points);
+
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row -= 1;
@@ -76,21 +87,10 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			break;
 		case EST:
 			if(map_info->player_column + 1 < map_info->column){
-				if(map[map_info->player_row][map_info->player_column + 1] != WALL) {
-					if (map[map_info->player_row][map_info->player_column + 1] == EXIT) {
-						win = true;
-					}
-					if (map[map_info->player_row][map_info->player_column + 1] == BONUS_POINTS) {
-						*points += QUANTITY_BONUS;
-					}
-					if (map[map_info->player_row][map_info->player_column + 1] == HALF_POINTS) {
-						if (*points < 0) {
-							*points = *points * 2;
-						}
-						else {
-							*points = (int) *points/2;
-						}
-					}
+				next_step = map[map_info->player_row][map_info->player_column + 1];
+				if(next_step != WALL) {
+					check_next_step(map_info, next_step, &win, points);
+
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column += 1;
@@ -107,21 +107,10 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			break;
 		case SUD:
 			if(map_info->player_row + 1 < map_info->row){
-				if(map[map_info->player_row + 1][map_info->player_column] != WALL) {
-					if (map[map_info->player_row + 1][map_info->player_column] == EXIT) {
-						win = true;
-					}
-					if (map[map_info->player_row + 1][map_info->player_column] == BONUS_POINTS) {
-						*points += QUANTITY_BONUS;
-					}
-					if (map[map_info->player_row + 1][map_info->player_column] == HALF_POINTS) {
-						if (*points < 0) {
-							*points = *points * 2;
-						}
-						else {
-							*points = (int) *points/2;
-						}
-					}
+				next_step = map[map_info->player_row + 1][map_info->player_column];
+				if(next_step != WALL) {
+					check_next_step(map_info, next_step, &win, points);
+
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row += 1;
@@ -138,21 +127,9 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			break;
 		case OVEST:
 			if(map_info->player_column - 1 >= 0){
-				if(map[map_info->player_row][map_info->player_column - 1] != WALL) {
-					if (map[map_info->player_row][map_info->player_column - 1] == EXIT) {
-						win = true;
-					}
-					if (map[map_info->player_row][map_info->player_column - 1] == BONUS_POINTS) {
-						*points += QUANTITY_BONUS;
-					}
-					if (map[map_info->player_row][map_info->player_column - 1] == HALF_POINTS) {
-						if (*points < 0) {
-							*points = *points * 2;
-						}
-						else {
-							*points = (int) *points/2;
-						}
-					}
+				next_step = map[map_info->player_row][map_info->player_column - 1];
+				if(next_step != WALL) {
+					check_next_step(map_info, next_step, &win, points);
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column -= 1;
@@ -179,6 +156,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_info->column]) {
 	bool playing = true;
 	int points = 1000;
+	map_info->drill_counter = 0;
 	int all_steps_size = map_info->row + map_info->column;
 	char *all_steps = (char*)malloc(sizeof(char) * all_steps_size);
 
@@ -186,11 +164,12 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 		printf("\n\n---------------\n\n");
 		print_map(map_info, map);
 		printf("\nPUNTEGGIO: %d\n", points);
-		char *move = (char*) calloc(1, sizeof(char));
+		printf("TRAPANI: %d\n", map_info->drill_counter);
+		char move;
 		char command;
 		printf("Inserisci mossa: ");
 		scanf(" %c", &command);
-		int ci_result = command_interpreter(command, move);
+		int ci_result = command_interpreter(command, &move);
 		if(ci_result == 1) {
 			printf("Uscito dalla partita\n");
 			playing = false;
@@ -199,12 +178,11 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			printf("La sequenza inserita contiene valori non corretti, riprova");
 		}
 		else{
-			if(run_move(map_info, map, move, &points, &all_steps, &all_steps_size, false)) {
+			if(run_move(map_info, map, &move, &points, &all_steps, &all_steps_size, false)) {
 				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
 				playing = false;
 			}
 		}
-		free(move);
 	}
 }

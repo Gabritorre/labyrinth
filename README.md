@@ -4,7 +4,7 @@
 
 ### Normal
 
-	make && ./labyrinth.out
+	make && ./iap
 
 ### Challenge
 
@@ -14,7 +14,7 @@
 
 ### Normal
 
-	make && ./labyrinth.out
+	gcc -o iap.exe && ./iap.exe
 
 ### Challenge
 

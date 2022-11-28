@@ -107,8 +107,8 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 				}
 			}
 		}
-/*		print_map(map_info, map);*/
-/*		printf("\nsequenza: %s\n", *all_steps);*/
+		print_map(map_info, map);
+		printf("\nsequenza: %s\n", *all_steps);
 	}
 
 	// dopo essersi allineati con il target è possibile andare dritto verso di esso
@@ -148,8 +148,8 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 			}
 		}
 		run_move(map_info, map, &move, points, all_steps, all_steps_size, true);
-/*		print_map(map_info, map);*/
-/*		printf("\nsequenza: %s\n", *all_steps);*/
+		print_map(map_info, map);
+		printf("\nsequenza: %s\n", *all_steps);
 	}
 }
 
