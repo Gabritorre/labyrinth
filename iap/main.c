@@ -176,9 +176,10 @@ int main(int argc, char *argv[]) {
 /*		printf("\n");*/
 
 		int points = 1000;
+		map_info.drill_counter = 0;
 		int all_steps_size = map_info.row + map_info.column;
 		char *all_steps = (char *)malloc(sizeof(char) * all_steps_size);
-		no_wall_coin_algorithm(&map_info, map, &all_steps, &all_steps_size, &points);
+		coin_exit_algorithm(&map_info, map, &all_steps, &all_steps_size, &points);
 
 /*		printf("\npunteggio nwa: %d\n", points);*/
 /*		printf("lunghezza: %ld\n", strlen(sequence));*/

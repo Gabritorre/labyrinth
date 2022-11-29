@@ -64,10 +64,10 @@ void check_next_step(struct Map* map_info, char next_step, bool *win, int *point
  * parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva
  * Se la modalità ai è attiva il ritorno significa che la mossa è stata fatto correttamente
  * altrimenti il ritorno indica se il giocatore ha vinto la partità o no*/
-int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char *move, int *points, char **steps, int *step_size, bool ai_flag) {
+int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char move, int *points, char **steps, int *step_size, bool ai_flag) {
 	bool win = false;
 	char next_step; //conterrà il contenuto della cella del passo successivo
-	switch (*move) {
+	switch (move) {
 		case NORD:
 			if(map_info->player_row - 1 >= 0){
 				next_step = map[map_info->player_row - 1][map_info->player_column];
@@ -183,7 +183,7 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			printf("La sequenza inserita contiene valori non corretti, riprova");
 		}
 		else{
-			if(run_move(map_info, map, &move, &points, &all_steps, &all_steps_size, false)) {
+			if(run_move(map_info, map, move, &points, &all_steps, &all_steps_size, false)) {
 				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
 				playing = false;
