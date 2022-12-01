@@ -42,7 +42,9 @@ void vertical_move(struct Map* map_info, char move, int *points, char **all_step
  * il metodo ritorna quante volte si è spostato in direzione "move" prima di trovare una strada libera in direzione vert_value e horiz_value
  * Questo metodo server in sostanza per raggirare i muri
  * ES. se voglio controllare est -> vert_value = 0, horiz_value = 1
- * se voglio controllare sud -> vert_value = 1, horiz_value = 0*/
+ * se voglio controllare sud -> vert_value = 1, horiz_value = 0
+ * ovest -> vert_value = 0, horiz_value = -1
+ * nord -> vert_value = -1, horiz_value = 0*/
 int run_ghost(struct Map map_info, char map[map_info.row][map_info.column], char move, int vert_value, int horiz_value) {
 	int next_row = map_info.player_row + vert_value;
 	int next_column = map_info.player_column + horiz_value;
@@ -102,9 +104,16 @@ bool green_light_to_target (struct Map* map_info, char map[map_info->row][map_in
 void go_around_wall(struct Map* map_info, char map[map_info->row][map_info->column], char direction, char move, char** all_steps, int* all_steps_size, int* points) {
 	int ghost1_steps, ghost2_steps, better_path;
 
+	int vert_value, horiz_value; // rappresentano la direzione in cui guardare, vedere commento sulla funzione run_ghost
 	if (direction == 'v') {
-		ghost1_steps = run_ghost(*map_info, map, NORD, 0, 1);
-		ghost2_steps = run_ghost(*map_info, map, SUD, 0, 1);
+		vert_value = 0;
+		horiz_value = 1;
+		if(move == OVEST){
+			vert_value = 0;
+			horiz_value = -1;
+		}
+		ghost1_steps = run_ghost(*map_info, map, NORD, vert_value, horiz_value);
+		ghost2_steps = run_ghost(*map_info, map, SUD, vert_value, horiz_value);
 		move = NORD;
 		better_path = ghost1_steps;
 		if(ghost1_steps > ghost2_steps) {
@@ -113,8 +122,14 @@ void go_around_wall(struct Map* map_info, char map[map_info->row][map_info->colu
 		}
 	}
 	else if (direction == 'h') {
-		ghost1_steps = run_ghost(*map_info, map, OVEST, 0, 1);
-		ghost2_steps = run_ghost(*map_info, map, EST, 0, 1);
+		vert_value = 1;
+		horiz_value = 0;
+		if(move == NORD){
+			vert_value = -1;
+			horiz_value = 0;
+		}
+		ghost1_steps = run_ghost(*map_info, map, OVEST, vert_value, horiz_value);
+		ghost2_steps = run_ghost(*map_info, map, EST, vert_value, horiz_value);
 		move = OVEST;
 		better_path = ghost1_steps;
 		if(ghost1_steps > ghost2_steps) {
@@ -163,12 +178,10 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 	//finche il personaggio non si allinea o per riga o per colonna al target
 /*	while (map_info->player_row != target_row && map_info->player_column != target_col || counter < 1) {*/
 	while (!green_light_to_target(map_info, map, target_col, target_row, target_direction)) {
-		printf("ciclo!\n");
-		printf("target_col %d\n", target_col);
-		printf("target_row %d\n", target_row);
+/*		printf("target_col %d\n", target_col);*/
+/*		printf("target_row %d\n", target_row);*/
 		if (target_direction == 'h') { // vogliamo far corrispondere la riga del giocatore con quella dell'uscita
 			if (target_row > map_info->player_row) {
-				printf("vado giù\n");
 				//mi sposto giù
 				move = SUD;
 				if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true)) {
@@ -222,8 +235,7 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 					move = NORD;
 				}
 				if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true)) {
-					go_around_wall(map_info, map, 'v', move, all_steps, all_steps_size, points);
-					move = EST;
+					go_around_wall(map_info, map, 'h', move, all_steps, all_steps_size, points);
 					run_move(map_info, map, move, points, all_steps, all_steps_size, true);
 					print_map(map_info, map);
 					printf("\nsequenza: %s\n", *all_steps);
