@@ -37,18 +37,19 @@ void vertical_move(struct Map* map_info, char move, int *points, char **all_step
 	run_move(map_info, map, move, points, all_steps, step_size, true);
 }
 
-/*Questo metodo crea un fantasma del personaggio e lo manda in una direzione "move" fino a che non trova una strada libera che rispetti "vert_value" e "horiz_value": vert_value = 1 per controllare il sud, vert_value = -1 per controllare il nord,
+/*Questo metodo crea un fantasma del personaggio e lo manda in una direzione "move" fino a che non trova una strada libera che rispetti "vert_value" e "horiz_value":
+ * vert_value = 1 per controllare il sud, vert_value = -1 per controllare il nord,
  * horiz_value = 1 per controllare est, horiz_value = -1 per controllare a ovest
  * il metodo ritorna quante volte si è spostato in direzione "move" prima di trovare una strada libera in direzione vert_value e horiz_value
- * Questo metodo server in sostanza per raggirare i muri
- * ES. se voglio controllare est -> vert_value = 0, horiz_value = 1
- * se voglio controllare sud -> vert_value = 1, horiz_value = 0
- * ovest -> vert_value = 0, horiz_value = -1
- * nord -> vert_value = -1, horiz_value = 0*/
+ * Questo metodo serve in sostanza per raggirare i muri
+ * ES. se voglio controllare est -> move = NORD/SUD, vert_value = 0, horiz_value = 1
+ * se voglio controllare sud -> move = EST/OVEST, vert_value = 1, horiz_value = 0
+ * ovest -> move = NORD/SUD, vert_value = 0, horiz_value = -1
+ * nord -> move = EST/OVEST, vert_value = -1, horiz_value = 0*/
 int run_ghost(struct Map map_info, char map[map_info.row][map_info.column], char move, int vert_value, int horiz_value) {
-	int next_row = map_info.player_row + vert_value;
-	int next_column = map_info.player_column + horiz_value;
-	if(map[next_row][next_column] != WALL && map[next_row][next_column] != HALF_POINTS) {
+	int next_row = map_info.player_row + vert_value; // calcola la riga su qui deve guardare
+	int next_column = map_info.player_column + horiz_value; // calcola la colonna su cui deve guardare
+	if(map[next_row][next_column] != WALL && map[next_row][next_column] != HALF_POINTS) { // se nel punto da guardare è libero allora fermati
 		return 0;
 	}
 	//se vicolo ceco
@@ -56,6 +57,7 @@ int run_ghost(struct Map map_info, char map[map_info.row][map_info.column], char
 		return -9999;
 	}
 
+/*	continua a muoverti finchè trovi degli ostacoli dove stai guardando*/
 	if (move == NORD)
 		return run_ghost(map_info, map, move, vert_value - 1, horiz_value) + 1;
 
@@ -67,11 +69,13 @@ int run_ghost(struct Map map_info, char map[map_info.row][map_info.column], char
 
 	if (move == OVEST)
 		return run_ghost(map_info, map, move, vert_value, horiz_value - 1) + 1;
-
 }
 
-/*controlla che ci sia una via libera retta tra il player e il target da raggiungere*/
+/*controlla che ci sia una via libera retta tra il player e il target da raggiungere
+ * Il metodo parte dall'uscita e va verso il player, se trova degli ostacoli ritorna false, se invece
+ * riesce a raggiungere il player allora ritorna true*/
 bool green_light_to_target (struct Map* map_info, char map[map_info->row][map_info->column], int target_col, int target_row, char direction) {
+	// se player e target non sono allineati in nessun modo
 	if(map_info->player_row != target_row && map_info->player_column != target_col) {
 		return false;
 	}
@@ -101,6 +105,12 @@ bool green_light_to_target (struct Map* map_info, char map[map_info->row][map_in
 
 }
 
+/*metodo invocato quendo si incontra un muro che blocca la strada
+ * in base alla direzione in cui si è incappati nel muro questo metodo lancia i fantasmi (vedi metodo run_ghost) e decide quale strada conviene prendere
+ * parametri:
+ * direction = direzione in cui visogna muoversi per raggirare il muro (v = il player deve muoversi o a NORD o a SUD)
+ * move = rappresenta il movimento da fare una volta trovata il precorso da prendere per raggirare il muro
+ * */
 void go_around_wall(struct Map* map_info, char map[map_info->row][map_info->column], char direction, char move, char** all_steps, int* all_steps_size, int* points) {
 	int ghost1_steps, ghost2_steps, better_path;
 
@@ -138,14 +148,15 @@ void go_around_wall(struct Map* map_info, char map[map_info->row][map_info->colu
 		}
 	}
 
+	//eseguo il percorso deciso per raggirare il muro
 	for(int i = 0; i < better_path; i++) {
 		run_move(map_info, map, move, points, all_steps, all_steps_size, true);
-		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+/*		print_map(map_info, map);*/
+/*		printf("\nsequenza: %s\n", *all_steps);*/
 	}
 }
 
-/* Sposta la posizione del personaggio con un determinato target che gli viene passato come parametro
+/* Sposta la posizione del personaggio verso un determinato target che gli viene passato come parametro
  * parametri: le informazioni della mappa, la mappa, la stringa contenenti i passi fatti dal personaggio, la lunghezza di quest'utlima stringa, la colonna del target, la riga del target, il punteggio
  * */
 void goto_target(struct Map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int target_col, int target_row, int *points) {
@@ -175,8 +186,7 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 	}
 /*	printf("target_direction %c\n", target_direction);*/
 
-	//finche il personaggio non si allinea o per riga o per colonna al target
-/*	while (map_info->player_row != target_row && map_info->player_column != target_col || counter < 1) {*/
+	//finche il personaggio non trova percorso retto senza ostacoli verso il target
 	while (!green_light_to_target(map_info, map, target_col, target_row, target_direction)) {
 /*		printf("target_col %d\n", target_col);*/
 /*		printf("target_row %d\n", target_row);*/
@@ -204,9 +214,10 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 				}
 				if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true)) {
 					go_around_wall(map_info, map, 'v', move, all_steps, all_steps_size, points);
+					//una volta raggirato il muro esegue la mossa che mi avvicina al target
 					run_move(map_info, map, move, points, all_steps, all_steps_size, true);
-					print_map(map_info, map);
-					printf("\nsequenza: %s\n", *all_steps);
+/*					print_map(map_info, map);*/
+/*					printf("\nsequenza: %s\n", *all_steps);*/
 				}
 				else
 					continue;
@@ -236,16 +247,17 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 				}
 				if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true)) {
 					go_around_wall(map_info, map, 'h', move, all_steps, all_steps_size, points);
+					//una volta raggirato il muro esegue la mossa che mi avvicina al target
 					run_move(map_info, map, move, points, all_steps, all_steps_size, true);
-					print_map(map_info, map);
-					printf("\nsequenza: %s\n", *all_steps);
+/*					print_map(map_info, map);*/
+/*					printf("\nsequenza: %s\n", *all_steps);*/
 				}
 				else
 					continue;
 			}
 		}
-		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+/*		print_map(map_info, map);*/
+/*		printf("\nsequenza: %s\n", *all_steps);*/
 	}
 
 	// dopo essersi allineati con il target è possibile andare dritto verso di esso
@@ -285,13 +297,12 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 			}
 		}
 		run_move(map_info, map, move, points, all_steps, all_steps_size, true);
-		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+/*		print_map(map_info, map);*/
+/*		printf("\nsequenza: %s\n", *all_steps);*/
 	}
 }
 
-/*Questo metodo funziona quando non sono presenti muri interni nella mappa.
- * controlla se nel percorso per raggiungere l'uscita si trovano delle monete abbastanza vicine per essere raggiunte, una volta finite le monete raggiungibili punta all'uscita*/
+ /* controlla se nel percorso per raggiungere l'uscita si trovano delle monete abbastanza vicine per essere raggiunte, una volta finite le monete raggiungibili punta all'uscita*/
 void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int *points) {
 
 	int column = map_info->player_column;
