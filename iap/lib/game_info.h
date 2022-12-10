@@ -13,6 +13,7 @@
 #define DRILL 'T'
 #define PLAYER 'o'
 #define EXIT '_'
+#define TAIL 'x'
 
 
 #define QUANTITY_BONUS 11
@@ -58,6 +59,16 @@ void print_game_info() {
 
 }
 
+void clear_map_tail(struct Map* map_info, char map[map_info->row][map_info->column]) {
+	for (int row = 0; row < map_info->row; row++) {
+		for (int column = 0; column < map_info->column; column++) {
+			if (map[row][column] == TAIL) {
+				map[row][column] = ' ';
+			}
+		}
+	}
+}
+
 void print_map(struct Map* map_info, char map[map_info->row][map_info->column]) {
 	for (int row = 0; row < map_info->row; row++) {
 		printf("\n");
@@ -65,5 +76,6 @@ void print_map(struct Map* map_info, char map[map_info->row][map_info->column]) 
 			printf("%c", map[row][column]);
 		}
 	}
+	clear_map_tail(map_info, map);
 }
 

@@ -35,32 +35,59 @@ char* build_sequence (char **steps, int *step_size, char move) {
 	return sequence;
 }
 
-/*controlla il contenuto della prossima cella che si vuole visitare*/
-void check_next_step(struct Map* map_info, char next_step, bool *win, int *points, vector** tail, int actual_row, int actual_column) {
-	if (next_step == EXIT) {
-		*win = true;
+/*inserisce la coda nella mappa*/
+void insert_tail_in_map(struct Map* map_info, char map[map_info->row][map_info->column], vector* tail) {
+	if (tail == NULL) // fine lista, cioè lista vuota
+		return;
+	map[tail->row][tail->column] = TAIL;
+	insert_tail_in_map(map_info, map, tail->next);
+}
+
+void move_tail(struct Map* map_info, vector** tail) {
+	if ((*tail) == NULL){
+		return;
 	}
-	else if (next_step == BONUS_POINTS) {
+	if (((*tail)->next) == NULL) {
+		(*tail)->row = map_info->player_row;
+		(*tail)->column = map_info->player_column;
+		return;
+	}
+	(*tail)->row = ((*tail)->next)->row;
+	(*tail)->column = ((*tail)->next)->column;
+	move_tail(map_info, &((*tail)->next));
+}
+
+/*controlla il contenuto della prossima cella che si vuole visitare*/
+void check_next_step(struct Map* map_info, char next_step, bool *win, int *points, vector** tail) {
+	if (next_step == BONUS_POINTS) {
 		*points += QUANTITY_BONUS;
-		vector_append(tail, actual_row, actual_column);
+		vector_append(tail, map_info->player_row, map_info->player_column);
 		printf("coda: ");
 		print_vector(*tail);
 		printf("\n");
 	}
-	else if (next_step == HALF_POINTS) {
-		if (*points < 0) {
-			*points = *points * 2;
+	else{
+		if (next_step == EXIT) {
+			*win = true;
 		}
-		else {
-			*points = (int) *points/2;
-		}
-	}
-	else if (next_step == DRILL) {
-		map_info->drill_counter += 3;
-	}
 
-	if (next_step == WALL && map_info->drill_counter > 0) {
-		map_info->drill_counter -= 1;
+		else if (next_step == HALF_POINTS) {
+			if (*points < 0) {
+				*points = *points * 2;
+			}
+			else {
+				*points = (int) *points/2;
+			}
+		}
+
+		else if (next_step == DRILL) {
+			map_info->drill_counter += 3;
+		}
+
+		if (next_step == WALL && map_info->drill_counter > 0) {
+			map_info->drill_counter -= 1;
+		}
+		move_tail(map_info, tail);
 	}
 }
 
@@ -76,7 +103,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			if(map_info->player_row - 1 >= 0){
 				next_step = map[map_info->player_row - 1][map_info->player_column];
 				if(next_step != WALL || map_info->drill_counter > 0) {
-					check_next_step(map_info, next_step, &win, points, tail, map_info->player_row, map_info->player_column);
+					check_next_step(map_info, next_step, &win, points, tail);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
@@ -97,7 +124,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			if(map_info->player_column + 1 < map_info->column){
 				next_step = map[map_info->player_row][map_info->player_column + 1];
 				if(next_step != WALL || map_info->drill_counter > 0) {
-					check_next_step(map_info, next_step, &win, points, tail, map_info->player_row, map_info->player_column);
+					check_next_step(map_info, next_step, &win, points, tail);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
@@ -117,7 +144,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			if(map_info->player_row + 1 < map_info->row){
 				next_step = map[map_info->player_row + 1][map_info->player_column];
 				if(next_step != WALL || map_info->drill_counter > 0) {
-					check_next_step(map_info, next_step, &win, points, tail, map_info->player_row, map_info->player_column);
+					check_next_step(map_info, next_step, &win, points, tail);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
@@ -137,7 +164,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			if(map_info->player_column - 1 >= 0){
 				next_step = map[map_info->player_row][map_info->player_column - 1];
 				if(next_step != WALL || map_info->drill_counter > 0) {
-					check_next_step(map_info, next_step, &win, points, tail, map_info->player_row, map_info->player_column);
+					check_next_step(map_info, next_step, &win, points, tail);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
@@ -172,6 +199,7 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 
 	while(playing) {
 		printf("\n\n---------------\n\n");
+		insert_tail_in_map(map_info, map, tail);
 		print_map(map_info, map);
 		printf("\nPUNTEGGIO: %d\n", points);
 		printf("TRAPANI: %d\n", map_info->drill_counter);
@@ -189,6 +217,7 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 		}
 		else{
 			if(run_move(map_info, map, move, &points, &all_steps, &all_steps_size, false, &tail)) {
+				insert_tail_in_map(map_info, map, tail);
 				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
 				playing = false;
