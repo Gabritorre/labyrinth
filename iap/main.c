@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
+#include "lib/tail_vector.h"
 #include "lib/game_info.h"
 #include "lib/game_mode/interactive.h"
 #include "lib/game_mode/ai.h"
@@ -176,10 +177,11 @@ int main(int argc, char *argv[]) {
 /*		printf("\n");*/
 
 		int points = 1000;
+		vector *tail = NULL;
 		map_info.drill_counter = 0;
 		int all_steps_size = map_info.row + map_info.column; //lunghezza della sequenza di passi
 		char *all_steps = (char *)malloc(sizeof(char) * all_steps_size); // array che conterrà la sequenza di passi,
-		coin_exit_algorithm(&map_info, map, &all_steps, &all_steps_size, &points);
+		coin_exit_algorithm(&map_info, map, &all_steps, &all_steps_size, &points, &tail);
 
 /*		printf("\npunteggio nwa: %d\n", points);*/
 /*		printf("lunghezza: %ld\n", strlen(sequence));*/
