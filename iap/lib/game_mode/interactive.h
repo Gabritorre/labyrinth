@@ -39,7 +39,9 @@ char* build_sequence (char **steps, int *step_size, char move) {
 void insert_tail_in_map(struct Map* map_info, char map[map_info->row][map_info->column], vector* tail) {
 	if (tail == NULL) // fine lista, cioè lista vuota
 		return;
-	map[tail->row][tail->column] = TAIL;
+	if(tail->row != -1)
+		map[tail->row][tail->column] = TAIL;
+
 	insert_tail_in_map(map_info, map, tail->next);
 }
 
@@ -52,19 +54,18 @@ void move_tail(struct Map* map_info, vector** tail) {
 		(*tail)->column = map_info->player_column;
 		return;
 	}
-	(*tail)->row = ((*tail)->next)->row;
-	(*tail)->column = ((*tail)->next)->column;
+	if((*tail)->row != -1){
+		(*tail)->row = ((*tail)->next)->row;
+		(*tail)->column = ((*tail)->next)->column;
+	}
 	move_tail(map_info, &((*tail)->next));
 }
 
 /*controlla il contenuto della prossima cella che si vuole visitare*/
-void check_next_step(struct Map* map_info, char next_step, bool *win, int *points, vector** tail) {
+void check_next_step(struct Map* map_info, char map[map_info->row][map_info->column], char next_step, bool *win, int *points, vector** tail, int next_row, int next_column) {
 	if (next_step == BONUS_POINTS) {
 		*points += QUANTITY_BONUS;
 		vector_append(tail, map_info->player_row, map_info->player_column);
-		printf("coda: ");
-		print_vector(*tail);
-		printf("\n");
 	}
 	else{
 		if (next_step == EXIT) {
@@ -88,7 +89,17 @@ void check_next_step(struct Map* map_info, char next_step, bool *win, int *point
 			map_info->drill_counter -= 1;
 		}
 		move_tail(map_info, tail);
+		clear_map_tail(map_info, map);
+		insert_tail_in_map(map_info, map, *tail);
+		if (map[next_row][next_column] == TAIL) {
+			reset_nodes_till(tail, next_row, next_column);
+		}
+		clear_map_tail(map_info, map);
+		insert_tail_in_map(map_info, map, *tail);
 	}
+	printf("coda: ");
+	print_vector(*tail);
+	printf("\n");
 }
 
 /*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative invormazioni
@@ -103,7 +114,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			if(map_info->player_row - 1 >= 0){
 				next_step = map[map_info->player_row - 1][map_info->player_column];
 				if(next_step != WALL || map_info->drill_counter > 0) {
-					check_next_step(map_info, next_step, &win, points, tail);
+					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row - 1, map_info->player_column);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
@@ -124,7 +135,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			if(map_info->player_column + 1 < map_info->column){
 				next_step = map[map_info->player_row][map_info->player_column + 1];
 				if(next_step != WALL || map_info->drill_counter > 0) {
-					check_next_step(map_info, next_step, &win, points, tail);
+					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row, map_info->player_column + 1);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
@@ -144,7 +155,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			if(map_info->player_row + 1 < map_info->row){
 				next_step = map[map_info->player_row + 1][map_info->player_column];
 				if(next_step != WALL || map_info->drill_counter > 0) {
-					check_next_step(map_info, next_step, &win, points, tail);
+					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row + 1, map_info->player_column);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
@@ -164,7 +175,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 			if(map_info->player_column - 1 >= 0){
 				next_step = map[map_info->player_row][map_info->player_column - 1];
 				if(next_step != WALL || map_info->drill_counter > 0) {
-					check_next_step(map_info, next_step, &win, points, tail);
+					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row, map_info->player_column - 1);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
