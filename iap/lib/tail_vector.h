@@ -38,7 +38,9 @@ void print_vector(vector *list) {
 }
 
 // resetta il contenuto dei nodi fino al raggiungimento di un determinato nodo
-void reset_nodes_till(vector **list, int node_row, int node_col){
+void reset_nodes_till(vector **list, int node_row, int node_col, int *points){
+	if ((*list)->row != -1)
+		*points -= 10;
 	if ((*list)->row == node_row && (*list)->column == node_col) {
 		(*list)->row = -1;
 		(*list)->column = -1;
@@ -46,5 +48,5 @@ void reset_nodes_till(vector **list, int node_row, int node_col){
 	}
 	(*list)->row = -1;
 	(*list)->column = -1;
-	reset_nodes_till(&((*list)->next), node_row, node_col);
+	reset_nodes_till(&((*list)->next), node_row, node_col, points);
 }

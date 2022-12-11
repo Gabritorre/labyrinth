@@ -92,7 +92,7 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 		if (map[next_row][next_column] == TAIL) {
-			reset_nodes_till(tail, next_row, next_column);
+			reset_nodes_till(tail, next_row, next_column, points);
 		}
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
