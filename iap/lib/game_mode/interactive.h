@@ -19,18 +19,20 @@ int command_interpreter (char command, char *move) {
 
 /*appende la mossa appena fatta alla sequenza di mosse
  * parametri: la sequenza di mosse fatte, la dimensione della stringa, la mossa da appendere*/
-char* build_sequence (char **steps, int *step_size, char move) {
-	if (strlen(*steps) == *step_size){
+char* build_sequence (char **steps, int *max_step_size, char move) {
+	if (strlen(*steps) >= *max_step_size){
 /*		printf("\n\trealloco\n");*/
-		*step_size += 5;
+		*max_step_size += 5;
 	}
 
-	char *sequence = (char*)malloc(sizeof(char) * *step_size);
+	char *sequence = (char*)malloc(sizeof(char) * *max_step_size);
 	strncat(sequence, *steps, strlen(*steps));
 	strncat(sequence, &move, 1);
 	strcat(sequence, "\0");
-/*	printf("\nstep_size: %d\n", *step_size);*/
-/*	printf("str_len: %ld\n", strlen(*steps));*/
+/*	printf("\nmax_step_size: %d\n", *max_step_size);*/
+/*	printf("old_sequence_len: %ld\n", strlen(*steps));*/
+/*	printf("sequence: %s\n", sequence);*/
+/*	printf("sequence_len: %ld\n", strlen(sequence));*/
 
 	return sequence;
 }
@@ -65,7 +67,7 @@ void move_tail(struct Map* map_info, vector** tail) {
 void check_next_step(struct Map* map_info, char map[map_info->row][map_info->column], char next_step, bool *win, int *points, vector** tail, int next_row, int next_column) {
 	if (next_step == BONUS_POINTS) {
 		*points += QUANTITY_BONUS;
-		vector_append(tail, map_info->player_row, map_info->player_column);
+		vector_append(tail, map_info);
 	}
 	else{
 		if (next_step == EXIT) {
@@ -73,12 +75,17 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
 		}
 
 		else if (next_step == HALF_POINTS) {
-			if (*points < 0) {
-				*points = *points * 2;
+/*			if (*points < 0) {*/
+/*				*points = *points * 2;*/
+/*			}*/
+/*			else {*/
+/*				*points = (int) *points/2;*/
+/*			}*/
+			int middle_node = map_info->tail_len/2;
+			if(map_info->tail_len % 2 != 0) {
+				middle_node = (map_info->tail_len + 1) / 2;
 			}
-			else {
-				*points = (int) *points/2;
-			}
+			delete_half_tail(tail, middle_node, points, map_info);
 		}
 
 		else if (next_step == DRILL) {
@@ -92,14 +99,14 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 		if (map[next_row][next_column] == TAIL) {
-			reset_nodes_till(tail, next_row, next_column, points);
+			reset_nodes_till(tail, next_row, next_column, points, map_info);
 		}
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 	}
 	printf("coda: ");
 	print_vector(*tail);
-	printf("\n");
+	printf("\nlen coda %d\n", map_info->tail_len);
 }
 
 /*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative invormazioni
@@ -204,9 +211,10 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 	bool playing = true;
 	int points = 1000;
 	vector *tail = NULL;
+	map_info->tail_len = 0;
 	map_info->drill_counter = 0;
-	int all_steps_size = map_info->row + map_info->column;
-	char *all_steps = (char*)malloc(sizeof(char) * all_steps_size);
+	int max_steps_size = map_info->row + map_info->column;
+	char *all_steps = (char*)malloc(sizeof(char) * max_steps_size);
 
 	while(playing) {
 		printf("\n\n---------------\n\n");
@@ -227,7 +235,7 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			printf("La sequenza inserita contiene valori non corretti, riprova");
 		}
 		else{
-			if(run_move(map_info, map, move, &points, &all_steps, &all_steps_size, false, &tail)) {
+			if(run_move(map_info, map, move, &points, &all_steps, &max_steps_size, false, &tail)) {
 				insert_tail_in_map(map_info, map, tail);
 				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
@@ -235,4 +243,6 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			}
 		}
 	}
+	dealloc_vector(&tail);
+	free(all_steps);
 }

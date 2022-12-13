@@ -24,6 +24,8 @@ struct Map {
 
 	int player_row;
 	int player_column;
+	int tail_len;
+
 	int drill_counter;
 
 	int exit_row;
