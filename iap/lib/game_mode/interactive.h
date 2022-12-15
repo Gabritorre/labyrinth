@@ -104,9 +104,9 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 	}
-	printf("coda: ");
-	print_vector(*tail);
-	printf("\nlen coda %d\n", map_info->tail_len);
+/*	printf("coda: ");*/
+/*	print_vector(*tail);*/
+/*	printf("\nlen coda %d\n", map_info->tail_len);*/
 }
 
 /*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative invormazioni
