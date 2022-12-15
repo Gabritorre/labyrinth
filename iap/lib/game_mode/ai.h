@@ -142,7 +142,9 @@ void goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 		target_direction = 'v';
 	}
 
-	if (map[target_row][target_col] == BONUS_POINTS) {
+	bool free_vertical = green_light_to_target(map_info, map, target_col, target_row, 'v');
+	bool free_horizontal = green_light_to_target(map_info, map, target_col, target_row, 'h');
+	if (map[target_row][target_col] == BONUS_POINTS && (free_vertical || free_horizontal)) {
 		if(target_col == map_info->player_column){
 			target_direction = 'v';
 		}
@@ -291,12 +293,21 @@ void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info-
 		column = map_info->column - 1;
 	}
 
-	//ricerca delle monete
+	//ricerca delle monete facendo il seguente percorso: dall'alto al basso -> cambio colonna -> dal basso all'alto
+	//-> cambio colonna -> dall'alto al basso ecc...
+	int start = 0, end = map_info->row - 1;
 	while(column != map_info->exit_column || deep_inspect) {
-		for(int row = 1; row < map_info->row - 1; row++) {
+		int row = start;
+		while(row != end) {
 			if(map[row][column] == BONUS_POINTS) {
 				printf("MONETA IN %d %d", row, column);
 				goto_target(map_info, map, all_steps, all_steps_size, column, row, points, tail);
+			}
+			if(row < end){
+				row++;
+			}
+			else {
+				row --;
 			}
 		}
 		if (column < map_info->exit_column || deep_inspect) {
@@ -308,10 +319,13 @@ void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info-
 		if (deep_inspect) {
 			//if (column == further_column || map[map_info->player_row][column] == WALL) {
 			if (column == further_column) {
-				printf("\nmi blocco perche %d %d\n", column == further_column, map[map_info->player_row][column] == WALL);
 				deep_inspect = false;
 			}
 		}
+		// scambio start con end
+		int temp = end;
+		end = start;
+		start = temp;
 	}
 
 	//raggiungimento dell'uscita
