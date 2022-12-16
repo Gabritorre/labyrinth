@@ -74,7 +74,7 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
 			*win = true;
 		}
 
-		else if (next_step == HALF_POINTS) {
+		else if (next_step == HALF_POINTS && map_info->tail_len > 0) {
 /*			if (*points < 0) {*/
 /*				*points = *points * 2;*/
 /*			}*/

@@ -178,6 +178,7 @@ int main(int argc, char *argv[]) {
 
 		int points = 1000;
 		vector *tail = NULL;
+		map_info.tail_len = 0;
 		map_info.drill_counter = 0;
 		int max_steps_size = map_info.row + map_info.column; //lunghezza della sequenza di passi
 		char *all_steps = (char *)malloc(sizeof(char) * max_steps_size); // array che conterrà la sequenza di passi,

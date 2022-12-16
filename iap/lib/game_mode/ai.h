@@ -11,7 +11,7 @@
 int run_ghost(struct Map map_info, char map[map_info.row][map_info.column], char move, int vert_value, int horiz_value) {
 	int next_row = map_info.player_row + vert_value; // calcola la riga su qui deve guardare
 	int next_column = map_info.player_column + horiz_value; // calcola la colonna su cui deve guardare
-	if(map[next_row][next_column] != WALL && map[next_row][next_column] != HALF_POINTS) { // se nel punto da guardare è libero allora fermati
+	if(map[next_row][next_column] != WALL) { // se nel punto da guardare è libero allora fermati
 		return 0;
 	}
 	//se vicolo ceco
@@ -44,7 +44,7 @@ bool green_light_to_target (struct Map* map_info, char map[map_info->row][map_in
 	if (map[target_row][target_col] == PLAYER) {
 		return true;
 	}
-	else if (map[target_row][target_col] == WALL || map[target_row][target_col] == HALF_POINTS) {
+	else if (map[target_row][target_col] == WALL) {
 		return false;
 	}
 
