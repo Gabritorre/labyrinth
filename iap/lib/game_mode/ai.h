@@ -11,14 +11,14 @@
 int run_ghost(struct Map map_info, char map[map_info.row][map_info.column], char move, int vert_value, int horiz_value) {
 	int next_row = map_info.player_row + vert_value; // calcola la riga su qui deve guardare
 	int next_column = map_info.player_column + horiz_value; // calcola la colonna su cui deve guardare
-	if(map[next_row][next_column] != WALL) { // se nel punto da guardare è libero allora fermati
-		return 0;
-	}
-	//se vicolo ceco
-	if (next_row < 0 || next_row >= map_info.row || next_column < 0 || next_column >= map_info.column) {
+	//se vicolo ceco o fuori dai bordi della mappa
+	if (next_row <= 0 || next_row >= map_info.row || next_column <= 0 || next_column >= map_info.column) {
 		return 9999;
 	}
 
+	if(map[next_row][next_column] != WALL) { // se nel punto da guardare è libero allora fermati
+		return 1;
+	}
 /*	continua a muoverti finchè trovi degli ostacoli dove stai guardando*/
 	if (move == NORD)
 		return run_ghost(map_info, map, move, vert_value - 1, horiz_value) + 1;
@@ -41,6 +41,7 @@ bool green_light_to_target (struct Map* map_info, char map[map_info->row][map_in
 	if(map_info->player_row != target_row && map_info->player_column != target_col) {
 		return false;
 	}
+	// se si è trovata una via libera
 	if (map[target_row][target_col] == PLAYER) {
 		return true;
 	}
@@ -64,21 +65,23 @@ bool green_light_to_target (struct Map* map_info, char map[map_info->row][map_in
 			return green_light_to_target(map_info, map, target_col, target_row + 1, direction);
 		}
 	}
-
 }
 
 /*metodo invocato quendo si incontra un muro che blocca la strada
  * in base alla direzione in cui si è incappati nel muro questo metodo lancia i fantasmi (vedi metodo run_ghost) e decide quale strada conviene prendere
  * parametri:
- * direction = direzione in cui visogna muoversi per raggirare il muro (v = il player deve muoversi o a NORD o a SUD)
- * move = rappresenta il movimento da fare una volta trovata il precorso da prendere per raggirare il muro
+ * moving_direction = direzione in cui bisogna muoversi per raggirare il muro (v = il player deve muoversi o a NORD o a SUD, h = il player deve
+ * muoversi a EST oppure a OVEST)
+ * move = rappresenta la direzione in cui andare per raggirare il muro
+ *
+ * Il metodo ritorna quanti step sono necessari per raggirare il muro
  * */
-int go_around_wall(struct Map* map_info, char map[map_info->row][map_info->column], char direction, char move, char** all_steps, int* all_steps_size, int* points, vector** tail, int target_row, int target_col) {
+int go_around_wall(struct Map* map_info, char map[map_info->row][map_info->column], char moving_direction, char move, char** all_steps, int* all_steps_size, int* points, vector** tail, int target_row, int target_col) {
 	int ghost1_steps, ghost2_steps, better_path;
 
 	printf("lancio i fantasmi\n");
 	int vert_value, horiz_value; // rappresentano la direzione in cui guardare, vedere commento sulla funzione run_ghost
-	if (direction == 'v') {
+	if (moving_direction == 'v') {
 		vert_value = 0;
 		horiz_value = 1;
 		if(move == OVEST){
@@ -86,48 +89,60 @@ int go_around_wall(struct Map* map_info, char map[map_info->row][map_info->colum
 			horiz_value = -1;
 		}
 
-		ghost1_steps = run_ghost(*map_info, map, NORD, vert_value, horiz_value);
-		ghost2_steps = run_ghost(*map_info, map, SUD, vert_value, horiz_value);
+		ghost1_steps = run_ghost(*map_info, map, NORD, vert_value - 1, horiz_value);
+		ghost2_steps = run_ghost(*map_info, map, SUD, vert_value + 1, horiz_value);
 		move = NORD;
 		better_path = ghost1_steps;
+		//se ghost2 è migliore
 		if(ghost1_steps > ghost2_steps) {
 			better_path = ghost2_steps;
 			move = SUD;
-			if (ghost1_steps != 9999 && target_row < map_info->player_row){
+			// se però ghost1 è una strada possibile e il target è in alto
+			if (ghost1_steps < 9999 && target_row < map_info->player_row){
 				better_path = ghost1_steps;
 				move = NORD;
 			}
 		}
-		if (ghost2_steps != 9999 && target_row > map_info->player_row){
+
+		// se ghost1 è meglio però ghost2 è una strada possibile e il target è in basso
+		if (ghost2_steps < 9999 && target_row > map_info->player_row){
 			better_path = ghost2_steps;
 			move = SUD;
 		}
+		printf("ghost1: %d\n", ghost1_steps);
+		printf("ghost2: %d\n", ghost2_steps);
 		printf("better_move di v %c\n", move);
 
 	}
-	else if (direction == 'h') {
+	else if (moving_direction == 'h') {
 		vert_value = 1;
 		horiz_value = 0;
 		if(move == NORD){
 			vert_value = -1;
 			horiz_value = 0;
 		}
-		ghost1_steps = run_ghost(*map_info, map, OVEST, vert_value, horiz_value);
-		ghost2_steps = run_ghost(*map_info, map, EST, vert_value, horiz_value);
+		ghost1_steps = run_ghost(*map_info, map, OVEST, vert_value, horiz_value - 1);
+		ghost2_steps = run_ghost(*map_info, map, EST, vert_value, horiz_value + 1);
 		move = OVEST;
 		better_path = ghost1_steps;
+		//se ghost2 è migliore
 		if(ghost1_steps > ghost2_steps) {
 			better_path = ghost2_steps;
 			move = EST;
-			if (ghost1_steps != 9999 && target_col < map_info->player_column){
+			// se però ghost1 è una strada possibile e il target è a sinistra
+			if (ghost1_steps < 9999 && target_col < map_info->player_column){
 				better_path = ghost1_steps;
 				move = OVEST;
 			}
 		}
-		if (ghost2_steps != 9999 && target_col > map_info->player_column){
+
+		// se ghost1 è meglio però ghost2 è una strada possibile e il target è a destra
+		if (ghost2_steps < 9999 && target_col > map_info->player_column){
 			better_path = ghost2_steps;
 			move = EST;
 		}
+		printf("ghost1: %d\n", ghost1_steps);
+		printf("ghost2: %d\n", ghost2_steps);
 		printf("better_move di h %c\n", move);
 	}
 
@@ -140,30 +155,27 @@ int go_around_wall(struct Map* map_info, char map[map_info->row][map_info->colum
 	return better_path;
 }
 
+/*Controlla quanti muri ci nelle celle adiacenti ad un item passato per parametro*/
 int inspect_item(struct Map *map_info, char map[map_info->row][map_info->column], int item_row, int item_col) {
 	int counter = 0;
 
 	if(map[item_row + 1][item_col] == WALL && item_row + 1 < map_info->row) {
-		printf("ost sud\n");
 		counter++;
 	}
 	if(map[item_row - 1][item_col] == WALL && item_row - 1 >= 0) {
-		printf("ost nord\n");
 		counter++;
 	}
 	if(map[item_row][item_col + 1] == WALL && item_col + 1 < map_info->column) {
-		printf("ost est\n");
 		counter++;
 	}
 	if(map[item_row][item_col - 1] == WALL && item_col - 1 >= 0) {
-		printf("ost ovest\n");
 		counter++;
 	}
 	return counter;
 }
 
 /* Sposta la posizione del personaggio verso un determinato target che gli viene passato come parametro
- * parametri: le informazioni della mappa, la mappa, la stringa contenenti i passi fatti dal personaggio, la lunghezza di quest'utlima stringa, la colonna del target, la riga del target, il punteggio
+ * parametri: le informazioni della mappa, la mappa, la stringa contenenti i passi fatti dal personaggio, la lunghezza di quest'utlima stringa, la colonna del target, la riga del target, il punteggio, la coda
  * ritorna vero se ha interrotto forzatamente il raggiungimento del target, ritorna falso se lo ha raggiunto correttamente
  * */
 bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int target_col, int target_row, int *points, vector** tail) {
@@ -171,21 +183,24 @@ bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 	char move; //contine la mossa da fare
 	char target_direction = 'h'; // serve a capire da quale direzione (verticale od orizzontale) si può accedere all'uscita
 	char left_target = '?', right_target = '?';
-	int panic_counter = 0;
+	int panic_counter = 0; // contatore che se va oltre una certa quantità forza l'algoritmo a interrompere il raggiungimento del target attuale e si dirige all'uscita
 
+	//salva la posizione a sinistra del target
 	if (target_col - 1 >= 0) {
 		left_target = map[target_row][target_col - 1];
 	}
+	//salva la posizione a destra del target
 	if (target_col + 1 < map_info->column) {
 		right_target = map[target_row][target_col + 1];
 	}
-
+	// se sia a sinistra che a destra ci sono dei muri allora il target è accessibile verticalmente
 	if (left_target == WALL && right_target == WALL) {
 		target_direction = 'v';
 	}
 
 	bool free_vertical = green_light_to_target(map_info, map, target_col, target_row, 'v');
 	bool free_horizontal = green_light_to_target(map_info, map, target_col, target_row, 'h');
+	//se il target è una moneta e questa moneta èd è presente una strada retta libera dal player alla moneta
 	if (map[target_row][target_col] == BONUS_POINTS && (free_vertical || free_horizontal)) {
 		if(target_col == map_info->player_column){
 			target_direction = 'v';
@@ -193,7 +208,6 @@ bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 		else if (target_row == map_info->player_row) {
 			target_direction = 'h';
 		}
-
 	}
 	//ignora il target se il target ha 3 o più muri intorno a esso oppure se non c'è una strada libera retta per raggiungerlo
 	if (inspect_item(map_info, map, target_row, target_col) >= 3 && !green_light_to_target(map_info, map, target_col, target_row, target_direction)) {
@@ -202,7 +216,7 @@ bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 
 	printf("target_direction %c\n", target_direction);
 
-	//finche il personaggio non trova percorso retto senza ostacoli verso il target
+	//finche il personaggio non trova percorso retto senza ostacoli verso il target e finche siamo nel limite dei passi consentito per raggiungerlo
 	while (!green_light_to_target(map_info, map, target_col, target_row, target_direction) && panic_counter <= map_info->row + map_info->column) {
 /*		printf("target_col %d\n", target_col);*/
 /*		printf("target_row %d\n", target_row);*/
@@ -239,7 +253,6 @@ bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 			}
 			if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail)) {
 				panic_counter += go_around_wall(map_info, map, 'h', move, all_steps, all_steps_size, points, tail, target_row, target_col);
-				printf("vado a %d\n", move);
 				run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail);
 			}
 		}
@@ -329,16 +342,17 @@ bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 	return false;
 }
 
- /* controlla se nel percorso per raggiungere l'uscita si trovano delle monete abbastanza vicine per essere raggiunte, una volta finite le monete raggiungibili punta all'uscita*/
+ /* controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili punta all'uscita*/
 void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int *points, vector** tail) {
 
-	int column = map_info->player_column;
+	int column = map_info->player_column; // colonna da cui partire per scannerizzare la mappa in presenza di monete
 	int further_column = map_info->column - 1; // colonna più lontana da scannerizzare per cercare delle monete
-	bool deep_inspect = false; //nel caso in cui il personaggio e l'uscita siano allineati sin dalla partenza allora cerca delle monete nelle colonne adiacenti a qualla per raggiungere l'uscita
+	bool deep_inspect = true; // condizione che rimane vera fino a che non si finisce di scannerizzare la mappa
+	//calcolo la colonna di arrivo e di partenza per la scannerizzazione
 	if (map_info->player_column > map_info->exit_column) {
 		column = map_info->player_column + 10;
-		if(map_info->player_column - 10 > 0){
-			further_column = map_info->player_column - 10;
+		if(map_info->exit_column - 10 > 0){
+			further_column = map_info->exit_column - 10;
 		}
 		else {
 			further_column = 0;
@@ -346,12 +360,14 @@ void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info-
 	}
 	else{
 		column = map_info->player_column - 10;
-		if(map_info->player_column + 10 <= map_info->column){
-			further_column = map_info->player_column + 10;
+		if(map_info->exit_column + 10 <= map_info->column){
+			further_column = map_info->exit_column + 10;
+		}
+		else{
+			further_column = map_info->column;
 		}
 	}
 
-	deep_inspect = true;
 	//evito di uscire dai limiti della mappa
 	if(column <= 0) {
 		column = 1;
@@ -360,10 +376,10 @@ void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info-
 		column = map_info->column - 1;
 	}
 
-	//ricerca delle monete facendo il seguente percorso: dall'alto al basso -> cambio colonna -> dal basso all'alto
+	//ricerca delle monete e trapani facendo il seguente percorso: dall'alto al basso -> cambio colonna -> dal basso all'alto
 	//-> cambio colonna -> dall'alto al basso ecc...
 	int start = 0, end = map_info->row - 1;
-	bool panic = false;
+	bool panic = false; // se si avvera il panic interrompe la scannerizzazione e si dirige verso l'uscita
 	while(deep_inspect) {
 		if (panic){
 			break;

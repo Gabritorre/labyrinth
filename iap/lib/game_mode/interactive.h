@@ -47,15 +47,20 @@ void insert_tail_in_map(struct Map* map_info, char map[map_info->row][map_info->
 	insert_tail_in_map(map_info, map, tail->next);
 }
 
+//muove la coda in modo tale che segua snake, ogni nodo copierà le coordinate del nodo che gli sta davanti fino a che l'ultimo nodo
+//copia l'ultima posizione di snake
 void move_tail(struct Map* map_info, vector** tail) {
+	// se la coda non è ancora presente
 	if ((*tail) == NULL){
 		return;
 	}
+	// se siamo nell'ultimo pezzo di coda (quello più vicino a snake)
 	if (((*tail)->next) == NULL) {
 		(*tail)->row = map_info->player_row;
 		(*tail)->column = map_info->player_column;
 		return;
 	}
+	// se siamo in un nodo che è ancora valido, gli faccio copiare le coordinate del nodo successivo
 	if((*tail)->row != -1){
 		(*tail)->row = ((*tail)->next)->row;
 		(*tail)->column = ((*tail)->next)->column;
@@ -75,16 +80,13 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
 		}
 
 		else if (next_step == HALF_POINTS && map_info->tail_len > 0) {
-/*			if (*points < 0) {*/
-/*				*points = *points * 2;*/
-/*			}*/
-/*			else {*/
-/*				*points = (int) *points/2;*/
-/*			}*/
+			//calcolo la metà della coda
 			int middle_node = map_info->tail_len/2;
+			// trovo il nodo che sta in mezzo alla coda
 			if(map_info->tail_len % 2 != 0) {
 				middle_node = (map_info->tail_len + 1) / 2;
 			}
+			// elimino la coda fino a metà
 			delete_half_tail(tail, middle_node, points, map_info);
 		}
 
@@ -98,6 +100,7 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
 		move_tail(map_info, tail);
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
+		// se incontro un pezzo di coda, resetto i nodi fino al punto incontrato
 		if (map[next_row][next_column] == TAIL) {
 			reset_nodes_till(tail, next_row, next_column, points, map_info);
 		}
@@ -109,8 +112,8 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
 /*	printf("\nlen coda %d\n", map_info->tail_len);*/
 }
 
-/*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative invormazioni
- * parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva
+/*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative informazioni
+ * parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva, la coda
  * Se la modalità ai è attiva il ritorno significa che la mossa è stata fatto correttamente
  * altrimenti il ritorno indica se il giocatore ha vinto la partità o no*/
 int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char move, int *points, char **steps, int *step_size, bool ai_flag, vector** tail) {
@@ -119,7 +122,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 	switch (move) {
 		case NORD:
 			if(map_info->player_row - 1 >= 0){
-				next_step = map[map_info->player_row - 1][map_info->player_column];
+				next_step = map[map_info->player_row - 1][map_info->player_column]; // ottengo il carattere contenuto nel nuovo passo da fare
 				if(next_step != WALL || map_info->drill_counter > 0) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row - 1, map_info->player_column);
 
@@ -210,8 +213,8 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_info->column]) {
 	bool playing = true;
 	int points = 1000;
-	vector *tail = NULL;
-	map_info->tail_len = 0;
+	vector *tail = NULL; // vettore che conterrà i nodi della coda, il primo elemento del vettore sarà la parte più lontana della coda, mentre l'ultimo elemnto del vettore è il nodo più vicino a snake
+	map_info->tail_len = 0; // lunghezza della coda iniziale
 	map_info->drill_counter = 0;
 	int max_steps_size = map_info->row + map_info->column;
 	char *all_steps = (char*)malloc(sizeof(char) * max_steps_size);
