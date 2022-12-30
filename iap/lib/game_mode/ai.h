@@ -8,7 +8,7 @@
  * se voglio controllare sud -> move = EST/OVEST, vert_value = 1, horiz_value = 0
  * ovest -> move = NORD/SUD, vert_value = 0, horiz_value = -1
  * nord -> move = EST/OVEST, vert_value = -1, horiz_value = 0*/
-int run_ghost(struct Map map_info, char map[map_info.row][map_info.column], char move, int vert_value, int horiz_value) {
+int run_ghost(map map_info, char map[map_info.row][map_info.column], char move, int vert_value, int horiz_value) {
 	int next_row = map_info.player_row + vert_value; // calcola la riga su qui deve guardare
 	int next_column = map_info.player_column + horiz_value; // calcola la colonna su cui deve guardare
 	//se vicolo ceco o fuori dai bordi della mappa
@@ -36,7 +36,7 @@ int run_ghost(struct Map map_info, char map[map_info.row][map_info.column], char
 /*controlla che ci sia una via libera retta tra il player e il target da raggiungere
  * Il metodo parte dall'uscita e va verso il player, se trova degli ostacoli ritorna false, se invece
  * riesce a raggiungere il player allora ritorna true*/
-bool green_light_to_target (struct Map* map_info, char map[map_info->row][map_info->column], int target_col, int target_row, char direction) {
+bool green_light_to_target (map* map_info, char map[map_info->row][map_info->column], int target_col, int target_row, char direction) {
 	// se player e target non sono allineati in nessun modo
 	if(map_info->player_row != target_row && map_info->player_column != target_col) {
 		return false;
@@ -76,7 +76,7 @@ bool green_light_to_target (struct Map* map_info, char map[map_info->row][map_in
  *
  * Il metodo ritorna quanti step sono necessari per raggirare il muro
  * */
-int go_around_wall(struct Map* map_info, char map[map_info->row][map_info->column], char moving_direction, char move, char** all_steps, int* all_steps_size, int* points, vector** tail, int target_row, int target_col) {
+int go_around_wall(map* map_info, char map[map_info->row][map_info->column], char moving_direction, char move, char** all_steps, int* all_steps_size, int* points, vector** tail, int target_row, int target_col) {
 	int ghost1_steps, ghost2_steps, better_path;
 
 	printf("lancio i fantasmi\n");
@@ -156,7 +156,7 @@ int go_around_wall(struct Map* map_info, char map[map_info->row][map_info->colum
 }
 
 /*Controlla quanti muri ci nelle celle adiacenti ad un item passato per parametro*/
-int inspect_item(struct Map *map_info, char map[map_info->row][map_info->column], int item_row, int item_col) {
+int inspect_item(map* map_info, char map[map_info->row][map_info->column], int item_row, int item_col) {
 	int counter = 0;
 
 	if(map[item_row + 1][item_col] == WALL && item_row + 1 < map_info->row) {
@@ -178,7 +178,7 @@ int inspect_item(struct Map *map_info, char map[map_info->row][map_info->column]
  * parametri: le informazioni della mappa, la mappa, la stringa contenenti i passi fatti dal personaggio, la lunghezza di quest'utlima stringa, la colonna del target, la riga del target, il punteggio, la coda
  * ritorna vero se ha interrotto forzatamente il raggiungimento del target, ritorna falso se lo ha raggiunto correttamente
  * */
-bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int target_col, int target_row, int *points, vector** tail) {
+bool goto_target(map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int target_col, int target_row, int *points, vector** tail) {
 
 	char move; //contine la mossa da fare
 	char target_direction = 'h'; // serve a capire da quale direzione (verticale od orizzontale) si può accedere all'uscita
@@ -343,7 +343,7 @@ bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 }
 
  /* controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili punta all'uscita*/
-void cpu_algorithm(struct Map* map_info, char map[map_info->row][map_info->column]) {
+void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column]) {
 	int points = 1000;
 	vector *tail = NULL;
 	map_info->tail_len = 0;

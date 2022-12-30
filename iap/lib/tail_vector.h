@@ -19,7 +19,7 @@ vector* vector_create(int row, int column) {
 	return list;
 }
 
-void vector_append(vector** list, struct Map* map_info) {
+void vector_append(vector** list, map* map_info) {
 	if (*list == NULL) {
 		*list = vector_create(map_info->player_row, map_info->player_column);
 		map_info->tail_len += 1;
@@ -37,7 +37,7 @@ void print_vector(vector *list) {
 }
 
 // resetta il contenuto dei nodi fino al raggiungimento di un determinato nodo
-void reset_nodes_till(vector **list, int node_row, int node_col, int *points, struct Map* map_info){
+void reset_nodes_till(vector **list, int node_row, int node_col, int *points, map* map_info){
 	if ((*list)->row != -1){
 		*points -= 10;
 		map_info->tail_len -= 1;
@@ -52,7 +52,7 @@ void reset_nodes_till(vector **list, int node_row, int node_col, int *points, st
 	reset_nodes_till(&((*list)->next), node_row, node_col, points, map_info);
 }
 
-void delete_half_tail(vector **list, int middle_node, int *points, struct Map* map_info) {
+void delete_half_tail(vector **list, int middle_node, int *points, map* map_info) {
 	if ((*list)->row != -1){
 		*points -= 10;
 		middle_node -= 1;

@@ -18,7 +18,7 @@
 
 #define QUANTITY_BONUS 11
 
-struct Map {
+typedef struct {
 	int row;
 	int column;
 
@@ -30,7 +30,7 @@ struct Map {
 
 	int exit_row;
 	int exit_column;
-};
+} map;
 
 void title() {
 	printf(" -------------------\n");
@@ -79,7 +79,7 @@ void print_game_info() {
 
 }
 
-void clear_map_tail(struct Map* map_info, char map[map_info->row][map_info->column]) {
+void clear_map_tail(map* map_info, char map[map_info->row][map_info->column]) {
 	for (int row = 0; row < map_info->row; row++) {
 		for (int column = 0; column < map_info->column; column++) {
 			if (map[row][column] == TAIL) {
@@ -89,7 +89,7 @@ void clear_map_tail(struct Map* map_info, char map[map_info->row][map_info->colu
 	}
 }
 
-void print_map(struct Map* map_info, char map[map_info->row][map_info->column]) {
+void print_map(map* map_info, char map[map_info->row][map_info->column]) {
 	for (int row = 0; row < map_info->row; row++) {
 		printf("\n");
 		for (int column = 0; column < map_info->column; column++) {

@@ -38,7 +38,7 @@ char* build_sequence (char **steps, int *max_step_size, char move) {
 }
 
 /*inserisce la coda nella mappa*/
-void insert_tail_in_map(struct Map* map_info, char map[map_info->row][map_info->column], vector* tail) {
+void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column], vector* tail) {
 	if (tail == NULL) // fine lista, cioè lista vuota
 		return;
 	if(tail->row != -1)
@@ -49,7 +49,7 @@ void insert_tail_in_map(struct Map* map_info, char map[map_info->row][map_info->
 
 //muove la coda in modo tale che segua snake, ogni nodo copierà le coordinate del nodo che gli sta davanti fino a che l'ultimo nodo
 //copia l'ultima posizione di snake
-void move_tail(struct Map* map_info, vector** tail) {
+void move_tail(map* map_info, vector** tail) {
 	// se la coda non è ancora presente
 	if ((*tail) == NULL){
 		return;
@@ -69,7 +69,7 @@ void move_tail(struct Map* map_info, vector** tail) {
 }
 
 /*controlla il contenuto della prossima cella che si vuole visitare*/
-void check_next_step(struct Map* map_info, char map[map_info->row][map_info->column], char next_step, bool *win, int *points, vector** tail, int next_row, int next_column) {
+void check_next_step(map* map_info, char map[map_info->row][map_info->column], char next_step, bool *win, int *points, vector** tail, int next_row, int next_column) {
 	if (next_step == BONUS_POINTS) {
 		*points += QUANTITY_BONUS;
 		vector_append(tail, map_info);
@@ -116,7 +116,7 @@ void check_next_step(struct Map* map_info, char map[map_info->row][map_info->col
  * parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva, la coda
  * Se la modalità ai è attiva il ritorno significa che la mossa è stata fatto correttamente
  * altrimenti il ritorno indica se il giocatore ha vinto la partità o no*/
-int run_move(struct Map* map_info, char map[map_info->row][map_info->column], char move, int *points, char **steps, int *step_size, bool ai_flag, vector** tail) {
+int run_move(map* map_info, char map[map_info->row][map_info->column], char move, int *points, char **steps, int *step_size, bool ai_flag, vector** tail) {
 	bool win = false;
 	char next_step; //conterrà il contenuto della cella del passo successivo
 	switch (move) {
@@ -210,7 +210,7 @@ int run_move(struct Map* map_info, char map[map_info->row][map_info->column], ch
 	return 0;
 }
 
-void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_info->column]) {
+void start_interactive_mode(map* map_info, char map[map_info->row][map_info->column]) {
 	bool playing = true;
 	int points = 1000;
 	vector *tail = NULL; // vettore che conterrà i nodi della coda, il primo elemento del vettore sarà la parte più lontana della coda, mentre l'ultimo elemnto del vettore è il nodo più vicino a snake

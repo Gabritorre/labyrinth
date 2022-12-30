@@ -37,7 +37,7 @@ char list_maps(FILE *file) {
 }
 
 // questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente
-int get_map_info(FILE *file, struct Map* map_info, int map_number) {
+int get_map_info(FILE *file, map* map_info, int map_number) {
 	map_info->row = 1;
 	map_info->column = 1;
 	map_info->player_row = -1;
@@ -106,7 +106,7 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 	return map_start_char;
 }
 
-void save_map(struct Map* map_info, int map_line, char map[map_info->row][map_info->column]) {
+void save_map(map* map_info, int map_line, char map[map_info->row][map_info->column]) {
 	FILE *file;
 	file = fopen("maps.txt", "r");
 	if (NULL == file) {
@@ -137,7 +137,7 @@ void save_map(struct Map* map_info, int map_line, char map[map_info->row][map_in
 	}
 }
 
-int check_map_proprieties(struct Map *map_info) {
+int check_map_proprieties(map* map_info) {
 	if (map_info->row <= 2 || map_info->column <= 2){
 		printf("\tDimensioni della mappa non sufficienti\n");
 		return 1;
@@ -153,7 +153,7 @@ int check_map_proprieties(struct Map *map_info) {
 	return 0;
 }
 
-void take_map_cmd_line(struct Map* map_info, char map[map_info->row][map_info->column]) {
+void take_map_cmd_line(map* map_info, char map[map_info->row][map_info->column]) {
 	for (int i = 0; i < map_info->row; i++) {
 		char line[map_info->column];
 		scanf(" %[^\n]%*c", line); //leggi l'input finche non trovi \n e quando viene trovata non viene salvata
@@ -171,7 +171,7 @@ void take_map_cmd_line(struct Map* map_info, char map[map_info->row][map_info->c
 	}
 }
 
-int take_map_text_file(struct Map* map_info) {
+int take_map_text_file(map* map_info) {
 	FILE *file;
 	file = fopen("maps.txt", "r");
 	if (NULL == file) {
@@ -228,7 +228,7 @@ int main(int argc, char *argv[]) {
 		//modalità interativa
 		if (user_selection[0] == '1' && user_selection[1] == 0) {
 			printf("\thai selezionato modalita' interattiva\n");
-			struct Map map_info;
+			map map_info;
 			int map_line;
 			bool choosing_input = true;
 			while(choosing_input){
@@ -268,7 +268,7 @@ int main(int argc, char *argv[]) {
 
 		else if (user_selection[0] == '2' && user_selection[1] == 0) {
 			printf("\thai selezionato modalita' CPU\n");
-			struct Map map_info;
+			map map_info;
 			int map_line;
 			bool choosing_input = true;
 			while(choosing_input){
