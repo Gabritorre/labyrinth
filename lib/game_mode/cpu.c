@@ -1,3 +1,6 @@
+/*
+file contentente le funzioni utilizzate dalla modalità CPU
+*/
 
 /*Questo metodo crea un fantasma del personaggio e lo manda in una direzione "move" fino a che non trova una strada libera che rispetti "vert_value" e "horiz_value":
  * vert_value = 1 per controllare il sud, vert_value = -1 per controllare il nord,
@@ -342,7 +345,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 	return false;
 }
 
- /* controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili punta all'uscita*/
+/* controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili punta all'uscita*/
 void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column]) {
 	int points = 1000;
 	vector *tail = NULL;
@@ -353,6 +356,7 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column]) {
 	int column = map_info->player_column; // colonna da cui partire per scannerizzare la mappa in presenza di monete
 	int further_column = map_info->column - 1; // colonna più lontana da scannerizzare per cercare delle monete
 	bool deep_inspect = true; // condizione che rimane vera fino a che non si finisce di scannerizzare la mappa
+	
 	//calcolo la colonna di arrivo e di partenza per la scannerizzazione
 	if (map_info->player_column > map_info->exit_column) {
 		column = map_info->player_column + 10;

@@ -1,21 +1,28 @@
+/*
+file contentente: funzioni di stampe particolarmente lunghe (menu), funzioni utilizzate da entrambe le modalità di gioco
+*/
 
-/* 1 = uscito dalla partita
- * 2 = comando inserito non valido
- * 0 = corretto*/
-int command_interpreter (char command, char *move) {
-	printf("comando: %d\n", command);
-	if (command == QUIT) {
-		return 1;
-	}
-	else {
-		if (toupper(command) != NORD && toupper(command) != SUD && toupper(command) != EST && toupper(command) != OVEST) {
-			printf("\nerrore dato da: %d %c\n", command, command);
-			return 2;
+// rimuove tutti i caratteri TAIL dalla mappa
+void clear_map_tail(map* map_info, char map[map_info->row][map_info->column]) {
+	for (int row = 0; row < map_info->row; row++) {
+		for (int column = 0; column < map_info->column; column++) {
+			if (map[row][column] == TAIL) {
+				map[row][column] = ' ';
+			}
 		}
-		*move = toupper(command);
 	}
-	return 0;
 }
+
+/*inserisce la coda nella mappa*/
+void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column], vector* tail) {
+	if (tail == NULL) // fine lista, cioè lista vuota
+		return;
+	if(tail->row != -1)
+		map[tail->row][tail->column] = TAIL;
+
+	insert_tail_in_map(map_info, map, tail->next);
+}
+
 
 /*appende la mossa appena fatta alla sequenza di mosse
  * parametri: la sequenza di mosse fatte, la dimensione della stringa, la mossa da appendere*/
@@ -35,37 +42,6 @@ char* build_sequence (char **steps, int *max_step_size, char move) {
 /*	printf("sequence_len: %ld\n", strlen(sequence));*/
 
 	return sequence;
-}
-
-/*inserisce la coda nella mappa*/
-void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column], vector* tail) {
-	if (tail == NULL) // fine lista, cioè lista vuota
-		return;
-	if(tail->row != -1)
-		map[tail->row][tail->column] = TAIL;
-
-	insert_tail_in_map(map_info, map, tail->next);
-}
-
-//muove la coda in modo tale che segua snake, ogni nodo copierà le coordinate del nodo che gli sta davanti fino a che l'ultimo nodo
-//copia l'ultima posizione di snake
-void move_tail(map* map_info, vector** tail) {
-	// se la coda non è ancora presente
-	if ((*tail) == NULL){
-		return;
-	}
-	// se siamo nell'ultimo pezzo di coda (quello più vicino a snake)
-	if (((*tail)->next) == NULL) {
-		(*tail)->row = map_info->player_row;
-		(*tail)->column = map_info->player_column;
-		return;
-	}
-	// se siamo in un nodo che è ancora valido, gli faccio copiare le coordinate del nodo successivo
-	if((*tail)->row != -1){
-		(*tail)->row = ((*tail)->next)->row;
-		(*tail)->column = ((*tail)->next)->column;
-	}
-	move_tail(map_info, &((*tail)->next));
 }
 
 /*controlla il contenuto della prossima cella che si vuole visitare*/
@@ -111,6 +87,7 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 /*	print_vector(*tail);*/
 /*	printf("\nlen coda %d\n", map_info->tail_len);*/
 }
+
 
 /*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative informazioni
  * parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva, la coda
@@ -210,42 +187,60 @@ int run_move(map* map_info, char map[map_info->row][map_info->column], char move
 	return 0;
 }
 
-void start_interactive_mode(map* map_info, char map[map_info->row][map_info->column]) {
-	bool playing = true;
-	int points = 1000;
-	vector *tail = NULL; // vettore che conterrà i nodi della coda, il primo elemento del vettore sarà la parte più lontana della coda, mentre l'ultimo elemnto del vettore è il nodo più vicino a snake
-	map_info->tail_len = 0; // lunghezza della coda iniziale
-	map_info->drill_counter = 0;
-	int max_steps_size = map_info->row + map_info->column;
-	char *all_steps = (char*)malloc(sizeof(char) * max_steps_size);
+//--------------------- menus and long prints
 
-	while(playing) {
-		printf("\n\n---------------\n\n");
-		insert_tail_in_map(map_info, map, tail);
-		print_map(map_info, map);
-		printf("\nPUNTEGGIO: %d\n", points);
-		printf("TRAPANI: %d\n", map_info->drill_counter);
-		char move;
-		char command;
-		printf("Inserisci mossa: ");
-		scanf(" %c", &command);
-		int ci_result = command_interpreter(command, &move);
-		if(ci_result == 1) {
-			printf("Uscito dalla partita\n");
-			playing = false;
-		}
-		else if (ci_result == 2) {
-			printf("La sequenza inserita contiene valori non corretti, riprova");
-		}
-		else{
-			if(run_move(map_info, map, move, &points, &all_steps, &max_steps_size, false, &tail)) {
-				insert_tail_in_map(map_info, map, tail);
-				print_map(map_info, map);
-				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti\n", points);
-				playing = false;
-			}
+void title() {
+	printf(" -------------------\n");
+	printf("|  SNAKE LABYRINTH  |\n");
+	printf(" -------------------\n");
+}
+
+void main_menu() {
+	printf("Scegli modalita' di gioco:\n");
+	printf("1: Modalita' interattiva\n");
+	printf("2: Modalita' IA\n");
+	printf("3: Info sul gioco\n");
+	printf("4: Esci\n");
+	printf("Premi il numero corrispondente: ");
+}
+
+void input_type_menu() {
+	printf("Scegli tipo di input della mappa:\n");
+	printf("1: Scegli mappe del gioco\n");
+	printf("2: Inserisci mappa da linea di comando\n");
+	printf("3: Indietro\n");
+	printf("Premi il numero corrispondente: ");
+}
+
+
+void print_game_info() {
+	title();
+	printf("Snake labyrinth è un gioco che presenta due modalità:\n");
+	printf("\tModalità interattiva: si tratta di far uscire il proprio personaggio dal labirinto muovendonsi in quattro direzioni.\n"
+			"\tLe direzioni sono associate ai seguenti tasti:\n"
+				"\t\t- 'N'/'n' nord (movimento verso l'alto)\n"
+				"\t\t- 'E'/'e' est (movimento verso destra)\n"
+				"\t\t- 'S'/'s' sud (movimento verso il basso)\n"
+				"\t\t- 'O'/'o' ovest (movimento verso sinistra)\n");
+	printf("\tIl personaggio parte da una base di 1000 punti. Una volta usciti dal labirinto si ottiene un punteggio che si basa su quanti movimenti sono stati fatti e in base a dei modificatori che si trovano nella mappa:\n"
+			"\tI modificatori sono i seguenti:\n"
+				"\t\t- '$' aggiunge 10 punti al punteggio\n"
+				"\t\t- '!' dimezza il proprio punteggio\n"
+				"\t\t- ogni movimento toglie un punto\n");
+	printf("\tAltri simboli che sono presenti nel gioco sono:\n"
+				"\t\t- 'o' il proprio personaggio\n"
+				"\t\t- '#' parete (non si può passare attraverso)\n"
+				"\t\t- '_' uscita della mappa\n\n");
+	printf("La seconda modalità: todo\n");
+	printf("è possibili aggiungere le proprie mappe aggiungendole al file di testo: todo\n\n");
+}
+
+void print_map(map* map_info, char map[map_info->row][map_info->column]) {
+	for (int row = 0; row < map_info->row; row++) {
+		printf("\n");
+		for (int column = 0; column < map_info->column; column++) {
+			printf("%c", map[row][column]);
 		}
 	}
-	dealloc_vector(&tail);
-	free(all_steps);
+	clear_map_tail(map_info, map);
 }

@@ -4,10 +4,11 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
-#include "lib/game_info.h"
-#include "lib/tail_vector.h"
-#include "lib/game_mode/interactive.h"
-#include "lib/game_mode/ai.h"
+#include "lib/prototype.h"
+#include "lib/general_purpose.c"
+#include "lib/tail_vector.c"
+#include "lib/game_mode/interactive.c"
+#include "lib/game_mode/cpu.c"
 
 char list_maps(FILE *file) {
 	char character = fgetc(file);

@@ -2,9 +2,9 @@
 
 ## Execution on linux and MacOS
 
-	make && ./iap
+	make && ./lab
 
 ## Execution on Windows
 
-	gcc *.c -o iap.exe && ./iap.exe
+	gcc *.c -o lab.exe && ./lab.exe
 
