@@ -229,33 +229,82 @@ int main(int argc, char *argv[]) {
 		if (user_selection[0] == '1' && user_selection[1] == 0) {
 			printf("\thai selezionato modalita' interattiva\n");
 			struct Map map_info;
-			int map_line = take_map_text_file(&map_info);
-			//mappa non valida / troppi valori non validi dati in input / nessuna mappa trovata
-			if(map_line == -1){
-				continue;
+			int map_line;
+			bool choosing_input = true;
+			while(choosing_input){
+				choosing_input = false;
+				input_type_menu();
+				scanf(" %s", user_selection);
+				//prende la mappa dal file di testo
+				if(user_selection[0] == '1' && user_selection[1] == 0){
+					map_line = take_map_text_file(&map_info);
+					//mappa non valida / troppi valori non validi dati in input / nessuna mappa trovata
+					if(map_line == -1){
+						choosing_input = true;
+						continue;
+					}
+					char map[map_info.row][map_info.column];
+					save_map(&map_info, map_line, map);
+					start_interactive_mode(&map_info, map);
+				}
+				//prende la mappa dal user input
+				else if (user_selection[0] == '2' && user_selection[1] == 0) {
+					scanf(" %d", &map_info.column);
+					scanf(" %d", &map_info.row);
+
+					char map[map_info.row][map_info.column];
+					take_map_cmd_line(&map_info, map);
+					start_interactive_mode(&map_info, map);
+				}
+				//torna al menu precedente
+				else if (user_selection[0] == '3' && user_selection[1] == 0) {}
+
+				else {
+					printf("\n\tL'input inserito non e' valido, riprova...\n\n");
+					choosing_input = true;
+				}
 			}
-			char map[map_info.row][map_info.column];
-			save_map(&map_info, map_line, map);
-			start_interactive_mode(&map_info, map);
 		}
 
 		else if (user_selection[0] == '2' && user_selection[1] == 0) {
 			printf("\thai selezionato modalita' CPU\n");
-			input_type_menu();
-			scanf(" %s", user_selection);
 			struct Map map_info;
-			scanf(" %d", &map_info.column);
-			scanf(" %d", &map_info.row);
+			int map_line;
+			bool choosing_input = true;
+			while(choosing_input){
+				choosing_input = false;
+				input_type_menu();
+				scanf(" %s", user_selection);
 
-			char map[map_info.row][map_info.column];
-			take_map_cmd_line(&map_info, map);
+				//prende la mappa dal file di testo
+				if(user_selection[0] == '1' && user_selection[1] == 0){
+					map_line = take_map_text_file(&map_info);
+					//mappa non valida / troppi valori non validi dati in input / nessuna mappa trovata
+					if(map_line == -1){
+						choosing_input = true;
+						continue;
+					}
+					char map[map_info.row][map_info.column];
+					save_map(&map_info, map_line, map);
+					cpu_algorithm(&map_info, map);
+				}
+				//prende la mappa dal user input
+				else if (user_selection[0] == '2' && user_selection[1] == 0) {
+					scanf(" %d", &map_info.column);
+					scanf(" %d", &map_info.row);
 
-			printf("\nmappa:\n");
-			print_map(&map_info, map);
-			printf("\n");
+					char map[map_info.row][map_info.column];
+					take_map_cmd_line(&map_info, map);
+					cpu_algorithm(&map_info, map);
+				}
+				//torna al menu precedente
+				else if (user_selection[0] == '3' && user_selection[1] == 0) {}
 
-			cpu_algorithm(&map_info, map);
-			play = false;
+				else {
+					printf("\n\tL'input inserito non e' valido, riprova...\n\n");
+					choosing_input = true;
+				}
+			}
 		}
 
 		else if (user_selection[0] == '3' && user_selection[1] == 0) {
