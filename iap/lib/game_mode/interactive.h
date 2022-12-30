@@ -241,7 +241,7 @@ void start_interactive_mode(struct Map* map_info, char map[map_info->row][map_in
 			if(run_move(map_info, map, move, &points, &all_steps, &max_steps_size, false, &tail)) {
 				insert_tail_in_map(map_info, map, tail);
 				print_map(map_info, map);
-				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti", points);
+				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti\n", points);
 				playing = false;
 			}
 		}

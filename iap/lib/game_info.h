@@ -38,6 +38,24 @@ void title() {
 	printf(" -------------------\n");
 }
 
+void main_menu() {
+	printf("Scegli modalita' di gioco:\n");
+	printf("1: Modalita' interattiva\n");
+	printf("2: Modalita' IA\n");
+	printf("3: Info sul gioco\n");
+	printf("4: Esci\n");
+	printf("Premi il numero corrispondente: ");
+}
+
+void input_type_menu() {
+	printf("Scegli tipo di input della mappa:\n");
+	printf("1: Scegli mappe del gioco\n");
+	printf("2: Inserisci mappa da linea di comando\n");
+	printf("3: Indietro\n");
+	printf("Premi il numero corrispondente: ");
+}
+
+
 void print_game_info() {
 	title();
 	printf("Snake labyrinth è un gioco che presenta due modalità:\n");

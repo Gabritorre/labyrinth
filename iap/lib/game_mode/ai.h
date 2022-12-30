@@ -343,8 +343,13 @@ bool goto_target(struct Map* map_info, char map[map_info->row][map_info->column]
 }
 
  /* controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili punta all'uscita*/
-void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int *points, vector** tail) {
-
+void cpu_algorithm(struct Map* map_info, char map[map_info->row][map_info->column]) {
+	int points = 1000;
+	vector *tail = NULL;
+	map_info->tail_len = 0;
+	map_info->drill_counter = 0;
+	int max_steps_size = map_info->row + map_info->column; //lunghezza della sequenza di passi
+	char *all_steps = (char *)malloc(sizeof(char) * max_steps_size); // array che conterrà la sequenza di passi,
 	int column = map_info->player_column; // colonna da cui partire per scannerizzare la mappa in presenza di monete
 	int further_column = map_info->column - 1; // colonna più lontana da scannerizzare per cercare delle monete
 	bool deep_inspect = true; // condizione che rimane vera fino a che non si finisce di scannerizzare la mappa
@@ -391,11 +396,11 @@ void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info-
 			}
 			if(map[row][column] == DRILL){
 				printf("trapano in %d %d\n", row, column);
-				panic = goto_target(map_info, map, all_steps, all_steps_size, column, row, points, tail);
+				panic = goto_target(map_info, map, &all_steps, &max_steps_size, column, row, &points, &tail);
 			}
 			else if(map[row][column] == BONUS_POINTS) {
 				printf("\t\tMONETA IN %d %d\n", row, column);
-				panic = goto_target(map_info, map, all_steps, all_steps_size, column, row, points, tail);
+				panic = goto_target(map_info, map, &all_steps, &max_steps_size, column, row, &points, &tail);
 			}
 			if(row < end){
 				row++;
@@ -422,6 +427,8 @@ void coin_exit_algorithm(struct Map* map_info, char map[map_info->row][map_info-
 
 	//raggiungimento dell'uscita
 	printf("\n\n\t\t vado all'uscita\n");
-	goto_target(map_info, map, all_steps, all_steps_size, map_info->exit_column, map_info->exit_row, points, tail);
+	goto_target(map_info, map, &all_steps, &max_steps_size, map_info->exit_column, map_info->exit_row, &points, &tail);
+	printf("%s\n", all_steps);
+	free(all_steps);
 }
 

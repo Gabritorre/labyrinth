@@ -106,7 +106,13 @@ int get_map_info(FILE *file, struct Map* map_info, int map_number) {
 	return map_start_char;
 }
 
-void save_map(FILE *file, struct Map* map_info, int map_line, char map[map_info->row][map_info->column]) {
+void save_map(struct Map* map_info, int map_line, char map[map_info->row][map_info->column]) {
+	FILE *file;
+	file = fopen("maps.txt", "r");
+	if (NULL == file) {
+		printf("\n\tErrore nell'apertura del file\n");
+		exit(1);
+	}
 	fseek(file, map_line, SEEK_SET); //rileggo il file dalla mappa scelta dall'utente
 	char character = fgetc(file);
 	bool fill_columns = false;
@@ -147,119 +153,116 @@ int check_map_proprieties(struct Map *map_info) {
 	return 0;
 }
 
-int main(int argc, char *argv[]) {
-	bool play = true;
-	if (argc > 1 && strcmp(argv[1], "--challenge") == 0) {
-		struct Map map_info;
-		scanf(" %d", &map_info.column);
-		scanf(" %d", &map_info.row);
-
-		char map[map_info.row][map_info.column];
-
-		for (int i = 0; i < map_info.row; i++) {
-			char line[map_info.column];
-			scanf(" %[^\n]%*c", line); //leggi l'input finche non trovi \n e quando viene trovata non viene salvata
-			for (int j = 0; j < map_info.column; j++) {
-				map[i][j] = line[j];
-				if(map[i][j] == PLAYER) {
-					map_info.player_row = i;
-					map_info.player_column = j;
-				}
-				if(map[i][j] == EXIT) {
-					map_info.exit_row = i;
-					map_info.exit_column = j;
-				}
+void take_map_cmd_line(struct Map* map_info, char map[map_info->row][map_info->column]) {
+	for (int i = 0; i < map_info->row; i++) {
+		char line[map_info->column];
+		scanf(" %[^\n]%*c", line); //leggi l'input finche non trovi \n e quando viene trovata non viene salvata
+		for (int j = 0; j < map_info->column; j++) {
+			map[i][j] = line[j];
+			if(map[i][j] == PLAYER) {
+				map_info->player_row = i;
+				map_info->player_column = j;
+			}
+			if(map[i][j] == EXIT) {
+				map_info->exit_row = i;
+				map_info->exit_column = j;
 			}
 		}
-
-/*		printf("\nmappa:\n");*/
-/*		print_map(&map_info, map);*/
-/*		printf("\n");*/
-
-		int points = 1000;
-		vector *tail = NULL;
-		map_info.tail_len = 0;
-		map_info.drill_counter = 0;
-		int max_steps_size = map_info.row + map_info.column; //lunghezza della sequenza di passi
-		char *all_steps = (char *)malloc(sizeof(char) * max_steps_size); // array che conterrà la sequenza di passi,
-		coin_exit_algorithm(&map_info, map, &all_steps, &max_steps_size, &points, &tail);
-
-/*		printf("\npunteggio nwa: %d\n", points);*/
-/*		printf("lunghezza: %ld\n", strlen(sequence));*/
-/*		printf("%s\n", sequence);*/
-		printf("%s\n", all_steps);
-		play = false;
-		free(all_steps);
 	}
-	while(play) {
-		char game_mode[50];
-		title();
-		printf("Scegli modalita' di gioco:\n");
-		printf("1: Modalita' interattiva\n");
-		printf("2: Modalita' IA\n");
-		printf("3: Info sul gioco\n");
-		printf("4: Esci\n");
-		printf("Premi il numero corrispondente: ");
-		scanf(" %s", game_mode);
+}
 
-		if (game_mode[0] == '1' && game_mode[1] == 0) {
-			printf("hai selezionato modalita' interattiva\n");
-			FILE *file;
-			file = fopen("maps.txt", "r");
-			if (NULL == file) {
-				printf("\n\tErrore nell'apertura del file\n");
-				exit(1);
-			}
-			int map_quantity = list_maps(file);
-			int user_map_number;
+int take_map_text_file(struct Map* map_info) {
+	FILE *file;
+	file = fopen("maps.txt", "r");
+	if (NULL == file) {
+		printf("\n\tErrore nell'apertura del file\n");
+		exit(1);
+	}
+	int map_quantity = list_maps(file);
+	int user_map_number;
 
-			if(map_quantity) {
-				bool choose_map = true;
-				short counter_error = 0; // in caso di input errato il programma resetta per evitare cicli infiniti
-				while(choose_map && counter_error != 10) {
-					printf("scegli la mappa con il numero corrispondente: ");
-					scanf(" %d", &user_map_number);
-					if (user_map_number > 0 && user_map_number <= map_quantity) {
-						choose_map = false;
-					}
-					else {
-						printf("valore inserito non valido. Riprova...\n");
-						counter_error++;
-					}
-				}
-				if (counter_error == 10) {
-					printf("Troppi valori errati inseriti\n");
-					getchar(); // pulisce l'input buffer
-					continue;
-				}
-
-				struct Map map_info;
-
-				int map_line = get_map_info(file, &map_info, user_map_number);
-				if (check_map_proprieties(&map_info)) { // ripeti se la mappa scelta non soddisfa i requisiti necessari
-					continue;
-				}
-				char map[map_info.row][map_info.column];
-				save_map(file, &map_info, map_line, map);
-				start_interactive_mode(&map_info, map);
+	if(map_quantity) {
+		bool choose_map = true;
+		short counter_error = 0; // in caso di input errato il programma resetta per evitare cicli infiniti
+		while(choose_map && counter_error != 10) {
+			printf("scegli la mappa con il numero corrispondente: ");
+			scanf(" %d", &user_map_number);
+			if (user_map_number > 0 && user_map_number <= map_quantity) {
+				choose_map = false;
 			}
 			else {
-				printf("Nessuna mappa trovata");
-				play = false;
+				printf("valore inserito non valido. Riprova...\n");
+				counter_error++;
 			}
-			fclose(file);
-			printf("\n\n");
+		}
+		if (counter_error == 10) {
+			printf("Troppi valori errati inseriti\n");
+			getchar(); // pulisce l'input buffer
+			return -1;
+		}
+	}
+	else{
+		printf("nessuna mappa trovata\n");
+		fclose(file);
+		return -1;
+	}
+	int map_line = get_map_info(file, map_info, user_map_number);
+	if (check_map_proprieties(map_info)) { // ripeti se la mappa scelta non soddisfa i requisiti necessari
+		fclose(file);
+		return -1;
+	}
+
+	fclose(file);
+	printf("\n\n");
+	return map_line;
+}
+
+int main(int argc, char *argv[]) {
+	bool play = true;
+	while(play) {
+		char user_selection[50];
+		title();
+		main_menu();
+		scanf(" %s", user_selection);
+
+		//modalità interativa
+		if (user_selection[0] == '1' && user_selection[1] == 0) {
+			printf("\thai selezionato modalita' interattiva\n");
+			struct Map map_info;
+			int map_line = take_map_text_file(&map_info);
+			//mappa non valida / troppi valori non validi dati in input / nessuna mappa trovata
+			if(map_line == -1){
+				continue;
+			}
+			char map[map_info.row][map_info.column];
+			save_map(&map_info, map_line, map);
+			start_interactive_mode(&map_info, map);
 		}
 
-		else if (game_mode[0] == '2' && game_mode[1] == 0) {
-			printf("hai selezionato modalita' IA\n");
+		else if (user_selection[0] == '2' && user_selection[1] == 0) {
+			printf("\thai selezionato modalita' CPU\n");
+			input_type_menu();
+			scanf(" %s", user_selection);
+			struct Map map_info;
+			scanf(" %d", &map_info.column);
+			scanf(" %d", &map_info.row);
+
+			char map[map_info.row][map_info.column];
+			take_map_cmd_line(&map_info, map);
+
+			printf("\nmappa:\n");
+			print_map(&map_info, map);
+			printf("\n");
+
+			cpu_algorithm(&map_info, map);
+			play = false;
 		}
 
-		else if (game_mode[0] == '3' && game_mode[1] == 0) {
+		else if (user_selection[0] == '3' && user_selection[1] == 0) {
 			print_game_info();
 		}
 
-		else if (game_mode[0] == '4' && game_mode[1] == 0) {
+		else if (user_selection[0] == '4' && user_selection[1] == 0) {
 			printf("Ciao ciao!\n");
 			play = false;
 		}
