@@ -32,7 +32,7 @@ char* build_sequence (char **steps, int *max_step_size, char move) {
 		*max_step_size += 5;
 	}
 
-	char *sequence = (char*)malloc(sizeof(char) * *max_step_size);
+	char *sequence = (char*) calloc(*max_step_size, sizeof(char));
 	strncat(sequence, *steps, strlen(*steps));
 	strncat(sequence, &move, 1);
 	strcat(sequence, "\0");
@@ -41,6 +41,7 @@ char* build_sequence (char **steps, int *max_step_size, char move) {
 /*	printf("sequence: %s\n", sequence);*/
 /*	printf("sequence_len: %ld\n", strlen(sequence));*/
 
+	free(*steps);
 	return sequence;
 }
 
@@ -73,6 +74,7 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 		if (next_step == WALL && map_info->drill_counter > 0) {
 			map_info->drill_counter -= 1;
 		}
+		//!!!!!!!!!!!!!!provare a mettere gli step qui!!!!!!!!!!!!!!!!!!!!
 		move_tail(map_info, tail);
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);

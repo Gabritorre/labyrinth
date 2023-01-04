@@ -352,11 +352,11 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column]) {
 	map_info->tail_len = 0;
 	map_info->drill_counter = 0;
 	int max_steps_size = map_info->row + map_info->column; //lunghezza della sequenza di passi
-	char *all_steps = (char *)malloc(sizeof(char) * max_steps_size); // array che conterrà la sequenza di passi,
+	char *all_steps = (char *) calloc(max_steps_size, sizeof(char)); // array che conterrà la sequenza di passi,
 	int column = map_info->player_column; // colonna da cui partire per scannerizzare la mappa in presenza di monete
 	int further_column = map_info->column - 1; // colonna più lontana da scannerizzare per cercare delle monete
 	bool deep_inspect = true; // condizione che rimane vera fino a che non si finisce di scannerizzare la mappa
-	
+
 	//calcolo la colonna di arrivo e di partenza per la scannerizzazione
 	if (map_info->player_column > map_info->exit_column) {
 		column = map_info->player_column + 10;
