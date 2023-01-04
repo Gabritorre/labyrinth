@@ -186,7 +186,7 @@ int take_map_text_file(map* map_info) {
 		bool choose_map = true;
 		short counter_error = 0; // in caso di input errato il programma resetta per evitare cicli infiniti
 		while(choose_map && counter_error != 10) {
-			printf("scegli la mappa con il numero corrispondente: ");
+			printf("scegli la mappa con il numero corrispondente >");
 			scanf(" %d", &user_map_number);
 			if (user_map_number > 0 && user_map_number <= map_quantity) {
 				choose_map = false;

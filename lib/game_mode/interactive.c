@@ -38,7 +38,7 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 		printf("TRAPANI: %d\n", map_info->drill_counter);
 		char move;
 		char command;
-		printf("Inserisci mossa: ");
+		printf("Inserisci mossa >");
 		scanf(" %c", &command);
 		int ci_result = command_interpreter(command, &move);
 		if(ci_result == 1) {
@@ -52,7 +52,9 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 			if(run_move(map_info, map, move, &points, &all_steps, &max_steps_size, false, &tail)) {
 				insert_tail_in_map(map_info, map, tail);
 				print_map(map_info, map);
-				printf("\n\tHAI RAGGIUNTO L'USCITA!\n\tHai fatto %d punti\n", points);
+				printf("\n\tHAI RAGGIUNTO L'USCITA!\n");
+				printf("\tHai fatto %d punti\n", points);
+				printf("\tSequenza di passi fatti: %s\n", all_steps);
 				playing = false;
 			}
 		}

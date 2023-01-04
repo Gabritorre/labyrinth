@@ -1,4 +1,4 @@
-# labyrinth
+# Snake labyrinth
 
 ## Execution on linux and MacOS
 

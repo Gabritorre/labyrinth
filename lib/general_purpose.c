@@ -202,7 +202,7 @@ void main_menu() {
 	printf("2: Modalita' IA\n");
 	printf("3: Info sul gioco\n");
 	printf("4: Esci\n");
-	printf("Premi il numero corrispondente: ");
+	printf("Premi il numero corrispondente >");
 }
 
 void input_type_menu() {
@@ -210,7 +210,7 @@ void input_type_menu() {
 	printf("1: Scegli mappe del gioco\n");
 	printf("2: Inserisci mappa da linea di comando\n");
 	printf("3: Indietro\n");
-	printf("Premi il numero corrispondente: ");
+	printf("Premi il numero corrispondente >");
 }
 
 
@@ -223,17 +223,33 @@ void print_game_info() {
 				"\t\t- 'E'/'e' est (movimento verso destra)\n"
 				"\t\t- 'S'/'s' sud (movimento verso il basso)\n"
 				"\t\t- 'O'/'o' ovest (movimento verso sinistra)\n");
-	printf("\tIl personaggio parte da una base di 1000 punti. Una volta usciti dal labirinto si ottiene un punteggio che si basa su quanti movimenti sono stati fatti e in base a dei modificatori che si trovano nella mappa:\n"
+	printf("\tIl personaggio parte da una base di 1000 punti.\n\tUna volta usciti dal labirinto si ottiene un punteggio che si basa su quanti movimenti sono stati fatti e in base a dei modificatori che si trovano nella mappa:\n"
 			"\tI modificatori sono i seguenti:\n"
-				"\t\t- '$' aggiunge 10 punti al punteggio\n"
-				"\t\t- '!' dimezza il proprio punteggio\n"
+				"\t\t- '$' aggiunge 10 punti al punteggio, e aggiunge un pezzo di coda a Snake\n"
+				"\t\t- '!' dimezza il punteggio ottenuto dalle monete, quindi dimezza la dimensione della coda\n"
 				"\t\t- ogni movimento toglie un punto\n");
 	printf("\tAltri simboli che sono presenti nel gioco sono:\n"
 				"\t\t- 'o' il proprio personaggio\n"
-				"\t\t- '#' parete (non si può passare attraverso)\n"
-				"\t\t- '_' uscita della mappa\n\n");
-	printf("La seconda modalità: todo\n");
-	printf("è possibili aggiungere le proprie mappe aggiungendole al file di testo: todo\n\n");
+				"\t\t- 'x' un pezzo della coda di Snake\n"
+				"\t\t- '#' parete della mappa\n"
+				"\t\t- '_' uscita della mappa\n"
+				"\t\t- 'T' trapano, una volta preso da la possibilità di bucare tre muri\n\n");
+
+	printf("\tModalità CPU: in questa modalità la CPU proverà ad uscire da un labirinto che gli viene dato.\n");
+	printf("\t\te' possibile aggiungere o creare le proprie mappe inserendole nel file di testo \"maps.txt\" (separare ogni mappa da una riga vuota)\n"
+			"\t\toppure si puo' inserire direttamente una mappa da linea di comando seguendo il seguente formato:\n");
+
+	printf("\t\t<numero di colonne>\n"
+			"\t\t<numero di righe>\n"
+			"\t\t<caratteri della mappa> inseriti una riga alla volta\n\n");
+	printf("\t\tesempio:\n"
+			"\t\t13\n"
+			"\t\t5\n"
+			"\t\t#o##########\n"
+			"\t\t# $      $ #\n"
+			"\t\t#   $$$$   #\n"
+			"\t\t# $      $ #\n"
+			"\t\t#_##########\n");
 }
 
 void print_map(map* map_info, char map[map_info->row][map_info->column]) {
