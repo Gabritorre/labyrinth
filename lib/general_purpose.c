@@ -64,7 +64,7 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 				middle_node = (map_info->tail_len + 1) / 2;
 			}
 			// elimino la coda fino a metà
-			delete_half_tail(tail, middle_node, points, map_info);
+			delete_half_tail(tail, middle_node, points, map_info, map);
 		}
 
 		else if (next_step == DRILL) {
@@ -74,20 +74,19 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 		if (next_step == WALL && map_info->drill_counter > 0) {
 			map_info->drill_counter -= 1;
 		}
-		//!!!!!!!!!!!!!!provare a mettere gli step qui!!!!!!!!!!!!!!!!!!!!
-		move_tail(map_info, tail);
+		move_tail(map_info, tail, map);
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 		// se incontro un pezzo di coda, resetto i nodi fino al punto incontrato
 		if (map[next_row][next_column] == TAIL) {
-			reset_nodes_till(tail, next_row, next_column, points, map_info);
+			reset_nodes_till(tail, next_row, next_column, points, map_info, map);
 		}
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 	}
-/*	printf("coda: ");*/
-/*	print_vector(*tail);*/
-/*	printf("\nlen coda %d\n", map_info->tail_len);*/
+	printf("coda: ");
+	print_vector(*tail);
+	printf("\nlen coda %d\n", map_info->tail_len);
 }
 
 
