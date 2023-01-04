@@ -2,7 +2,9 @@
 file contentente: funzioni di stampe particolarmente lunghe (menu), funzioni utilizzate da entrambe le modalità di gioco
 */
 
-// rimuove tutti i caratteri TAIL dalla mappa
+/**
+ rimuove tutti i caratteri TAIL dalla mappa
+ */
 void clear_map_tail(map* map_info, char map[map_info->row][map_info->column]) {
 	for (int row = 0; row < map_info->row; row++) {
 		for (int column = 0; column < map_info->column; column++) {
@@ -13,7 +15,9 @@ void clear_map_tail(map* map_info, char map[map_info->row][map_info->column]) {
 	}
 }
 
-/*inserisce la coda nella mappa*/
+/**
+inserisce la coda nella mappa
+*/
 void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column], vector* tail) {
 	if (tail == NULL) // fine lista, cioè lista vuota
 		return;
@@ -24,8 +28,9 @@ void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column]
 }
 
 
-/*appende la mossa appena fatta alla sequenza di mosse
- * parametri: la sequenza di mosse fatte, la dimensione della stringa, la mossa da appendere*/
+/**appende la mossa appena fatta alla sequenza di mosse
+ * parametri: la sequenza di mosse fatte, la dimensione della stringa, la mossa da appendere
+ */
 char* build_sequence (char **steps, int *max_step_size, char move) {
 	if (strlen(*steps) >= *max_step_size){
 /*		printf("\n\trealloco\n");*/
@@ -45,7 +50,9 @@ char* build_sequence (char **steps, int *max_step_size, char move) {
 	return sequence;
 }
 
-/*controlla il contenuto della prossima cella che si vuole visitare*/
+/**
+controlla il contenuto della prossima cella che si vuole visitare
+*/
 void check_next_step(map* map_info, char map[map_info->row][map_info->column], char next_step, bool *win, int *points, vector** tail, int next_row, int next_column) {
 	if (next_step == BONUS_POINTS) {
 		*points += QUANTITY_BONUS;
@@ -90,7 +97,7 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 }
 
 
-/*Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative informazioni
+/**Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative informazioni
  * parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva, la coda
  * Se la modalità ai è attiva il ritorno significa che la mossa è stata fatto correttamente
  * altrimenti il ritorno indica se il giocatore ha vinto la partità o no*/
@@ -190,12 +197,14 @@ int run_move(map* map_info, char map[map_info->row][map_info->column], char move
 
 //--------------------- menus and long prints
 
+/**stampa il titolo di gioco*/
 void title() {
 	printf(" -------------------\n");
 	printf("|  SNAKE LABYRINTH  |\n");
 	printf(" -------------------\n");
 }
 
+/**stampa il menu principale del gioco*/
 void main_menu() {
 	printf("Scegli modalita' di gioco:\n");
 	printf("1: Modalita' interattiva\n");
@@ -205,6 +214,7 @@ void main_menu() {
 	printf("Premi il numero corrispondente > ");
 }
 
+/**stampa il menu di scelta di come impostare la mappa (se sceglierne una esistente oppure passarne una da input)*/
 void input_type_menu() {
 	printf("Scegli tipo di input della mappa:\n");
 	printf("1: Scegli mappe del gioco\n");
@@ -213,7 +223,7 @@ void input_type_menu() {
 	printf("Premi il numero corrispondente > ");
 }
 
-
+/**stampa le informazione del gioco*/
 void print_game_info() {
 	title();
 	printf("Snake labyrinth è un gioco che presenta due modalità:\n");
@@ -252,6 +262,8 @@ void print_game_info() {
 			"\t\t#_##########\n");
 }
 
+/**stampa la mappa di gioco
+*/
 void print_map(map* map_info, char map[map_info->row][map_info->column]) {
 	for (int row = 0; row < map_info->row; row++) {
 		printf("\n");

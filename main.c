@@ -9,8 +9,13 @@
 #include "lib/tail_vector.c"
 #include "lib/game_mode/interactive.c"
 #include "lib/game_mode/cpu.c"
-
-char list_maps(FILE *file) {
+/**
+* elenca tutte le mappe che sono presenti nel file di testo "maps.txt".
+*
+* @param file file da cui estrarre le mappe.
+* @return il numero di mappe trovate.
+*/
+int list_maps(FILE *file) {
 	char character = fgetc(file);
 	int map_counter = 0;
 	printf("MAPPE:\n");
@@ -37,7 +42,7 @@ char list_maps(FILE *file) {
 	return 0;
 }
 
-// questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente
+/// questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente
 int get_map_info(FILE *file, map* map_info, int map_number) {
 	map_info->row = 1;
 	map_info->column = 1;

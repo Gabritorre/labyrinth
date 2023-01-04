@@ -20,16 +20,18 @@ file che contine: costanti, strutture e le firme delle funzioni
 #define TAIL 'x'
 
 //--------------------- constants values
-#define QUANTITY_BONUS 11
+///contine la quantità di punti bonus da dare quando si prende una moneta
+#define QUANTITY_BONUS 11 
 
 //--------------------- structures
-
+/**linked list che serve a gestire la coda di Snake*/
 typedef struct List {
 	int row;
 	int column;
 	struct List *next;
 } vector;
 
+/**struttura contenente le informazione più inmportanti della mappa */
 typedef struct {
 	int row;
 	int column;
@@ -43,6 +45,7 @@ typedef struct {
 	int exit_row;
 	int exit_column;
 } map;
+
 
 vector* vector_create(int row, int column);
 

@@ -2,7 +2,9 @@
 file contentente le funzioni utilizzate dalla modalità interativa
 */
 
-/* 1 = uscito dalla partita
+/**
+ * interpreta il comando di movimento inserito dall'utente
+ * 1 = uscito dalla partita
  * 2 = comando inserito non valido
  * 0 = corretto*/
 int command_interpreter (char command, char *move) {
@@ -20,7 +22,8 @@ int command_interpreter (char command, char *move) {
 	return 0;
 }
 
-
+/** fa partire la modalità interattiva.
+*/
 void start_interactive_mode(map* map_info, char map[map_info->row][map_info->column]) {
 	bool playing = true;
 	int points = 1000;
