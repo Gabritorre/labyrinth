@@ -30,7 +30,7 @@ void move_tail(map* map_info, vector** list, char map[map_info->row][map_info->c
 		return;
 	}
 	// se siamo nell'ultimo pezzo di coda (quello più vicino a snake)
-	if (((*list)->next) == NULL) {
+	if (((*list)->next) == NULL && (*list)->row != -1) {
 		map[(*list)->row][(*list)->column] = STEP;
 		(*list)->row = map_info->player_row;
 		(*list)->column = map_info->player_column;
@@ -76,6 +76,7 @@ void delete_half_tail(vector **list, int middle_node, int *points, map* map_info
 	if ((*list)->row != -1){
 		*points -= 10;
 		middle_node -= 1;
+		map[(*list)->row][(*list)->column] = STEP;
 		map_info->tail_len -= 1;
 	}
 	if (middle_node <= 0) {
@@ -84,7 +85,6 @@ void delete_half_tail(vector **list, int middle_node, int *points, map* map_info
 		(*list)->column = -1;
 		return;
 	}
-	map[(*list)->row][(*list)->column] = STEP;
 	(*list)->row = -1;
 	(*list)->column = -1;
 	delete_half_tail(&((*list)->next), middle_node, points, map_info, map);
