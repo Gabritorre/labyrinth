@@ -38,7 +38,7 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 		printf("TRAPANI: %d\n", map_info->drill_counter);
 		char move;
 		char command;
-		printf("Inserisci mossa >");
+		printf("Inserisci mossa > ");
 		scanf(" %c", &command);
 		int ci_result = command_interpreter(command, &move);
 		if(ci_result == 1) {

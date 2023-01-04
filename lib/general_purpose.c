@@ -202,7 +202,7 @@ void main_menu() {
 	printf("2: Modalita' IA\n");
 	printf("3: Info sul gioco\n");
 	printf("4: Esci\n");
-	printf("Premi il numero corrispondente >");
+	printf("Premi il numero corrispondente > ");
 }
 
 void input_type_menu() {
@@ -210,7 +210,7 @@ void input_type_menu() {
 	printf("1: Scegli mappe del gioco\n");
 	printf("2: Inserisci mappa da linea di comando\n");
 	printf("3: Indietro\n");
-	printf("Premi il numero corrispondente >");
+	printf("Premi il numero corrispondente > ");
 }
 
 
