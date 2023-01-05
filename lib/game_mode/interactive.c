@@ -40,6 +40,7 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 	char *all_steps = (char*) calloc(max_steps_size, sizeof(char));
 	while(playing) {
 		clear_screen();
+		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, tail);
 		print_map(map_info, map);
 		printf("\nPUNTEGGIO: %d\n", points);
@@ -59,6 +60,7 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 		else{
 			if(run_move(map_info, map, move, &points, &all_steps, &max_steps_size, false, &tail)) {
 				clear_screen();
+				clear_map_tail(map_info, map);
 				insert_tail_in_map(map_info, map, tail);
 				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n");

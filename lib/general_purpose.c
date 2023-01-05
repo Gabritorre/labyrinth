@@ -109,9 +109,9 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 	}
-	printf("coda: ");
-	print_vector(*tail);
-	printf("\nlen coda %d\n", map_info->tail_len);
+	// printf("coda: ");
+	// print_vector(*tail);
+	// printf("\nlen coda %d\n", map_info->tail_len);
 }
 
 

@@ -104,7 +104,7 @@ bool green_light_to_target (map* map_info, char map[map_info->row][map_info->col
 int go_around_wall(map* map_info, char map[map_info->row][map_info->column], char moving_direction, char move, char** all_steps, int* max_steps_size, int* points, vector** tail, int target_row, int target_col) {
 	int ghost1_steps, ghost2_steps, better_path;
 
-	printf("lancio i fantasmi\n");
+	// printf("lancio i fantasmi\n");
 	int vert_value, horiz_value; // rappresentano la direzione in cui guardare, vedere commento sulla funzione run_ghost
 	if (moving_direction == 'v') {
 		vert_value = 0;
@@ -134,9 +134,9 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 			better_path = ghost2_steps;
 			move = SUD;
 		}
-		printf("ghost1: %d\n", ghost1_steps);
-		printf("ghost2: %d\n", ghost2_steps);
-		printf("better_move di v %c\n", move);
+		// printf("ghost1: %d\n", ghost1_steps);
+		// printf("ghost2: %d\n", ghost2_steps);
+		// printf("better_move di v %c\n", move);
 
 	}
 	else if (moving_direction == 'h') {
@@ -166,16 +166,16 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 			better_path = ghost2_steps;
 			move = EST;
 		}
-		printf("ghost1: %d\n", ghost1_steps);
-		printf("ghost2: %d\n", ghost2_steps);
-		printf("better_move di h %c\n", move);
+		// printf("ghost1: %d\n", ghost1_steps);
+		// printf("ghost2: %d\n", ghost2_steps);
+		// printf("better_move di h %c\n", move);
 	}
 
 	//eseguo il percorso deciso per raggirare il muro
 	for(int i = 0; i < better_path; i++) {
 		run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
-		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+		// print_map(map_info, map);
+		// printf("\nsequenza: %s\n", *all_steps);
 	}
 	return better_path;
 }
@@ -255,7 +255,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 		target_direction = 'i';
 	}
 
-	printf("target_direction %c\n", target_direction);
+	// printf("target_direction %c\n", target_direction);
 
 	//finche il personaggio non trova percorso retto senza ostacoli verso il target e finche siamo nel limite dei passi consentito per raggiungerlo
 	while (!green_light_to_target(map_info, map, target_col, target_row, target_direction) && panic_counter <= map_info->row + map_info->column) {
@@ -263,9 +263,8 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 /*		printf("target_row %d\n", target_row);*/
 		panic_counter++;
 		if (target_direction == 'h') { // vogliamo far corrispondere la riga del giocatore con quella dell'uscita
-			printf("accesso orizzontale\n");
+			// printf("accesso orizzontale\n");
 			if (target_row == map_info->player_row){
-				printf("sono nella stessa riga\n");
 				if (target_col > map_info->player_column) {
 					move = EST;
 				}
@@ -275,13 +274,12 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
 					panic_counter += go_around_wall(map_info, map, 'v', move, all_steps, max_steps_size, points, tail, target_row, target_col);
 					//una volta raggirato il muro esegue la mossa che mi avvicina al target
-					printf("mi muovo a %c\n", move);
 					run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 /*					print_map(map_info, map);*/
 /*					printf("\nsequenza: %s\n", *all_steps);*/
 				}
-				print_map(map_info, map);
-				printf("\nsequenza: %s\n", *all_steps);
+				// print_map(map_info, map);
+				// printf("\nsequenza: %s\n", *all_steps);
 				continue;
 			}
 			else if (target_row > map_info->player_row) {
@@ -312,8 +310,8 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 /*					print_map(map_info, map);*/
 /*					printf("\nsequenza: %s\n", *all_steps);*/
 				}
-				print_map(map_info, map);
-				printf("\nsequenza: %s\n", *all_steps);
+				// print_map(map_info, map);
+				// printf("\nsequenza: %s\n", *all_steps);
 				continue;
 			}
 			else if (target_col > map_info->player_column) {
@@ -332,8 +330,8 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 		else if (target_direction == 'i') {
 			return false;
 		}
-		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+		// print_map(map_info, map);
+		// printf("\nsequenza: %s\n", *all_steps);
 	}
 
 	if(panic_counter >= map_info->row + map_info->column){
@@ -377,8 +375,8 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 			}
 		}
 		run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
-		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+		// print_map(map_info, map);
+		// printf("\nsequenza: %s\n", *all_steps);
 	}
 	return false;
 }
@@ -443,11 +441,11 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 				break;
 			}
 			if(map[row][column] == DRILL){
-				printf("trapano in %d %d\n", row, column);
+				// printf("trapano in %d %d\n", row, column);
 				panic = goto_target(map_info, map, &all_steps, &max_steps_size, row, column, &points, &tail);
 			}
 			else if(map[row][column] == BONUS_POINTS) {
-				printf("\t\tMONETA IN %d %d\n", row, column);
+				// printf("\t\tMONETA IN %d %d\n", row, column);
 				panic = goto_target(map_info, map, &all_steps, &max_steps_size, row, column, &points, &tail);
 			}
 			if(row < end){
@@ -474,14 +472,21 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 	}
 
 	//raggiungimento dell'uscita
-	printf("\n\n\t\t vado all'uscita\n");
+	// printf("\n\n\t\t vado all'uscita\n");
 	goto_target(map_info, map, &all_steps, &max_steps_size, map_info->exit_row, map_info->exit_column, &points, &tail);
+	if(!force_quit){
+		clear_map_tail(map_info, map);
+		insert_tail_in_map(map_info, map, tail);
+		print_map(map_info, map);
+		printf("\n");
+	}
 	printf("%s\n", all_steps);
 	if(!force_quit){
 		printf("premi invio per continuare");
 		getchar();
 		getchar();
 	}
+	
 	free(all_steps);
 }
 
