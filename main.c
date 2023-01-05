@@ -232,9 +232,11 @@ int main(int argc, char *argv[]) {
 			play = false;
 		}
 		else{
+			clear_screen();
 			title();
 			main_menu();
 			scanf(" %s", user_selection);
+			clear_screen();
 		}
 		//modalità interativa
 		if (user_selection[0] == '1' && user_selection[1] == 0) {
@@ -271,8 +273,10 @@ int main(int argc, char *argv[]) {
 				else if (user_selection[0] == '3' && user_selection[1] == 0) {}
 
 				else {
-					printf("\n\tL'input inserito non e' valido, riprova...\n\n");
+					printf("\n\tL'input inserito non e' valido, riprova...(premi invio)\n");
 					choosing_input = true;
+					getchar();
+					getchar();
 				}
 			}
 		}
@@ -286,12 +290,15 @@ int main(int argc, char *argv[]) {
 			bool choosing_input = true;
 			while(choosing_input){
 				choosing_input = false;
+				bool force_quit = false;
 				if (argc > 1 && strcmp(argv[1], "--cpu") == 0) {
 					user_selection[0] = '2';
+					force_quit = true;
 				}
 				else{
 					input_type_menu();
 					scanf(" %s", user_selection);
+					clear_screen();
 				}
 
 				//prende la mappa dal file di testo
@@ -304,7 +311,7 @@ int main(int argc, char *argv[]) {
 					}
 					char map[map_info.row][map_info.column];
 					save_map(&map_info, map_line, map);
-					cpu_algorithm(&map_info, map);
+					cpu_algorithm(&map_info, map, force_quit);
 				}
 				//prende la mappa dal user input
 				else if (user_selection[0] == '2' && user_selection[1] == 0) {
@@ -313,7 +320,7 @@ int main(int argc, char *argv[]) {
 
 					char map[map_info.row][map_info.column];
 					take_map_cmd_line(&map_info, map);
-					cpu_algorithm(&map_info, map);
+					cpu_algorithm(&map_info, map, force_quit);
 				}
 				//torna al menu precedente
 				else if (user_selection[0] == '3' && user_selection[1] == 0) {}
@@ -321,12 +328,17 @@ int main(int argc, char *argv[]) {
 				else {
 					printf("\n\tL'input inserito non e' valido, riprova...\n\n");
 					choosing_input = true;
+					getchar();
+					getchar();
 				}
 			}
 		}
 
 		else if (user_selection[0] == '3' && user_selection[1] == 0) {
 			print_game_info();
+			printf("\npremi invio per continuare");
+			getchar();
+			getchar();
 		}
 
 		else if (user_selection[0] == '4' && user_selection[1] == 0) {
@@ -335,7 +347,9 @@ int main(int argc, char *argv[]) {
 		}
 
 		else {
-			printf("\n\tL'input inserito non e' valido, riprova...\n\n");
+			printf("\n\tL'input inserito non e' valido, riprova...(premi invio)\n\n");
+			getchar();
+			getchar();
 		}
 	}
 	return 0;

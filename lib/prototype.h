@@ -87,4 +87,4 @@ int inspect_item(map* map_info, char map[map_info->row][map_info->column], int i
 
 bool goto_target(map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int target_col, int target_row, int *points, vector** tail);
 
-void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column]);
+void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], bool force_quit);

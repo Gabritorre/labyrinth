@@ -355,7 +355,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 /**
  * controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili punta all'uscita
  */
-void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column]) {
+void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], bool force_quit) {
 	int points = 1000;
 	vector *tail = NULL;
 	map_info->tail_len = 0;
@@ -442,6 +442,11 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column]) {
 	printf("\n\n\t\t vado all'uscita\n");
 	goto_target(map_info, map, &all_steps, &max_steps_size, map_info->exit_column, map_info->exit_row, &points, &tail);
 	printf("%s\n", all_steps);
+	if(!force_quit){
+		printf("premi invio per continuare");
+		getchar();
+		getchar();
+	}
 	free(all_steps);
 }
 

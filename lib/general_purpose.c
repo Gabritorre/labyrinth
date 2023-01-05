@@ -273,3 +273,13 @@ void print_map(map* map_info, char map[map_info->row][map_info->column]) {
 	}
 	clear_map_tail(map_info, map);
 }
+
+void clear_screen() {
+    #if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+        system("clear");
+    #endif
+
+    #if defined(_WIN32) || defined(_WIN64)
+        system("cls");
+    #endif
+}
