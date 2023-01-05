@@ -10,8 +10,7 @@
 #include "lib/game_mode/interactive.c"
 #include "lib/game_mode/cpu.c"
 /**
-* elenca tutte le mappe che sono presenti nel file di testo "maps.txt".
-*
+* Elenca tutte le mappe che sono presenti nel file di testo "maps.txt".
 * @param file file da cui estrarre le mappe.
 * @return il numero di mappe trovate.
 */
@@ -42,7 +41,13 @@ int list_maps(FILE *file) {
 	return 0;
 }
 
-/// questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente
+/**
+ * Cerca la mappa scelta dall'utente e si salva tutte le informazione necessarie: coordinate di Snake, dell'uscita; le dimensioni della mappa
+ * @param file file contentente le mappe
+ * @param map_info contiene le informazioni della mappa
+ * @param map_number numero della mappa scelta dall'utente
+ * @return ritorna la riga in cui inizia la mappa scelta dall'utente
+*/
 int get_map_info(FILE *file, map* map_info, int map_number) {
 	map_info->row = 1;
 	map_info->column = 1;
@@ -111,7 +116,12 @@ int get_map_info(FILE *file, map* map_info, int map_number) {
 
 	return map_start_char;
 }
-
+/**
+ * Salva la mappa scelta dall'utente mettendola nella matrice di gioco
+ * @param map_info contiene le informazioni della mappa
+ * @param map_line il punto d'inzio della mappa scelta dall'utente
+ * @param map la matrice dove salvare la mappa
+*/
 void save_map(map* map_info, int map_line, char map[map_info->row][map_info->column]) {
 	FILE *file;
 	file = fopen("maps.txt", "r");
@@ -143,6 +153,11 @@ void save_map(map* map_info, int map_line, char map[map_info->row][map_info->col
 	}
 }
 
+/**
+ * Controlla che la mappa scelta dall'utente rispetti le proprietà necessarie: avere Snake, avere l'uscita e la mappa deve essere sufficientemente grande
+ * @param map_info contiene le informazioni della mappa
+ * @return 1 se la mappa non soddisfa i requisiti altrimenti restituisce 0
+*/
 int check_map_proprieties(map* map_info) {
 	if (map_info->row <= 2 || map_info->column <= 2){
 		printf("\tDimensioni della mappa non sufficienti\n");
@@ -158,7 +173,11 @@ int check_map_proprieties(map* map_info) {
 	}
 	return 0;
 }
-
+/**
+ * Legge una mappa dallo user input
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
+*/
 void take_map_cmd_line(map* map_info, char map[map_info->row][map_info->column]) {
 	for (int i = 0; i < map_info->row; i++) {
 		char line[map_info->column];
@@ -177,6 +196,11 @@ void take_map_cmd_line(map* map_info, char map[map_info->row][map_info->column])
 	}
 }
 
+/**
+ * Prende la mappa dal file di testo
+ * @param map_info contiene le informazioni della mappa
+ * @return il punto nel file di testo dove inizia la mappa scelta dall'utente, altrimenti ritorna -1 in caso di errore
+*/
 int take_map_text_file(map* map_info) {
 	FILE *file;
 	file = fopen("maps.txt", "r");
@@ -223,6 +247,9 @@ int take_map_text_file(map* map_info) {
 	return map_line;
 }
 
+/**
+ * All'interno del main si navigano i menu
+*/
 int main(int argc, char *argv[]) {
 	bool play = true;
 	while(play) {

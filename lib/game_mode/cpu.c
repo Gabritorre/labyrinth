@@ -1,17 +1,23 @@
-/*
-file contentente le funzioni utilizzate dalla modalità CPU
+/**
+* @file cpu.c
+* @brief Contiene le funzioni utilizzate dalla modalità CPU
 */
 
 /**
-Questo metodo crea un fantasma del personaggio e lo manda in una direzione "move" fino a che non trova una strada libera che rispetti "vert_value" e "horiz_value":
- * vert_value = 1 per controllare il sud, vert_value = -1 per controllare il nord,
- * horiz_value = 1 per controllare est, horiz_value = -1 per controllare a ovest
- * il metodo ritorna quante volte si è spostato in direzione "move" prima di trovare una strada libera in direzione vert_value e horiz_value
- * Questo metodo serve in sostanza per raggirare i muri
- * ES. se voglio controllare est -> move = NORD/SUD, vert_value = 0, horiz_value = 1
- * se voglio controllare sud -> move = EST/OVEST, vert_value = 1, horiz_value = 0
- * ovest -> move = NORD/SUD, vert_value = 0, horiz_value = -1
- * nord -> move = EST/OVEST, vert_value = -1, horiz_value = 0
+Questo metodo serve in sostanza per raggirare i muri.\n
+Il metodo crea un fantasma del personaggio e lo manda in una direzione "move" fino a che non trova una strada libera che rispetti "vert_value" e "horiz_value":\n
+ * vert_value = 1 per controllare il sud, vert_value = -1 per controllare il nord,\n
+ * horiz_value = 1 per controllare est, horiz_value = -1 per controllare a ovest\n
+ * ES. se voglio controllare est -> move = NORD/SUD, vert_value = 0, horiz_value = 1\n
+ * se voglio controllare sud -> move = EST/OVEST, vert_value = 1, horiz_value = 0\n
+ * ovest -> move = NORD/SUD, vert_value = 0, horiz_value = -1\n
+ * nord -> move = EST/OVEST, vert_value = -1, horiz_value = 0\n
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
+ * @param move direzione in cui si deve muovere il fantasma
+ * @param vert_value serve a calcolare la posizione in cui deve guardare il fantasma
+  * @param horiz_value serve a calcolare la posizione in cui deve guardare il fantasma
+ * @return il metodo ritorna quante volte si è spostato in direzione "move" prima di trovare una strada libera in direzione vert_value e horiz_value
  */
 int run_ghost(map map_info, char map[map_info.row][map_info.column], char move, int vert_value, int horiz_value) {
 	int next_row = map_info.player_row + vert_value; // calcola la riga su qui deve guardare
@@ -39,9 +45,14 @@ int run_ghost(map map_info, char map[map_info.row][map_info.column], char move, 
 }
 
 /**
-controlla che ci sia una via libera retta tra il player e il target da raggiungere
- * Il metodo parte dall'uscita e va verso il player, se trova degli ostacoli ritorna false, se invece
- * riesce a raggiungere il player allora ritorna true
+ * Controlla che ci sia una via libera retta tra il player e il target da raggiungere
+ * Il metodo controlla tutte le posizione partendo dall'uscita fino ad arrivare da Snake.
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
+ * @param target_col valore della colonna del target
+ * @param target_row valore della riga del target
+ * @param direction direzione in cui si può accedere al target ('h' per accesso orizzontale, 'v' per accesso verticale)
+ * @return vero se non ci sono ostacoli tra il Snake e il target, altrimenti ritorna falso
  */
 bool green_light_to_target (map* map_info, char map[map_info->row][map_info->column], int target_col, int target_row, char direction) {
 	// se player e target non sono allineati in nessun modo
@@ -75,16 +86,22 @@ bool green_light_to_target (map* map_info, char map[map_info->row][map_info->col
 }
 
 /**
-metodo invocato quendo si incontra un muro che blocca la strada
+ * Metodo invocato quendo si incontra un muro che blocca la strada.
  * in base alla direzione in cui si è incappati nel muro questo metodo lancia i fantasmi (vedi metodo run_ghost) e decide quale strada conviene prendere
- * parametri:
- * moving_direction = direzione in cui bisogna muoversi per raggirare il muro (v = il player deve muoversi o a NORD o a SUD, h = il player deve
- * muoversi a EST oppure a OVEST)
- * move = rappresenta la direzione in cui andare per raggirare il muro
- *
- * Il metodo ritorna quanti step sono necessari per raggirare il muro
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
+ * @param moving_direction direzione in cui bisogna muoversi per raggirare il muro (v = Snake deve muoversi a NORD oppure a SUD, h = Snake deve muoversi a EST oppure a OVEST)
+ * @param move contiene direzione in cui andare per raggirare il muro
+ * @param all_steps contiene la lista dei passi fatti fino ad ora
+ * @param max_steps_size contiene la dimensione massima attuale della lista dei passi fatti
+ * @param points contiene i punti attuali della partita
+ * @param tail vettore della coda di Snake
+ * @param target_row riga del target
+ * @param target_col colonna del target
+
+ * @return quanti step sono stati necessari per raggirare il muro
  */
-int go_around_wall(map* map_info, char map[map_info->row][map_info->column], char moving_direction, char move, char** all_steps, int* all_steps_size, int* points, vector** tail, int target_row, int target_col) {
+int go_around_wall(map* map_info, char map[map_info->row][map_info->column], char moving_direction, char move, char** all_steps, int* max_steps_size, int* points, vector** tail, int target_row, int target_col) {
 	int ghost1_steps, ghost2_steps, better_path;
 
 	printf("lancio i fantasmi\n");
@@ -156,7 +173,7 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 
 	//eseguo il percorso deciso per raggirare il muro
 	for(int i = 0; i < better_path; i++) {
-		run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail);
+		run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 		print_map(map_info, map);
 		printf("\nsequenza: %s\n", *all_steps);
 	}
@@ -164,7 +181,12 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 }
 
 /**
-Controlla quanti muri ci nelle celle adiacenti ad un item passato per parametro
+ * Controlla quanti muri ci nelle celle adiacenti ad un item passato per parametro
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
+ * @param item_row riga dell'item
+ * @param item_col colonna dell'item
+ * @return il numero dei muri trovati
 */
 int inspect_item(map* map_info, char map[map_info->row][map_info->column], int item_row, int item_col) {
 	int counter = 0;
@@ -185,12 +207,21 @@ int inspect_item(map* map_info, char map[map_info->row][map_info->column], int i
 }
 
 /** Sposta la posizione del personaggio verso un determinato target che gli viene passato come parametro
- * parametri: le informazioni della mappa, la mappa, la stringa contenenti i passi fatti dal personaggio, la lunghezza di quest'utlima stringa, la colonna del target, la riga del target, il punteggio, la coda
- * ritorna vero se ha interrotto forzatamente il raggiungimento del target, ritorna falso se lo ha raggiunto correttamente
- */
-bool goto_target(map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* all_steps_size, int target_col, int target_row, int *points, vector** tail) {
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
+ * @param all_steps contiene la lista dei passi fatti fino ad ora
+ * @param max_steps_size contiene la dimensione massima attuale della lista dei passi fatti
+ * @param target_row riga del target
+ * @param target_col colonna del target
+ * @param points contiene i punti attuali della partita
+ * @param tail vettore della coda di Snake
 
-	char move; //contine la mossa da fare
+ * @return vero se ha interrotto forzatamente il raggiungimento del target, ritorna falso se lo ha raggiunto correttamente
+ * parametri: la colonna del target, la riga del target, il punteggio, la coda
+ */
+bool goto_target(map* map_info, char map[map_info->row][map_info->column], char** all_steps, int* max_steps_size, int target_row, int target_col, int *points, vector** tail) {
+
+	char move; //contiene la mossa da fare
 	char target_direction = 'h'; // serve a capire da quale direzione (verticale od orizzontale) si può accedere all'uscita
 	char left_target = '?', right_target = '?';
 	int panic_counter = 0; // contatore che se va oltre una certa quantità forza l'algoritmo a interrompere il raggiungimento del target attuale e si dirige all'uscita
@@ -241,11 +272,11 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				else if (target_col < map_info->player_column) {
 					move = OVEST;
 				}
-				if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail)) {
-					panic_counter += go_around_wall(map_info, map, 'v', move, all_steps, all_steps_size, points, tail, target_row, target_col);
+				if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
+					panic_counter += go_around_wall(map_info, map, 'v', move, all_steps, max_steps_size, points, tail, target_row, target_col);
 					//una volta raggirato il muro esegue la mossa che mi avvicina al target
 					printf("mi muovo a %c\n", move);
-					run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail);
+					run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 /*					print_map(map_info, map);*/
 /*					printf("\nsequenza: %s\n", *all_steps);*/
 				}
@@ -261,9 +292,9 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				//mi sposto sù
 				move = NORD;
 			}
-			if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail)) {
-				panic_counter += go_around_wall(map_info, map, 'h', move, all_steps, all_steps_size, points, tail, target_row, target_col);
-				run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail);
+			if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
+				panic_counter += go_around_wall(map_info, map, 'h', move, all_steps, max_steps_size, points, tail, target_row, target_col);
+				run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 			}
 		}
 		else if (target_direction == 'v') { // vogliamo far corrispondere la colonna del giocatore con quella dell'uscita
@@ -274,10 +305,10 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				else if (target_row < map_info->player_row) {
 					move = NORD;
 				}
-				if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail)) {
-					panic_counter += go_around_wall(map_info, map, 'h', move, all_steps, all_steps_size, points, tail, target_row, target_col);
+				if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
+					panic_counter += go_around_wall(map_info, map, 'h', move, all_steps, max_steps_size, points, tail, target_row, target_col);
 					//una volta raggirato il muro esegue la mossa che mi avvicina al target
-					run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail);
+					run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 /*					print_map(map_info, map);*/
 /*					printf("\nsequenza: %s\n", *all_steps);*/
 				}
@@ -293,9 +324,9 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				//mi sposto a sinistra
 				move = OVEST;
 			}
-			if(!run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail)) {
-				panic_counter += go_around_wall(map_info, map, 'v', move, all_steps, all_steps_size, points, tail, target_row, target_col);
-				run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail);
+			if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
+				panic_counter += go_around_wall(map_info, map, 'v', move, all_steps, max_steps_size, points, tail, target_row, target_col);
+				run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 			}
 		}
 		else if (target_direction == 'i') {
@@ -345,7 +376,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				move = NORD;
 			}
 		}
-		run_move(map_info, map, move, points, all_steps, all_steps_size, true, tail);
+		run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 		print_map(map_info, map);
 		printf("\nsequenza: %s\n", *all_steps);
 	}
@@ -353,8 +384,12 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 }
 
 /**
- * controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili punta all'uscita
- */
+ * Questo metodo inizia la modalità CPU.\n
+ * controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili, punta all'uscita
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
+ * @param force_quit quando questo flag è vero significa che il programma è stato chiamato con il parametro da linea di comando e quindi una volta terminato l'algoritmo, il terminare il programma deve terminare senza ulteriori stampe
+*/
 void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], bool force_quit) {
 	int points = 1000;
 	vector *tail = NULL;
@@ -409,11 +444,11 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 			}
 			if(map[row][column] == DRILL){
 				printf("trapano in %d %d\n", row, column);
-				panic = goto_target(map_info, map, &all_steps, &max_steps_size, column, row, &points, &tail);
+				panic = goto_target(map_info, map, &all_steps, &max_steps_size, row, column, &points, &tail);
 			}
 			else if(map[row][column] == BONUS_POINTS) {
 				printf("\t\tMONETA IN %d %d\n", row, column);
-				panic = goto_target(map_info, map, &all_steps, &max_steps_size, column, row, &points, &tail);
+				panic = goto_target(map_info, map, &all_steps, &max_steps_size, row, column, &points, &tail);
 			}
 			if(row < end){
 				row++;
@@ -440,7 +475,7 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 
 	//raggiungimento dell'uscita
 	printf("\n\n\t\t vado all'uscita\n");
-	goto_target(map_info, map, &all_steps, &max_steps_size, map_info->exit_column, map_info->exit_row, &points, &tail);
+	goto_target(map_info, map, &all_steps, &max_steps_size, map_info->exit_row, map_info->exit_column, &points, &tail);
 	printf("%s\n", all_steps);
 	if(!force_quit){
 		printf("premi invio per continuare");

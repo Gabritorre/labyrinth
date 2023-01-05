@@ -88,7 +88,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a49843ea693d4bd4d93d78b59d84a7e09"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a49843ea693d4bd4d93d78b59d84a7e09">list_maps</a> (FILE *file)</td></tr>
 <tr class="separator:a49843ea693d4bd4d93d78b59d84a7e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8dbbcff081dd533dc44418415adda042"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a8dbbcff081dd533dc44418415adda042">get_map_info</a> (FILE *file, <a class="el" href="structmap.html">map</a> *map_info, int map_number)</td></tr>
-<tr class="memdesc:a8dbbcff081dd533dc44418415adda042"><td class="mdescLeft">&#160;</td><td class="mdescRight">questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente  <a href="main_8c.html#a8dbbcff081dd533dc44418415adda042">More...</a><br /></td></tr>
 <tr class="separator:a8dbbcff081dd533dc44418415adda042"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0e21e9c91bad53fd8ea999d12ee6589"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ad0e21e9c91bad53fd8ea999d12ee6589">save_map</a> (<a class="el" href="structmap.html">map</a> *map_info, int map_line, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column])</td></tr>
 <tr class="separator:ad0e21e9c91bad53fd8ea999d12ee6589"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,6 +116,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Controlla che la mappa scelta dall'utente rispetti le proprietà necessarie: avere Snake, avere l'uscita e la mappa deve essere sufficientemente grande </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 se la mappa non soddisfa i requisiti altrimenti restituisce 0 </dd></dl>
 
 </div>
 </div>
@@ -151,8 +157,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>questo metodo ritorna la riga in cui inizia la mappa scelta dall'utente </p>
+<p>Cerca la mappa scelta dall'utente e si salva tutte le informazione necessarie: coordinate di Snake, dell'uscita; le dimensioni della mappa </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">file</td><td>file contentente le mappe </td></tr>
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map_number</td><td>numero della mappa scelta dall'utente </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ritorna la riga in cui inizia la mappa scelta dall'utente </dd></dl>
 
 </div>
 </div>
@@ -171,8 +184,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>elenca tutte le mappe che sono presenti nel file di testo "maps.txt".</p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Elenca tutte le mappe che sono presenti nel file di testo "maps.txt". </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">file</td><td>file da cui estrarre le mappe. </td></tr>
   </table>
@@ -207,6 +219,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>All'interno del main si navigano i menu </p>
 
 </div>
 </div>
@@ -241,6 +254,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Salva la mappa scelta dall'utente mettendola nella matrice di gioco </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map_line</td><td>il punto d'inzio della mappa scelta dall'utente </td></tr>
+    <tr><td class="paramname">map</td><td>la matrice dove salvare la mappa </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -269,6 +290,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Legge una mappa dallo user input </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -287,6 +315,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Prende la mappa dal file di testo </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>il punto nel file di testo dove inizia la mappa scelta dall'utente, altrimenti ritorna -1 in caso di errore </dd></dl>
 
 </div>
 </div>

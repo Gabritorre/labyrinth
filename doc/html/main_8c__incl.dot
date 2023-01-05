@@ -15,13 +15,13 @@ digraph "main.c"
   Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node6 [label="string.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
   Node1 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node7 [label="lib/prototype.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$prototype_8h.html",tooltip=" "];
+  Node7 [label="lib/prototype.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$prototype_8h.html",tooltip="contiene costanti, strutture e le firme delle funzioni"];
   Node1 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node8 [label="lib/general_purpose.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$general__purpose_8c.html",tooltip=" "];
+  Node8 [label="lib/general_purpose.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$general__purpose_8c.html",tooltip="Contiene le funzioni di stampa particolarmente lunghe (menu), funzioni utilizzate da entrambe le moda..."];
   Node1 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node9 [label="lib/tail_vector.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$tail__vector_8c.html",tooltip=" "];
+  Node9 [label="lib/tail_vector.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$tail__vector_8c.html",tooltip="Contiene le funzioni per gestire la coda del personaggio."];
   Node1 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node10 [label="lib/game_mode/interactive.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interactive_8c.html",tooltip=" "];
+  Node10 [label="lib/game_mode/interactive.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$interactive_8c.html",tooltip="Contentente le funzioni utilizzate dalla modalità interativa."];
   Node1 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node11 [label="lib/game_mode/cpu.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cpu_8c.html",tooltip=" "];
+  Node11 [label="lib/game_mode/cpu.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$cpu_8c.html",tooltip="Contiene le funzioni utilizzate dalla modalità CPU."];
 }

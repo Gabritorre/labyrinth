@@ -71,6 +71,9 @@ $(function() {
 <div class="title">general_purpose.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contiene le funzioni di stampa particolarmente lunghe (menu), funzioni utilizzate da entrambe le modalità di gioco.  
+<a href="#details">More...</a></p>
 <div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
@@ -83,12 +86,12 @@ Functions</h2></td></tr>
 <tr class="separator:a0abe46a8a8fa262bb5ab6ab7bb6270ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78b7699fde9508fbe1c44102e19e7c58"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a78b7699fde9508fbe1c44102e19e7c58">insert_tail_in_map</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], <a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> *tail)</td></tr>
 <tr class="separator:a78b7699fde9508fbe1c44102e19e7c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb80f71975d23f45eb9eaf3dd0e225d6"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#adb80f71975d23f45eb9eaf3dd0e225d6">build_sequence</a> (char **steps, int *max_step_size, char move)</td></tr>
-<tr class="separator:adb80f71975d23f45eb9eaf3dd0e225d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d34656096f89671ace6d06fd0d84239"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a9d34656096f89671ace6d06fd0d84239">build_sequence</a> (char **steps, int *max_steps_size, char move)</td></tr>
+<tr class="separator:a9d34656096f89671ace6d06fd0d84239"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ac97c3ceb13d2cc1d5c8affccfd00ea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a5ac97c3ceb13d2cc1d5c8affccfd00ea">check_next_step</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], char next_step, bool *win, int *points, <a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> **tail, int next_row, int next_column)</td></tr>
 <tr class="separator:a5ac97c3ceb13d2cc1d5c8affccfd00ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11becd4a12c6674275a4dcce6b9147ab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a11becd4a12c6674275a4dcce6b9147ab">run_move</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], char move, int *points, char **steps, int *step_size, bool ai_flag, <a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> **tail)</td></tr>
-<tr class="separator:a11becd4a12c6674275a4dcce6b9147ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54ae4fd6648dea250db45abb7bb9b5eb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a54ae4fd6648dea250db45abb7bb9b5eb">run_move</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], char move, int *points, char **steps, int *steps_size, bool ai_flag, <a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> **tail)</td></tr>
+<tr class="separator:a54ae4fd6648dea250db45abb7bb9b5eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55528ce3502c1ba485e04f6cf3a4a968"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a55528ce3502c1ba485e04f6cf3a4a968">title</a> ()</td></tr>
 <tr class="separator:a55528ce3502c1ba485e04f6cf3a4a968"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a885611589f6294afada89fe88362e863"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a885611589f6294afada89fe88362e863">main_menu</a> ()</td></tr>
@@ -99,10 +102,14 @@ Functions</h2></td></tr>
 <tr class="separator:a2dd57419ff21ee0516257413739faa6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40519c3cbccd22a46d234d09731bd98b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a40519c3cbccd22a46d234d09731bd98b">print_map</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column])</td></tr>
 <tr class="separator:a40519c3cbccd22a46d234d09731bd98b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4953d1edcbbfc7e420c423ded1d5621a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="general__purpose_8c.html#a4953d1edcbbfc7e420c423ded1d5621a">clear_screen</a> ()</td></tr>
+<tr class="separator:a4953d1edcbbfc7e420c423ded1d5621a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="adb80f71975d23f45eb9eaf3dd0e225d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb80f71975d23f45eb9eaf3dd0e225d6">&#9670;&nbsp;</a></span>build_sequence()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contiene le funzioni di stampa particolarmente lunghe (menu), funzioni utilizzate da entrambe le modalità di gioco. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a9d34656096f89671ace6d06fd0d84239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d34656096f89671ace6d06fd0d84239">&#9670;&nbsp;</a></span>build_sequence()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -117,7 +124,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&#160;</td>
-          <td class="paramname"><em>max_step_size</em>, </td>
+          <td class="paramname"><em>max_steps_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -132,7 +139,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>appende la mossa appena fatta alla sequenza di mosse parametri: la sequenza di mosse fatte, la dimensione della stringa, la mossa da appendere </p>
+<p>Appende la mossa appena fatta alla sequenza di mosse </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">steps</td><td>contiene la lista dei passi fatti fino ad ora </td></tr>
+    <tr><td class="paramname">max_steps_size</td><td>contiene la dimensione massima attuale della lista dei passi fatti </td></tr>
+    <tr><td class="paramname">move</td><td>la mossa da appendere </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -197,7 +211,20 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>controlla il contenuto della prossima cella che si vuole visitare </p>
+<p>Controlla il contenuto della prossima cella che si vuole visitare, comportandosi di conseguenza in base al contenuto.<br  />
+Vengono gestiti i casi in cui nella prossima cella c'è: l'uscita, una moneta, il malus '!', un trapano, un muro oppure un pezzo di coda. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">next_step</td><td>contiene il carattere della prossima posizione in cui andrà Snake </td></tr>
+    <tr><td class="paramname">win</td><td>flag che diventa vero quando snake ha raggiunto l'uscita, altrimenti è falso </td></tr>
+    <tr><td class="paramname">points</td><td>contiene i punti attuali della partita </td></tr>
+    <tr><td class="paramname">tail</td><td>vettore della coda di Snake </td></tr>
+    <tr><td class="paramname">next_row</td><td>riga successiva in cui andrà snake </td></tr>
+    <tr><td class="paramname">next_column</td><td>colonna successiva in cui andrà snake </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -226,7 +253,31 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>rimuove tutti i caratteri TAIL dalla mappa </p>
+<p>Rimuove tutti i caratteri TAIL dalla mappa </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4953d1edcbbfc7e420c423ded1d5621a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4953d1edcbbfc7e420c423ded1d5621a">&#9670;&nbsp;</a></span>clear_screen()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void clear_screen </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Pulisce lo schermo </p>
 
 </div>
 </div>
@@ -244,7 +295,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>stampa il menu di scelta di come impostare la mappa (se sceglierne una esistente oppure passarne una da input) </p>
+<p>Stampa il menu di scelta di come impostare la mappa (se sceglierne una esistente oppure passarne una da input) </p>
 
 </div>
 </div>
@@ -279,7 +330,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>inserisce la coda nella mappa </p>
+<p>Inserisce la coda nella mappa </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">tail</td><td>vettore contentente i nodi della coda </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -297,7 +355,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>stampa il menu principale del gioco </p>
+<p>Stampa il menu principale del gioco </p>
 
 </div>
 </div>
@@ -315,7 +373,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>stampa le informazione del gioco </p>
+<p>Stampa le informazione del gioco </p>
 
 </div>
 </div>
@@ -344,12 +402,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>stampa la mappa di gioco </p>
+<p>Stampa la mappa di gioco </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a11becd4a12c6674275a4dcce6b9147ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11becd4a12c6674275a4dcce6b9147ab">&#9670;&nbsp;</a></span>run_move()</h2>
+<a id="a54ae4fd6648dea250db45abb7bb9b5eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54ae4fd6648dea250db45abb7bb9b5eb">&#9670;&nbsp;</a></span>run_move()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -388,7 +452,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&#160;</td>
-          <td class="paramname"><em>step_size</em>, </td>
+          <td class="paramname"><em>steps_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -409,7 +473,22 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. Inoltre modifica il punteggio, la sequenza di mosse e aggiorno la mappa con le relative informazioni parametri: le info della mappa, la mappa, la mossa da fare, i punti, la stringa contenente i passi fatti fino ad ora, la dimensione della stringa dei passi, un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva, la coda Se la modalità ai è attiva il ritorno significa che la mossa è stata fatto correttamente altrimenti il ritorno indica se il giocatore ha vinto la partità o no </p>
+<p>Si occupa di eseguire una mossa che gli viene passata come parametro, assicurandosi che sia una mossa legale. <br  />
+Inoltre modifica il punteggio, la sequenza di mosse e aggiorna la mappa con le relative informazioni. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">move</td><td>la mossa da eseguire </td></tr>
+    <tr><td class="paramname">points</td><td>contiene i punti attuali della partita </td></tr>
+    <tr><td class="paramname">steps</td><td>contiene la lista dei passi fatti fino ad ora </td></tr>
+    <tr><td class="paramname">steps_size</td><td>contiene la dimensione massima attuale della lista dei passi fatti </td></tr>
+    <tr><td class="paramname">ai_flag</td><td>un flag che cambia il ritorno in caso di chiamata del metodo dalla modalità ia oppure dalla modalità interattiva </td></tr>
+    <tr><td class="paramname">tail</td><td>vettore della coda di Snake</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Se la modalità ai è attiva il ritorno significa che la mossa è stata fatto correttamente.<br  />
+Altrimenti il ritorno indica se il giocatore ha vinto la partità o no </dd></dl>
 
 </div>
 </div>
@@ -427,7 +506,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>stampa il titolo di gioco </p>
+<p>Stampa il titolo di gioco </p>
 
 </div>
 </div>

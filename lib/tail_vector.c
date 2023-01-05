@@ -1,19 +1,29 @@
-/*
-file contentente le funzioni per gestire la coda del personaggio
+/**
+ * @file tail_vector.c
+ * @brief Contiene le funzioni per gestire la coda del personaggio
 */
 
-/**crea un nodo della coda*/
+/**
+ * Crea un nuovo nodo della coda
+ * @param row riga del nodo da aggiungere
+ * @param column colonna del nodo da aggiungere
+ * @return ritorna il nodo creato
+*/
 vector* vector_create(int row, int column) {
-	vector *list = (vector*) malloc(sizeof(vector));
-	if (!list)
+	vector *node = (vector*) malloc(sizeof(vector));
+	if (!node)
 		exit(EXIT_FAILURE);
-	list->row = row;
-	list->column = column;
-	list->next = NULL;
-	return list;
+	node->row = row;
+	node->column = column;
+	node->next = NULL;
+	return node;
 }
 
-/**appende un nodo alla coda esistente*/
+/**
+ * Appende un nodo alla coda esistente
+ * @param list la coda
+ * @param map_info contiene le informazioni della mappa
+ */
 void vector_append(vector** list, map* map_info) {
 	if (*list == NULL) {
 		*list = vector_create(map_info->player_row, map_info->player_column);
@@ -25,8 +35,11 @@ void vector_append(vector** list, map* map_info) {
 }
 
 /**
- * muove la coda in modo tale che segua snake, ogni nodo copierà le coordinate del nodo che gli sta davanti
- * fino a che l'ultimo nodo copia l'ultima posizione di snake
+ * Muove la coda in modo tale che segua snake, ogni nodo copierà le coordinate del nodo successivo.\n
+ * L'ultimo nodo copia l'ultima posizione di snake
+ * @param map_info contiene le informazioni della mappa
+ * @param list la coda
+ * @param map la mappa
 */
 void move_tail(map* map_info, vector** list, char map[map_info->row][map_info->column]) {
 	// se la coda non è ancora presente
@@ -49,7 +62,10 @@ void move_tail(map* map_info, vector** list, char map[map_info->row][map_info->c
 	move_tail(map_info, &((*list)->next), map);
 }
 
-/**stampa le coordinate dei nodi della coda*/
+/**
+ * Stampa le coordinate dei nodi della coda
+ * @param list la coda
+*/
 void print_vector(vector *list) {
 	if (list == NULL)
 		return;
@@ -58,13 +74,21 @@ void print_vector(vector *list) {
 }
 
 /**
- * resetta il contenuto dei nodi fino al raggiungimento di un determinato nodo
+ * Resetta il contenuto dei nodi fino al raggiungimento di un determinato nodo
+ * @param list la coda
+ * @param node_row la riga dell'ultimo nodo da eliminare
+ * @param node_col la colonna dell'ultimo nodo da eliminare
+ * @param points contiene i punti attuali della partita
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
  */
 void reset_nodes_till(vector **list, int node_row, int node_col, int *points, map* map_info, char map[map_info->row][map_info->column]) {
+	// se siamo in un nodo ancora valido (non è stato ancora resettato)
 	if ((*list)->row != -1){
 		*points -= 10;
 		map_info->tail_len -= 1;
 	}
+	// se siamo arrivati all'ultimo nodo da eliminare
 	if ((*list)->row == node_row && (*list)->column == node_col) {
 		map[(*list)->row][(*list)->column] = STEP;
 		(*list)->row = -1;
@@ -77,16 +101,23 @@ void reset_nodes_till(vector **list, int node_row, int node_col, int *points, ma
 	reset_nodes_till(&((*list)->next), node_row, node_col, points, map_info, map);
 }
 
-/** resetta la coda fino a metà
- * middle_node è un counter di quanti nodi sono da eliminare
+/** 
+ * Resetta la coda fino a metà
+ * @param list la coda
+ * @param middle_node counter di quanti nodi sono da eliminare partendo dal nodo della coda più lontano (il primo nodo della lista)
+ * @param points contiene i punti attuali della partita
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
  */
 void delete_half_tail(vector **list, int middle_node, int *points, map* map_info, char map[map_info->row][map_info->column]) {
+	// se siamo in un nodo ancora valido (non è stato ancora resettato)
 	if ((*list)->row != -1){
 		*points -= 10;
 		middle_node -= 1;
 		map[(*list)->row][(*list)->column] = STEP;
 		map_info->tail_len -= 1;
 	}
+	// se siamo arrivati all'ultimo nodo da eliminare
 	if (middle_node <= 0) {
 		map[(*list)->row][(*list)->column] = STEP;
 		(*list)->row = -1;
@@ -98,7 +129,10 @@ void delete_half_tail(vector **list, int middle_node, int *points, map* map_info
 	delete_half_tail(&((*list)->next), middle_node, points, map_info, map);
 }
 
-/**dealloca tutti i nodi della coda*/
+/**
+ * Dealloca tutti i nodi della coda
+ * @param list la coda
+*/
 void dealloc_vector(vector **list) {
 	if ((*list) == NULL)
 		return;

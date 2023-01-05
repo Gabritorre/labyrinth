@@ -71,6 +71,9 @@ $(function() {
 <div class="title">cpu.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contiene le funzioni utilizzate dalla modalità CPU.  
+<a href="#details">More...</a></p>
 <div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
@@ -83,18 +86,20 @@ Functions</h2></td></tr>
 <tr class="separator:a83808b5b3b206488259a56bb1265594b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cfd866cb39f21768be32fd6cee79754"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8c.html#a0cfd866cb39f21768be32fd6cee79754">green_light_to_target</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], int target_col, int target_row, char direction)</td></tr>
 <tr class="separator:a0cfd866cb39f21768be32fd6cee79754"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaffbeed34c9f8e8f97f97c187e29cc56"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8c.html#aaffbeed34c9f8e8f97f97c187e29cc56">go_around_wall</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], char moving_direction, char move, char **all_steps, int *all_steps_size, int *points, <a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> **tail, int target_row, int target_col)</td></tr>
-<tr class="separator:aaffbeed34c9f8e8f97f97c187e29cc56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75b0bb56927aa17430ccb3df05805b40"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8c.html#a75b0bb56927aa17430ccb3df05805b40">go_around_wall</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], char moving_direction, char move, char **all_steps, int *max_steps_size, int *points, <a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> **tail, int target_row, int target_col)</td></tr>
+<tr class="separator:a75b0bb56927aa17430ccb3df05805b40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2c0fe01b31cfb4338f8ed130f105bd9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8c.html#ac2c0fe01b31cfb4338f8ed130f105bd9">inspect_item</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], int item_row, int item_col)</td></tr>
 <tr class="separator:ac2c0fe01b31cfb4338f8ed130f105bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63b01c7a0b5f9aecdeeb4c7a9be31a67"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8c.html#a63b01c7a0b5f9aecdeeb4c7a9be31a67">goto_target</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], char **all_steps, int *all_steps_size, int target_col, int target_row, int *points, <a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> **tail)</td></tr>
-<tr class="separator:a63b01c7a0b5f9aecdeeb4c7a9be31a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad83bbee2c53ffebf10e2d89b095db8ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8c.html#ad83bbee2c53ffebf10e2d89b095db8ac">cpu_algorithm</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column])</td></tr>
-<tr class="separator:ad83bbee2c53ffebf10e2d89b095db8ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34452225605962aa09b05541841c13f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8c.html#a34452225605962aa09b05541841c13f0">goto_target</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], char **all_steps, int *max_steps_size, int target_row, int target_col, int *points, <a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> **tail)</td></tr>
+<tr class="separator:a34452225605962aa09b05541841c13f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79bdf417be0df28855ee760d0e0d487a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cpu_8c.html#a79bdf417be0df28855ee760d0e0d487a">cpu_algorithm</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column], bool force_quit)</td></tr>
+<tr class="separator:a79bdf417be0df28855ee760d0e0d487a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="ad83bbee2c53ffebf10e2d89b095db8ac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad83bbee2c53ffebf10e2d89b095db8ac">&#9670;&nbsp;</a></span>cpu_algorithm()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contiene le funzioni utilizzate dalla modalità CPU. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a79bdf417be0df28855ee760d0e0d487a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79bdf417be0df28855ee760d0e0d487a">&#9670;&nbsp;</a></span>cpu_algorithm()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -109,7 +114,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">char&#160;</td>
-          <td class="paramname"><em>map</em>[map_info-&gt;row][map_info-&gt;column]&#160;</td>
+          <td class="paramname"><em>map</em>[map_info-&gt;row][map_info-&gt;column], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>force_quit</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -118,12 +129,20 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili punta all'uscita </p>
+<p>Questo metodo inizia la modalità CPU.<br  />
+controlla se nel percorso per raggiungere l'uscita si trovano delle monete o dei trapani, una volta finite le monete e i trapani raggiungibili, punta all'uscita </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">force_quit</td><td>quando questo flag è vero significa che il programma è stato chiamato con il parametro da linea di comando e quindi una volta terminato l'algoritmo, il terminare il programma deve terminare senza ulteriori stampe </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="aaffbeed34c9f8e8f97f97c187e29cc56"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaffbeed34c9f8e8f97f97c187e29cc56">&#9670;&nbsp;</a></span>go_around_wall()</h2>
+<a id="a75b0bb56927aa17430ccb3df05805b40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75b0bb56927aa17430ccb3df05805b40">&#9670;&nbsp;</a></span>go_around_wall()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,7 +181,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&#160;</td>
-          <td class="paramname"><em>all_steps_size</em>, </td>
+          <td class="paramname"><em>max_steps_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -195,13 +214,27 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>metodo invocato quendo si incontra un muro che blocca la strada in base alla direzione in cui si è incappati nel muro questo metodo lancia i fantasmi (vedi metodo run_ghost) e decide quale strada conviene prendere parametri: moving_direction = direzione in cui bisogna muoversi per raggirare il muro (v = il player deve muoversi o a NORD o a SUD, h = il player deve muoversi a EST oppure a OVEST) move = rappresenta la direzione in cui andare per raggirare il muro</p>
-<p>Il metodo ritorna quanti step sono necessari per raggirare il muro </p>
+<p>Metodo invocato quendo si incontra un muro che blocca la strada. in base alla direzione in cui si è incappati nel muro questo metodo lancia i fantasmi (vedi metodo run_ghost) e decide quale strada conviene prendere </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">moving_direction</td><td>direzione in cui bisogna muoversi per raggirare il muro (v = Snake deve muoversi a NORD oppure a SUD, h = Snake deve muoversi a EST oppure a OVEST) </td></tr>
+    <tr><td class="paramname">move</td><td>contiene direzione in cui andare per raggirare il muro </td></tr>
+    <tr><td class="paramname">all_steps</td><td>contiene la lista dei passi fatti fino ad ora </td></tr>
+    <tr><td class="paramname">max_steps_size</td><td>contiene la dimensione massima attuale della lista dei passi fatti </td></tr>
+    <tr><td class="paramname">points</td><td>contiene i punti attuali della partita </td></tr>
+    <tr><td class="paramname">tail</td><td>vettore della coda di Snake </td></tr>
+    <tr><td class="paramname">target_row</td><td>riga del target </td></tr>
+    <tr><td class="paramname">target_col</td><td>colonna del target</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>quanti step sono stati necessari per raggirare il muro </dd></dl>
 
 </div>
 </div>
-<a id="a63b01c7a0b5f9aecdeeb4c7a9be31a67"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a63b01c7a0b5f9aecdeeb4c7a9be31a67">&#9670;&nbsp;</a></span>goto_target()</h2>
+<a id="a34452225605962aa09b05541841c13f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34452225605962aa09b05541841c13f0">&#9670;&nbsp;</a></span>goto_target()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -228,19 +261,19 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int *&#160;</td>
-          <td class="paramname"><em>all_steps_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>target_col</em>, </td>
+          <td class="paramname"><em>max_steps_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>target_row</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>target_col</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -261,7 +294,20 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sposta la posizione del personaggio verso un determinato target che gli viene passato come parametro parametri: le informazioni della mappa, la mappa, la stringa contenenti i passi fatti dal personaggio, la lunghezza di quest'utlima stringa, la colonna del target, la riga del target, il punteggio, la coda ritorna vero se ha interrotto forzatamente il raggiungimento del target, ritorna falso se lo ha raggiunto correttamente </p>
+<p>Sposta la posizione del personaggio verso un determinato target che gli viene passato come parametro </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">all_steps</td><td>contiene la lista dei passi fatti fino ad ora </td></tr>
+    <tr><td class="paramname">max_steps_size</td><td>contiene la dimensione massima attuale della lista dei passi fatti </td></tr>
+    <tr><td class="paramname">target_row</td><td>riga del target </td></tr>
+    <tr><td class="paramname">target_col</td><td>colonna del target </td></tr>
+    <tr><td class="paramname">points</td><td>contiene i punti attuali della partita </td></tr>
+    <tr><td class="paramname">tail</td><td>vettore della coda di Snake</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vero se ha interrotto forzatamente il raggiungimento del target, ritorna falso se lo ha raggiunto correttamente parametri: la colonna del target, la riga del target, il punteggio, la coda </dd></dl>
 
 </div>
 </div>
@@ -308,7 +354,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>controlla che ci sia una via libera retta tra il player e il target da raggiungere Il metodo parte dall'uscita e va verso il player, se trova degli ostacoli ritorna false, se invece riesce a raggiungere il player allora ritorna true </p>
+<p>Controlla che ci sia una via libera retta tra il player e il target da raggiungere Il metodo controlla tutte le posizione partendo dall'uscita fino ad arrivare da Snake. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">target_col</td><td>valore della colonna del target </td></tr>
+    <tr><td class="paramname">target_row</td><td>valore della riga del target </td></tr>
+    <tr><td class="paramname">direction</td><td>direzione in cui si può accedere al target ('h' per accesso orizzontale, 'v' per accesso verticale) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vero se non ci sono ostacoli tra il Snake e il target, altrimenti ritorna falso </dd></dl>
 
 </div>
 </div>
@@ -349,7 +405,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Controlla quanti muri ci nelle celle adiacenti ad un item passato per parametro </p>
+<p>Controlla quanti muri ci nelle celle adiacenti ad un item passato per parametro </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">item_row</td><td>riga dell'item </td></tr>
+    <tr><td class="paramname">item_col</td><td>colonna dell'item </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>il numero dei muri trovati </dd></dl>
 
 </div>
 </div>
@@ -396,7 +461,25 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Questo metodo crea un fantasma del personaggio e lo manda in una direzione "move" fino a che non trova una strada libera che rispetti "vert_value" e "horiz_value": vert_value = 1 per controllare il sud, vert_value = -1 per controllare il nord, horiz_value = 1 per controllare est, horiz_value = -1 per controllare a ovest il metodo ritorna quante volte si è spostato in direzione "move" prima di trovare una strada libera in direzione vert_value e horiz_value Questo metodo serve in sostanza per raggirare i muri ES. se voglio controllare est -&gt; move = NORD/SUD, vert_value = 0, horiz_value = 1 se voglio controllare sud -&gt; move = EST/OVEST, vert_value = 1, horiz_value = 0 ovest -&gt; move = NORD/SUD, vert_value = 0, horiz_value = -1 nord -&gt; move = EST/OVEST, vert_value = -1, horiz_value = 0 </p>
+<p>Questo metodo serve in sostanza per raggirare i muri.<br  />
+Il metodo crea un fantasma del personaggio e lo manda in una direzione "move" fino a che non trova una strada libera che rispetti "vert_value" e "horiz_value":<br  />
+ vert_value = 1 per controllare il sud, vert_value = -1 per controllare il nord,<br  />
+ horiz_value = 1 per controllare est, horiz_value = -1 per controllare a ovest<br  />
+ ES. se voglio controllare est -&gt; move = NORD/SUD, vert_value = 0, horiz_value = 1<br  />
+ se voglio controllare sud -&gt; move = EST/OVEST, vert_value = 1, horiz_value = 0<br  />
+ ovest -&gt; move = NORD/SUD, vert_value = 0, horiz_value = -1<br  />
+ nord -&gt; move = EST/OVEST, vert_value = -1, horiz_value = 0<br  />
+</p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+    <tr><td class="paramname">move</td><td>direzione in cui si deve muovere il fantasma </td></tr>
+    <tr><td class="paramname">vert_value</td><td>serve a calcolare la posizione in cui deve guardare il fantasma </td></tr>
+    <tr><td class="paramname">horiz_value</td><td>serve a calcolare la posizione in cui deve guardare il fantasma </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>il metodo ritorna quante volte si è spostato in direzione "move" prima di trovare una strada libera in direzione vert_value e horiz_value </dd></dl>
 
 </div>
 </div>

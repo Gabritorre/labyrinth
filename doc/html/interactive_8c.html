@@ -71,6 +71,9 @@ $(function() {
 <div class="title">interactive.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contentente le funzioni utilizzate dalla modalità interativa.  
+<a href="#details">More...</a></p>
 <div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
@@ -84,7 +87,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a894a86ae77a8807372dab3cc1a44cd56"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interactive_8c.html#a894a86ae77a8807372dab3cc1a44cd56">start_interactive_mode</a> (<a class="el" href="structmap.html">map</a> *map_info, char <a class="el" href="structmap.html">map</a>[map_info-&gt;row][map_info-&gt;column])</td></tr>
 <tr class="separator:a894a86ae77a8807372dab3cc1a44cd56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contentente le funzioni utilizzate dalla modalità interativa. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a0ada81517d3eb95d7396f90067ac93bc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ada81517d3eb95d7396f90067ac93bc">&#9670;&nbsp;</a></span>command_interpreter()</h2>
 
@@ -110,7 +115,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>interpreta il comando di movimento inserito dall'utente 1 = uscito dalla partita 2 = comando inserito non valido 0 = corretto </p>
+<p>Interpreta il comando di movimento inserito dall'utente </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">command</td><td>il comando inserito dall'utente </td></tr>
+    <tr><td class="paramname">move</td><td>è dove il comando dell'utente viene salvato </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 = uscito dalla partita <br  />
+ 2 = comando inserito non valido <br  />
+0 = corretto </dd></dl>
 
 </div>
 </div>
@@ -139,7 +153,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>fa partire la modalità interattiva. </p>
+<p>Fa partire la modalità interattiva. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

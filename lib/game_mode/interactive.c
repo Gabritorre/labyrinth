@@ -1,12 +1,16 @@
-/*
-file contentente le funzioni utilizzate dalla modalità interativa
+/**
+* @file interactive.c
+* @brief Contentente le funzioni utilizzate dalla modalità interativa
 */
 
 /**
- * interpreta il comando di movimento inserito dall'utente
- * 1 = uscito dalla partita
- * 2 = comando inserito non valido
- * 0 = corretto*/
+ * Interpreta il comando di movimento inserito dall'utente
+ * @param command il comando inserito dall'utente
+ * @param move è dove il comando dell'utente viene salvato
+ * @return 1 = uscito dalla partita \n 
+ * 2 = comando inserito non valido \n
+ * 0 = corretto
+ */
 int command_interpreter (char command, char *move) {
 	printf("comando: %d\n", command);
 	if (command == QUIT) {
@@ -22,7 +26,9 @@ int command_interpreter (char command, char *move) {
 	return 0;
 }
 
-/** fa partire la modalità interattiva.
+/** Fa partire la modalità interattiva.
+ * @param map_info contiene le informazioni della mappa
+ * @param map la mappa
 */
 void start_interactive_mode(map* map_info, char map[map_info->row][map_info->column]) {
 	bool playing = true;

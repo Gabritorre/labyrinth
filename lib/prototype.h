@@ -1,5 +1,6 @@
-/*
-file che contine: costanti, strutture e le firme delle funzioni
+/**
+ * @file prototype.h 
+ * @brief contiene costanti, strutture e le firme delle funzioni
 */
 
 //--------------------- commands
@@ -20,29 +21,40 @@ file che contine: costanti, strutture e le firme delle funzioni
 #define TAIL 'x'
 
 //--------------------- constants values
-///contine la quantità di punti bonus da dare quando si prende una moneta
+///contiene la quantità di punti bonus da dare quando si prende una moneta
 #define QUANTITY_BONUS 11 
 
 //--------------------- structures
 /**linked list che serve a gestire la coda di Snake*/
 typedef struct List {
+	/// Riga del nodo
 	int row;
+	/// Colonna del nodo
 	int column;
+	/// Puntatore al nodo successivo
 	struct List *next;
 } vector;
 
-/**struttura contenente le informazione più inmportanti della mappa */
+/**Struttura contenente le informazione più inmportanti della mappa */
 typedef struct {
+	/// Numero di righe della mappa
 	int row;
+	/// Numero di colonne della mappa
 	int column;
 
+	/// Riga dell'attuale posizione di Snake
 	int player_row;
+	/// Colonna dell'attuale posizione di Snake
 	int player_column;
+	/// Lunghezza attuale della coda
 	int tail_len;
 
+	/// Contatore di quanti muri si possono rompere
 	int drill_counter;
 
+	/// Riga dell'uscita
 	int exit_row;
+	/// Colonna dell'uscita
 	int exit_column;
 } map;
 

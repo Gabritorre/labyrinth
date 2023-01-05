@@ -71,6 +71,9 @@ $(function() {
 <div class="title">tail_vector.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Contiene le funzioni per gestire la coda del personaggio.  
+<a href="#details">More...</a></p>
 <div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
@@ -94,7 +97,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af14f5747f57724d6fcfd0bc270be6aeb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="tail__vector_8c.html#af14f5747f57724d6fcfd0bc270be6aeb">dealloc_vector</a> (<a class="el" href="prototype_8h.html#acc32baa0902c4d9700fcaa6b5080408c">vector</a> **list)</td></tr>
 <tr class="separator:af14f5747f57724d6fcfd0bc270be6aeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Contiene le funzioni per gestire la coda del personaggio. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="af14f5747f57724d6fcfd0bc270be6aeb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af14f5747f57724d6fcfd0bc270be6aeb">&#9670;&nbsp;</a></span>dealloc_vector()</h2>
 
@@ -110,7 +115,12 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>dealloca tutti i nodi della coda </p>
+<p>Dealloca tutti i nodi della coda </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>la coda </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -157,7 +167,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>resetta la coda fino a metà middle_node è un counter di quanti nodi sono da eliminare </p>
+<p>Resetta la coda fino a metà </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>la coda </td></tr>
+    <tr><td class="paramname">middle_node</td><td>counter di quanti nodi sono da eliminare partendo dal nodo della coda più lontano (il primo nodo della lista) </td></tr>
+    <tr><td class="paramname">points</td><td>contiene i punti attuali della partita </td></tr>
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -192,7 +211,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>muove la coda in modo tale che segua snake, ogni nodo copierà le coordinate del nodo che gli sta davanti fino a che l'ultimo nodo copia l'ultima posizione di snake </p>
+<p>Muove la coda in modo tale che segua snake, ogni nodo copierà le coordinate del nodo successivo.<br  />
+L'ultimo nodo copia l'ultima posizione di snake </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">list</td><td>la coda </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -211,7 +238,12 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>stampa le coordinate dei nodi della coda </p>
+<p>Stampa le coordinate dei nodi della coda </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>la coda </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -264,7 +296,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>resetta il contenuto dei nodi fino al raggiungimento di un determinato nodo </p>
+<p>Resetta il contenuto dei nodi fino al raggiungimento di un determinato nodo </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>la coda </td></tr>
+    <tr><td class="paramname">node_row</td><td>la riga dell'ultimo nodo da eliminare </td></tr>
+    <tr><td class="paramname">node_col</td><td>la colonna dell'ultimo nodo da eliminare </td></tr>
+    <tr><td class="paramname">points</td><td>contiene i punti attuali della partita </td></tr>
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+    <tr><td class="paramname">map</td><td>la mappa </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -293,7 +335,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>appende un nodo alla coda esistente </p>
+<p>Appende un nodo alla coda esistente </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">list</td><td>la coda </td></tr>
+    <tr><td class="paramname">map_info</td><td>contiene le informazioni della mappa </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -322,7 +370,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>crea un nodo della coda </p>
+<p>Crea un nuovo nodo della coda </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">row</td><td>riga del nodo da aggiungere </td></tr>
+    <tr><td class="paramname">column</td><td>colonna del nodo da aggiungere </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>ritorna il nodo creato </dd></dl>
 
 </div>
 </div>
