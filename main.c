@@ -227,10 +227,15 @@ int main(int argc, char *argv[]) {
 	bool play = true;
 	while(play) {
 		char user_selection[50];
-		title();
-		main_menu();
-		scanf(" %s", user_selection);
-
+		if (argc > 1 && strcmp(argv[1], "--cpu") == 0) {
+			user_selection[0] = '2';
+			play = false;
+		}
+		else{
+			title();
+			main_menu();
+			scanf(" %s", user_selection);
+		}
 		//modalità interativa
 		if (user_selection[0] == '1' && user_selection[1] == 0) {
 			printf("\thai selezionato modalita' interattiva\n");
@@ -273,14 +278,21 @@ int main(int argc, char *argv[]) {
 		}
 
 		else if (user_selection[0] == '2' && user_selection[1] == 0) {
-			printf("\thai selezionato modalita' CPU\n");
+			if (!(argc > 1 && strcmp(argv[1], "--cpu") == 0)) {
+				printf("\thai selezionato modalita' CPU\n");
+			}
 			map map_info;
 			int map_line;
 			bool choosing_input = true;
 			while(choosing_input){
 				choosing_input = false;
-				input_type_menu();
-				scanf(" %s", user_selection);
+				if (argc > 1 && strcmp(argv[1], "--cpu") == 0) {
+					user_selection[0] = '2';
+				}
+				else{
+					input_type_menu();
+					scanf(" %s", user_selection);
+				}
 
 				//prende la mappa dal file di testo
 				if(user_selection[0] == '1' && user_selection[1] == 0){

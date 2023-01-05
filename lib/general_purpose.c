@@ -246,7 +246,7 @@ void print_game_info() {
 				"\t\t- 'T' trapano, una volta preso da la possibilità di bucare tre muri\n\n");
 
 	printf("\tModalità CPU: in questa modalità la CPU proverà ad uscire da un labirinto che gli viene dato.\n");
-	printf("\t\te' possibile aggiungere o creare le proprie mappe inserendole nel file di testo \"maps.txt\" (separare ogni mappa da una riga vuota)\n"
+	printf("\t\te' possibile aggiungere o creare le proprie mappe inserendole nel file di testo \"maps.txt\" (separare ogni mappa da una riga vuota e lasciare due righe vuote alla fine del file)\n"
 			"\t\toppure si puo' inserire direttamente una mappa da linea di comando seguendo il seguente formato:\n");
 
 	printf("\t\t<numero di colonne>\n"
