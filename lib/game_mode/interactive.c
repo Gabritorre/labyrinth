@@ -38,7 +38,6 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 	map_info->drill_counter = 0;
 	int max_steps_size = map_info->row + map_info->column;
 	char *all_steps = (char*) calloc(max_steps_size, sizeof(char));
-
 	while(playing) {
 		clear_screen();
 		insert_tail_in_map(map_info, map, tail);

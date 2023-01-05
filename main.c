@@ -179,6 +179,10 @@ int check_map_proprieties(map* map_info) {
  * @param map la mappa
 */
 void take_map_cmd_line(map* map_info, char map[map_info->row][map_info->column]) {
+	map_info->player_row = -1;
+	map_info->player_column = -1;
+	map_info->exit_row = -1;
+	map_info->exit_column = -1;
 	for (int i = 0; i < map_info->row; i++) {
 		char line[map_info->column];
 		scanf(" %[^\n]%*c", line); //leggi l'input finche non trovi \n e quando viene trovata non viene salvata
@@ -294,6 +298,10 @@ int main(int argc, char *argv[]) {
 
 					char map[map_info.row][map_info.column];
 					take_map_cmd_line(&map_info, map);
+					if(check_map_proprieties(&map_info)){
+						choosing_input = true;
+						continue;
+					}
 					start_interactive_mode(&map_info, map);
 				}
 				//torna al menu precedente
@@ -308,6 +316,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 
+		//modalità CPU
 		else if (user_selection[0] == '2' && user_selection[1] == 0) {
 			if (!(argc > 1 && strcmp(argv[1], "--cpu") == 0)) {
 				printf("\thai selezionato modalita' CPU\n");
@@ -347,6 +356,10 @@ int main(int argc, char *argv[]) {
 
 					char map[map_info.row][map_info.column];
 					take_map_cmd_line(&map_info, map);
+					if(check_map_proprieties(&map_info)){
+						choosing_input = true;
+						continue;
+					}
 					cpu_algorithm(&map_info, map, force_quit);
 				}
 				//torna al menu precedente
