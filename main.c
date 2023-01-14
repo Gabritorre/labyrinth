@@ -126,7 +126,7 @@ void save_map(map* map_info, int map_line, char map[map_info->row][map_info->col
 	FILE *file;
 	file = fopen("maps.txt", "r");
 	if (NULL == file) {
-		printf("\n\tErrore nell'apertura del file\n");
+		printf("\n\tErrore nell'apertura del file. \n\tcontrollare che ci sia il file delle mappe nella stessa cartella del file eseguibile\n");
 		exit(1);
 	}
 	fseek(file, map_line, SEEK_SET); //rileggo il file dalla mappa scelta dall'utente

@@ -1,10 +1,12 @@
 # Snake labyrinth
 
-## Execution on linux and MacOS
+## Execution on Linux and MacOS
 
-	make && ./lab
+	cd linux-mac
+	./game.out
 
 ## Execution on Windows
 
-	gcc *.c -o lab.exe && ./lab.exe
+	cd win
+	game.exe
 
