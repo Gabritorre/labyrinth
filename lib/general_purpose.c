@@ -257,10 +257,10 @@ void print_game_info() {
 	printf("Snake labyrinth è un gioco che presenta due modalità:\n");
 	printf("\tModalità interattiva: si tratta di far uscire il proprio personaggio dal labirinto muovendonsi in quattro direzioni.\n"
 			"\tLe direzioni sono associate ai seguenti tasti:\n"
-				"\t\t- 'N'/'n' nord (movimento verso l'alto)\n"
-				"\t\t- 'E'/'e' est (movimento verso destra)\n"
+				"\t\t- 'W'/'w' nord (movimento verso l'alto)\n"
+				"\t\t- 'A'/'a' ovest (movimento verso sinistra)\n"
 				"\t\t- 'S'/'s' sud (movimento verso il basso)\n"
-				"\t\t- 'O'/'o' ovest (movimento verso sinistra)\n");
+				"\t\t- 'D'/'d' est (movimento verso destra)\n");
 	printf("\tIl personaggio parte da una base di 1000 punti.\n\tUna volta usciti dal labirinto si ottiene un punteggio che si basa su quanti movimenti sono stati fatti e in base a dei modificatori che si trovano nella mappa:\n"
 			"\tI modificatori sono i seguenti:\n"
 				"\t\t- '$' aggiunge 10 punti al punteggio, e aggiunge un pezzo di coda a Snake\n"
