@@ -4,10 +4,10 @@
 */
 
 //--------------------- commands
-#define NORD 'N'
+#define NORD 'W'
 #define SUD 'S'
-#define EST 'E'
-#define OVEST 'O'
+#define EST 'D'
+#define OVEST 'A'
 #define QUIT 'Z'
 
 //--------------------- map items
@@ -22,7 +22,7 @@
 
 //--------------------- constants values
 ///contiene la quantità di punti bonus da dare quando si prende una moneta
-#define QUANTITY_BONUS 11 
+#define QUANTITY_BONUS 11
 
 //--------------------- structures
 /**linked list che serve a gestire la coda di Snake*/

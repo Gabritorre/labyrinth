@@ -7,7 +7,7 @@
  * Interpreta il comando di movimento inserito dall'utente
  * @param command il comando inserito dall'utente
  * @param move è dove il comando dell'utente viene salvato
- * @return 1 = uscito dalla partita \n 
+ * @return 1 = uscito dalla partita \n
  * 2 = comando inserito non valido \n
  * 0 = corretto
  */
@@ -64,8 +64,9 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 				insert_tail_in_map(map_info, map, tail);
 				print_map(map_info, map);
 				printf("\n\tHAI RAGGIUNTO L'USCITA!\n");
-				printf("\tHai fatto %d punti\n", points);
-				printf("\tSequenza di passi fatti: %s\n", all_steps);
+				printf("\t- Hai fatto %d punti\n", points);
+				printf("\t- Sequenza di passi fatti: %s\n", all_steps);
+				printf("\t- Numero di passi fatti: %ld\n", strlen(all_steps));
 				playing = false;
 				printf("(Premi invio per continuare)");
 				getchar();

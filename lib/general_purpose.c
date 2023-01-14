@@ -41,7 +41,7 @@ void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column]
  * @param move la mossa da appendere
  */
 char* build_sequence (char **steps, int *max_steps_size, char move) {
-	if (strlen(*steps) >= *max_steps_size){
+	if (strlen(*steps) >= *max_steps_size-1){
 /*		printf("\n\trealloco\n");*/
 		*max_steps_size += 5;
 	}
@@ -65,7 +65,7 @@ char* build_sequence (char **steps, int *max_steps_size, char move) {
  * @param map_info contiene le informazioni della mappa
  * @param map la mappa
  * @param next_step contiene il carattere della prossima posizione in cui andrà Snake
- * @param win flag che diventa vero quando snake ha raggiunto l'uscita, altrimenti è falso 
+ * @param win flag che diventa vero quando snake ha raggiunto l'uscita, altrimenti è falso
  * @param points contiene i punti attuali della partita
  * @param tail vettore della coda di Snake
  * @param next_row riga successiva in cui andrà snake
