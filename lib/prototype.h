@@ -19,6 +19,7 @@
 #define PLAYER 'o'
 #define EXIT '_'
 #define TAIL 'x'
+#define FLAG '/'
 
 //--------------------- constants values
 ///contiene la quantità di punti bonus da dare quando si prende una moneta
@@ -88,6 +89,8 @@ void print_map(map* map_info, char map[map_info->row][map_info->column]);
 int command_interpreter (char command, char *move);
 
 void start_interactive_mode(map* map_info, char map[map_info->row][map_info->column]);
+
+void dead_end(map *map_info, char map[map_info->row][map_info->column], int ghost1, int ghost2, int start_row, int start_column, char direction);
 
 int run_ghost(map map_info, char map[map_info.row][map_info.column], char move, int vert_value, int horiz_value);
 

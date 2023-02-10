@@ -136,7 +136,7 @@ int run_move(map* map_info, char map[map_info->row][map_info->column], char move
 		case NORD:
 			if(map_info->player_row - 1 >= 0){
 				next_step = map[map_info->player_row - 1][map_info->player_column]; // ottengo il carattere contenuto nel nuovo passo da fare
-				if(next_step != WALL || map_info->drill_counter > 0) {
+				if((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row - 1, map_info->player_column);
 
 					*points -= 1;
@@ -157,7 +157,7 @@ int run_move(map* map_info, char map[map_info->row][map_info->column], char move
 		case EST:
 			if(map_info->player_column + 1 < map_info->column){
 				next_step = map[map_info->player_row][map_info->player_column + 1];
-				if(next_step != WALL || map_info->drill_counter > 0) {
+				if((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row, map_info->player_column + 1);
 
 					*points -= 1;
@@ -177,7 +177,7 @@ int run_move(map* map_info, char map[map_info->row][map_info->column], char move
 		case SUD:
 			if(map_info->player_row + 1 < map_info->row){
 				next_step = map[map_info->player_row + 1][map_info->player_column];
-				if(next_step != WALL || map_info->drill_counter > 0) {
+				if((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row + 1, map_info->player_column);
 
 					*points -= 1;
@@ -197,7 +197,7 @@ int run_move(map* map_info, char map[map_info->row][map_info->column], char move
 		case OVEST:
 			if(map_info->player_column - 1 >= 0){
 				next_step = map[map_info->player_row][map_info->player_column - 1];
-				if(next_step != WALL || map_info->drill_counter > 0) {
+				if((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row, map_info->player_column - 1);
 
 					*points -= 1;
