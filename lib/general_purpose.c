@@ -107,14 +107,17 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 		insert_tail_in_map(map_info, map, *tail);
 		// se incontro un pezzo di coda, resetto i nodi fino al punto incontrato
 		if (map[next_row][next_column] == TAIL) {
+/*			printf("\ncoda (prima di eliminazione): ");*/
+/*			print_vector(*tail);*/
+/*			printf("\nlen coda %d\n", map_info->tail_len);*/
 			reset_nodes_till(tail, next_row, next_column, points, map_info, map);
 		}
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 	}
-	printf("\ncoda: ");
-	print_vector(*tail);
-	printf("\nlen coda %d\n", map_info->tail_len);
+/*	printf("\ncoda: ");*/
+/*	print_vector(*tail);*/
+/*	printf("\nlen coda %d\n", map_info->tail_len);*/
 }
 
 
@@ -273,6 +276,7 @@ void print_game_info() {
 				"\t\t- 'o' il proprio personaggio\n"
 				"\t\t- 'x' un pezzo della coda di Snake\n"
 				"\t\t- '#' parete della mappa\n"
+				"\t\t- '/' (solo in modalità cpu) flag che vengono messi per marcare vicoli ciechi\n"
 				"\t\t- '_' uscita della mappa\n"
 				"\t\t- 'T' trapano, una volta preso da la possibilità di bucare tre muri\n\n");
 

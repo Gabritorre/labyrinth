@@ -102,7 +102,6 @@ bool green_light_to_target (map* map_info, char map[map_info->row][map_info->col
 }
 
 void mark_dead_end(map* map_info, char map[map_info->row][map_info->column], int ghost1, int ghost2, int start_row, int start_column, char direction) {
-	printf("%d %d\n", ghost1, ghost2);
 	if(direction == 'v') {
 		for(int i = start_row - ghost1; i <= start_row + ghost2; i++) {
 			map[i][start_column] = FLAG;
@@ -137,8 +136,8 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 	int ghost1_steps, ghost2_steps, better_path;
 
 	bool dead_end = false;
-	// printf("lancio i fantasmi\n");
-	printf("voglio andare a %c\n", move);
+/*	printf("lancio i fantasmi\n");*/
+/*	printf("voglio andare a %c\n", move);*/
 	int vert_value, horiz_value; // rappresentano la direzione in cui guardare, vedere commento sulla funzione run_ghost
 	if (moving_direction == 'v') {
 		vert_value = 0;
@@ -228,8 +227,8 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 			}
 		}
 	}
-	printf("\nghost1: %d\n", ghost1_steps);
-	printf("ghost2: %d\n", ghost2_steps);
+/*	printf("\nghost1: %d\n", ghost1_steps);*/
+/*	printf("ghost2: %d\n", ghost2_steps);*/
 	// printf("better_move di h %c\n", move);
 	int player_row = map_info->player_row;
 	int player_column = map_info->player_column;
@@ -238,20 +237,19 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 	for(int i = 0; i < better_path; i++) {
 		run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 		print_map(map_info, map);
-		printf("\nsequenza: %s\n", *all_steps);
+/*		printf("\nsequenza: %s\n", *all_steps);*/
 	}
 	if (dead_end) {
 		mark_dead_end(map_info, map, ghost1_steps - 9999, ghost2_steps - 9999, player_row, player_column, moving_direction);
 	}
 	else if(ghost1_steps >= 9999) {
-		printf("cancello\n");
 		mark_dead_end(map_info, map, ghost1_steps - 9999, 0, player_row, player_column, moving_direction);
 	}
 	else if(ghost2_steps >= 9999) {
 		mark_dead_end(map_info, map, 0, ghost2_steps - 9999, player_row, player_column, moving_direction);
 	}
-	print_map(map_info, map);
-	printf("\nsequenza: %s\n", *all_steps);
+/*	print_map(map_info, map);*/
+/*	printf("\nsequenza: %s\n", *all_steps);*/
 
 /*	getchar();*/
 /*	getchar();*/
@@ -413,7 +411,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 		print_map(map_info, map);
 		// printf("\nsequenza: %s\n", *all_steps);
 	}
-	printf("\nho semaforo verde!!!!\n");
+/*	printf("\nho semaforo verde!!!!\n");*/
 
 
 	if(panic_counter >= (map_info->row + map_info->column)*2){
@@ -562,8 +560,9 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 		print_map(map_info, map);
 		printf("\n");
 	}
-	printf("%s (%ld)\n", all_steps, strlen(all_steps));
-	printf("mappa: %d %d\n", map_info->row, map_info->column);
+	printf("\t- Punti: %d\n", points);
+	printf("\t- Sequenza di passi fatti: %s\n", all_steps);
+	printf("\t- Numero di passi fatti: %ld\n", strlen(all_steps));
 	if(!force_quit){
 		printf("premi invio per continuare");
 		getchar();

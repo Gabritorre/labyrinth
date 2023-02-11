@@ -87,29 +87,30 @@ void print_vector(vector *list) {
  * @param map la mappa
  */
 void reset_nodes_till(vector **list, int node_row, int node_col, int *points, map* map_info, char map[map_info->row][map_info->column]) {
-	// se siamo in un nodo ancora valido (non è stato ancora resettato)
-	if ((*list)->row != -1){
-		*points -= 10;
-		map_info->tail_len -= 1;
-	}
 	// se siamo arrivati all'ultimo nodo da eliminare
 	if ((*list)->row == node_row && (*list)->column == node_col) {
 		if (map[(*list)->row][(*list)->column] != FLAG){
 			map[(*list)->row][(*list)->column] = STEP;
 		}
-
-		printf("resetto nodo %d %d\n", (*list)->row, (*list)->column);
 		(*list)->row = -1;
 		(*list)->column = -1;
+		*points -= 10;
+		map_info->tail_len -= 1;
 
 		return;
 	}
-	if (map[(*list)->row][(*list)->column] != FLAG){
-		map[(*list)->row][(*list)->column] = STEP;
+
+	// se siamo in un nodo ancora valido (non è stato ancora resettato)
+	if((*list)->row != -1){
+		if (map[(*list)->row][(*list)->column] != FLAG){
+			map[(*list)->row][(*list)->column] = STEP;
+		}
+		(*list)->row = -1;
+		(*list)->column = -1;
+
+		*points -= 10;
+		map_info->tail_len -= 1;
 	}
-	printf("resetto nodo %d %d\n", (*list)->row, (*list)->column);
-	(*list)->row = -1;
-	(*list)->column = -1;
 	reset_nodes_till(&((*list)->next), node_row, node_col, points, map_info, map);
 }
 
