@@ -253,8 +253,8 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 	print_map(map_info, map);
 	printf("\nsequenza: %s\n", *all_steps);
 
-	getchar();
-	getchar();
+/*	getchar();*/
+/*	getchar();*/
 
 	return better_path;
 }
@@ -338,6 +338,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 
 	//finche il personaggio non trova percorso retto senza ostacoli verso il target e finche siamo nel limite dei passi consentito per raggiungerlo
 	while (!green_light_to_target(map_info, map, target_col, target_row, target_direction) && panic_counter <= (map_info->row + map_info->column)*2) {
+
 /*		printf("target_col %d\n", target_col);*/
 /*		printf("target_row %d\n", target_row);*/
 		panic_counter++;
@@ -413,6 +414,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 		// printf("\nsequenza: %s\n", *all_steps);
 	}
 	printf("\nho semaforo verde!!!!\n");
+
 
 	if(panic_counter >= (map_info->row + map_info->column)*2){
 		return true;
@@ -560,13 +562,13 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 		print_map(map_info, map);
 		printf("\n");
 	}
-	printf("%s\n", all_steps);
+	printf("%s (%ld)\n", all_steps, strlen(all_steps));
+	printf("mappa: %d %d\n", map_info->row, map_info->column);
 	if(!force_quit){
 		printf("premi invio per continuare");
 		getchar();
 		getchar();
 	}
-
 	free(all_steps);
 }
 

@@ -48,14 +48,18 @@ void move_tail(map* map_info, vector** list, char map[map_info->row][map_info->c
 	}
 	// se siamo nell'ultimo pezzo di coda (quello più vicino a snake)
 	if (((*list)->next) == NULL && (*list)->row != -1) {
-		map[(*list)->row][(*list)->column] = STEP;
+		if(map[(*list)->row][(*list)->column] != FLAG) {
+			map[(*list)->row][(*list)->column] = STEP;
+		}
 		(*list)->row = map_info->player_row;
 		(*list)->column = map_info->player_column;
 		return;
 	}
 	// se siamo in un nodo che è ancora valido, gli faccio copiare le coordinate del nodo successivo
 	if((*list)->row != -1){
-		map[(*list)->row][(*list)->column] = STEP;
+		if(map[(*list)->row][(*list)->column] != FLAG){
+			map[(*list)->row][(*list)->column] = STEP;
+		}
 		(*list)->row = ((*list)->next)->row;
 		(*list)->column = ((*list)->next)->column;
 	}
@@ -90,18 +94,26 @@ void reset_nodes_till(vector **list, int node_row, int node_col, int *points, ma
 	}
 	// se siamo arrivati all'ultimo nodo da eliminare
 	if ((*list)->row == node_row && (*list)->column == node_col) {
-		map[(*list)->row][(*list)->column] = STEP;
+		if (map[(*list)->row][(*list)->column] != FLAG){
+			map[(*list)->row][(*list)->column] = STEP;
+		}
+
+		printf("resetto nodo %d %d\n", (*list)->row, (*list)->column);
 		(*list)->row = -1;
 		(*list)->column = -1;
+
 		return;
 	}
-	map[(*list)->row][(*list)->column] = STEP;
+	if (map[(*list)->row][(*list)->column] != FLAG){
+		map[(*list)->row][(*list)->column] = STEP;
+	}
+	printf("resetto nodo %d %d\n", (*list)->row, (*list)->column);
 	(*list)->row = -1;
 	(*list)->column = -1;
 	reset_nodes_till(&((*list)->next), node_row, node_col, points, map_info, map);
 }
 
-/** 
+/**
  * Resetta la coda fino a metà
  * @param list la coda
  * @param middle_node counter di quanti nodi sono da eliminare partendo dal nodo della coda più lontano (il primo nodo della lista)
@@ -114,12 +126,16 @@ void delete_half_tail(vector **list, int middle_node, int *points, map* map_info
 	if ((*list)->row != -1){
 		*points -= 10;
 		middle_node -= 1;
-		map[(*list)->row][(*list)->column] = STEP;
+		if(map[(*list)->row][(*list)->column] != FLAG) {
+			map[(*list)->row][(*list)->column] = STEP;
+		}
 		map_info->tail_len -= 1;
 	}
 	// se siamo arrivati all'ultimo nodo da eliminare
 	if (middle_node <= 0) {
-		map[(*list)->row][(*list)->column] = STEP;
+		if(map[(*list)->row][(*list)->column] != FLAG) {
+			map[(*list)->row][(*list)->column] = STEP;
+		}
 		(*list)->row = -1;
 		(*list)->column = -1;
 		return;

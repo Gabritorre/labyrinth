@@ -256,6 +256,7 @@ int take_map_text_file(map* map_info) {
 int main(int argc, char *argv[]) {
 	bool play = true;
 	while(play) {
+		printf("inzio!\n");
 		char user_selection[50];
 		if (argc > 1 && strcmp(argv[1], "--cpu") == 0) {
 			user_selection[0] = '2';

@@ -27,8 +27,11 @@ void clear_map_tail(map* map_info, char map[map_info->row][map_info->column]) {
 void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column], vector* tail) {
 	if (tail == NULL) // fine lista, cioè lista vuota
 		return;
-	if(tail->row != -1)
-		map[tail->row][tail->column] = TAIL;
+	if(tail->row != -1){//le il pezzo di coda esiste
+		if (map[tail->row][tail->column] != FLAG){
+			map[tail->row][tail->column] = TAIL;
+		}
+	}
 
 	insert_tail_in_map(map_info, map, tail->next);
 }
@@ -109,9 +112,9 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, *tail);
 	}
-	// printf("coda: ");
-	// print_vector(*tail);
-	// printf("\nlen coda %d\n", map_info->tail_len);
+	printf("\ncoda: ");
+	print_vector(*tail);
+	printf("\nlen coda %d\n", map_info->tail_len);
 }
 
 
