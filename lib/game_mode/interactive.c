@@ -39,6 +39,7 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 	int max_steps_size = map_info->row + map_info->column;
 	char *all_steps = (char*) calloc(max_steps_size, sizeof(char));
 	while (playing) {
+		fflush(stdout);
 		clear_screen();
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, tail);
@@ -68,8 +69,8 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 				printf("\t- Sequenza di passi fatti: %s\n", all_steps);
 				printf("\t- Numero di passi fatti: %ld\n", strlen(all_steps));
 				playing = false;
+				while(getchar() != '\n');
 				printf("(Premi invio per continuare)");
-				getchar();
 				getchar();
 			}
 		}
