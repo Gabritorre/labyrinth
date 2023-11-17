@@ -235,6 +235,8 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 	//eseguo il percorso deciso per raggirare il muro
 	for (int i = 0; i < better_path; i++) {
 		run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
+		clear_map_tail(map_info, map);
+		insert_tail_in_map(map_info, map, *tail);
 		print_map(map_info, map);
 /*		printf("\nsequenza: %s\n", *all_steps);*/
 	}
@@ -348,9 +350,13 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 					panic_counter += go_around_wall(map_info, map, 'v', move, all_steps, max_steps_size, points, tail, target_row, target_col);
 					//una volta raggirato il muro esegue la mossa che mi avvicina al target
 					run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
+					clear_map_tail(map_info, map);
+					insert_tail_in_map(map_info, map, *tail);
 					print_map(map_info, map);
 /*					printf("\nsequenza: %s\n", *all_steps);*/
 				}
+				clear_map_tail(map_info, map);
+				insert_tail_in_map(map_info, map, *tail);
 				print_map(map_info, map);
 				// printf("\nsequenza: %s\n", *all_steps);
 				continue;
@@ -403,6 +409,8 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 		else if (target_direction == 'i') {
 			return false;
 		}
+		clear_map_tail(map_info, map);
+		insert_tail_in_map(map_info, map, *tail);
 		print_map(map_info, map);
 		// printf("\nsequenza: %s\n", *all_steps);
 	}
@@ -448,6 +456,8 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 			}
 		}
 		run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
+		clear_map_tail(map_info, map);
+		insert_tail_in_map(map_info, map, *tail);
 		print_map(map_info, map);
 		// printf("\nsequenza: %s\n", *all_steps);
 	}
@@ -547,6 +557,7 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 	//raggiungimento dell'uscita
 	goto_target(map_info, map, &all_steps, &max_steps_size, map_info->exit_row, map_info->exit_column, &points, &tail);
 	if (!force_quit) {
+		printf("\n\n\nfull path:\n");
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, tail);
 		print_map(map_info, map);
