@@ -60,13 +60,13 @@ typedef struct {
 } map;
 
 
-vector* vector_create(int row, int column);
+vector* create_tail(int row, int column);
 
-void vector_append(vector** list, map* map_info);
+void tail_append(vector** list, map* map_info);
 
 void move_tail(map* map_info, vector** tail, char map[map_info->row][map_info->column]);
 
-void print_vector(vector *list);
+void print_tail(vector *list);
 
 void reset_nodes_till(vector **list, int node_row, int node_col, int *points, map* map_info, char map[map_info->row][map_info->column]);
 

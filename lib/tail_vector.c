@@ -9,7 +9,7 @@
  * @param column colonna del nodo da aggiungere
  * @return ritorna il nodo creato
 */
-vector* vector_create(int row, int column) {
+vector* create_tail(int row, int column) {
 	vector *node = (vector*) malloc(sizeof(vector));
 	if (!node)
 		exit(EXIT_FAILURE);
@@ -24,13 +24,13 @@ vector* vector_create(int row, int column) {
  * @param list la coda
  * @param map_info contiene le informazioni della mappa
  */
-void vector_append(vector** list, map* map_info) {
+void tail_append(vector** list, map* map_info) {
 	if (*list == NULL) {
-		*list = vector_create(map_info->player_row, map_info->player_column);
+		*list = create_tail(map_info->player_row, map_info->player_column);
 		map_info->tail_len += 1;
 	}
 	else {
-		vector_append(&((*list)->next), map_info);
+		tail_append(&((*list)->next), map_info);
 	}
 }
 
@@ -70,11 +70,11 @@ void move_tail(map* map_info, vector** list, char map[map_info->row][map_info->c
  * Stampa le coordinate dei nodi della coda
  * @param list la coda
 */
-void print_vector(vector *list) {
+void print_tail(vector *list) {
 	if (list == NULL)
 		return;
 	printf(" (%d %d)", list->row, list->column);
-	print_vector(list->next);
+	print_tail(list->next);
 }
 
 /**
@@ -156,4 +156,3 @@ void dealloc_vector(vector **list) {
 	dealloc_vector(&((*list)->next));
 	free((*list));
 }
-

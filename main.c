@@ -1,4 +1,3 @@
-// 895538
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -19,10 +18,10 @@ int list_maps(FILE *file) {
 	int map_counter = 0;
 	printf("MAPPE:\n");
 
-	if(character != EOF) {
+	if (character != EOF) {
 		printf("%d)\n", ++map_counter);
 		int new_line_counter = 0;
-		while(character != EOF) {
+		while (character != EOF) {
 			if(new_line_counter >= 2 && character != '\n') {
 				printf("%d)\n", ++map_counter);
 			}
@@ -32,7 +31,6 @@ int list_maps(FILE *file) {
 			else {
 				new_line_counter = 0;
 			}
-
 			printf("%c", character);
 			character = fgetc(file);
 		}
@@ -55,13 +53,14 @@ int get_map_info(FILE *file, map* map_info, int map_number) {
 	map_info->player_column = -1;
 	map_info->exit_row = -1;
 	map_info->exit_column = -1;
+
 	fseek(file, 0, SEEK_SET); //rileggo il file da capo
 	int map_start_char = -1; //indice del caratte di partenza della matrice scelta dall'utente
 	char character = fgetc(file);
 	int map_counter = 1;
 	bool saving = false; // flag che: se vero allora stiamo leggendo la mappa scelta dall'utente
 
-	if(map_number == 1) { // se la mappa scelta dall'utente è la prima allora inizzializzo a vero
+	if (map_number == 1) { // se la mappa scelta dall'utente è la prima allora inizzializzo a vero
 		saving = true;
 	}
 
@@ -69,21 +68,21 @@ int get_map_info(FILE *file, map* map_info, int map_number) {
 	int new_line_counter = 0; //conta i '\n'
 	int column_counter = 0;
 	for (int i = 0; character != EOF && searching; i++) { // interrompe se file è finito o se abbiamo finito di analizzare la mappa scelta dll'utente
-		if(map_start_char == -1 && saving) { // salvo la posizione del primo carattere della mappa scelta dall'utente
+		if (map_start_char == -1 && saving) { // salvo la posizione del primo carattere della mappa scelta dall'utente
 			map_start_char = i;
 		}
 
 		if (character == '\n') {
 			new_line_counter++;
-			if(saving) {
+			if (saving) {
 				map_info->row++;
 				if (map_info->column < column_counter) { //bisogna prendere come colonna massima il punto più a destra della mappa (considerando delle sporgenze nel mezzo)
 					map_info->column = column_counter;
 				}
 			}
-			if(new_line_counter >= 2) { // se si incontrano 2 '\n' di seguito allora si sta cambiando mappa
+			if (new_line_counter >= 2) { // se si incontrano 2 '\n' di seguito allora si sta cambiando mappa
 				map_counter++;
-				if(saving) { // se si stava leggendo la mappa interessata allora la mappa è finita e si può terminare di leggere il file
+				if (saving) { // se si stava leggendo la mappa interessata allora la mappa è finita e si può terminare di leggere il file
 					searching = false;
 					map_info->row -= 2;	//rimuove le ultime due righe vuote dal conto
 					break;
@@ -109,7 +108,6 @@ int get_map_info(FILE *file, map* map_info, int map_number) {
 		}
 		character = fgetc(file);
 	}
-
 	// printf("mappa: righe: %d colonne: %d\n", map_info->row, map_info->column);
 	// printf("pos. player: righa: %d colonna: %d\n", map_info->player_row, map_info->player_column);
 	// printf("pos. uscita: righa: %d colonna: %d\n", map_info->exit_row, map_info->exit_column);
@@ -136,11 +134,11 @@ void save_map(map* map_info, int map_line, char map[map_info->row][map_info->col
 	//salvo la mappa in una matrice
 	for (int row = 0; row < map_info->row; row++) {
 		for (int column = 0; column < map_info->column; column++) {
-			if (!fill_columns){ // finchè si stanno riempiendo le colonne rimanenti non si va avanti a leggere la mappa
+			if (!fill_columns) { // finchè si stanno riempiendo le colonne rimanenti non si va avanti a leggere la mappa
 				map[row][column] = character;
 				character = fgetc(file);
 			}
-			if (character == '\n'){
+			if (character == '\n') {
 				if(column+1 < map_info->column) { // nel caso in cui ci sia un a copo però non sono stato riempite tutte le colonne allora prima di continuare a leggere la mappa si riempiono di spazi le colonne rimanenti
 					map[row][column+1] = ' ';
 					fill_columns = true;
@@ -159,7 +157,7 @@ void save_map(map* map_info, int map_line, char map[map_info->row][map_info->col
  * @return 1 se la mappa non soddisfa i requisiti altrimenti restituisce 0
 */
 int check_map_proprieties(map* map_info) {
-	if (map_info->row <= 2 || map_info->column <= 2){
+	if (map_info->row <= 2 || map_info->column <= 2) {
 		printf("\tDimensioni della mappa non sufficienti\n");
 		return 1;
 	}
@@ -183,16 +181,17 @@ void take_map_cmd_line(map* map_info, char map[map_info->row][map_info->column])
 	map_info->player_column = -1;
 	map_info->exit_row = -1;
 	map_info->exit_column = -1;
+
 	for (int i = 0; i < map_info->row; i++) {
 		char line[map_info->column];
 		scanf(" %[^\n]%*c", line); //leggi l'input finche non trovi \n e quando viene trovata non viene salvata
 		for (int j = 0; j < map_info->column; j++) {
 			map[i][j] = line[j];
-			if(map[i][j] == PLAYER) {
+			if (map[i][j] == PLAYER) {
 				map_info->player_row = i;
 				map_info->player_column = j;
 			}
-			if(map[i][j] == EXIT) {
+			if (map[i][j] == EXIT) {
 				map_info->exit_row = i;
 				map_info->exit_column = j;
 			}
@@ -215,10 +214,10 @@ int take_map_text_file(map* map_info) {
 	int map_quantity = list_maps(file);
 	int user_map_number;
 
-	if(map_quantity) {
+	if (map_quantity) {
 		bool choose_map = true;
 		short counter_error = 0; // in caso di input errato il programma resetta per evitare cicli infiniti
-		while(choose_map && counter_error != 10) {
+		while (choose_map && counter_error != 10) {
 			printf("scegli la mappa con il numero corrispondente > ");
 			scanf(" %d", &user_map_number);
 			if (user_map_number > 0 && user_map_number <= map_quantity) {
@@ -235,11 +234,12 @@ int take_map_text_file(map* map_info) {
 			return -1;
 		}
 	}
-	else{
+	else {
 		printf("nessuna mappa trovata\n");
 		fclose(file);
 		return -1;
 	}
+
 	int map_line = get_map_info(file, map_info, user_map_number);
 	if (check_map_proprieties(map_info)) { // ripeti se la mappa scelta non soddisfa i requisiti necessari
 		fclose(file);
@@ -255,35 +255,36 @@ int take_map_text_file(map* map_info) {
 */
 int main(int argc, char *argv[]) {
 	bool play = true;
-	while(play) {
+	while (play) {
 		printf("inzio!\n");
 		char user_selection[50];
 		if (argc > 1 && strcmp(argv[1], "--cpu") == 0) {
 			user_selection[0] = '2';
 			play = false;
 		}
-		else{
+		else {
 			clear_screen();
 			title();
 			main_menu();
 			scanf(" %s", user_selection);
 			clear_screen();
 		}
+
 		//modalità interativa
 		if (user_selection[0] == '1' && user_selection[1] == 0) {
 			printf("\thai selezionato modalita' interattiva\n");
 			map map_info;
 			int map_line;
 			bool choosing_input = true;
-			while(choosing_input){
+			while (choosing_input) {
 				choosing_input = false;
 				input_type_menu();
 				scanf(" %s", user_selection);
 				//prende la mappa dal file di testo
-				if(user_selection[0] == '1' && user_selection[1] == 0){
+				if (user_selection[0] == '1' && user_selection[1] == 0) {
 					map_line = take_map_text_file(&map_info);
 					//mappa non valida / troppi valori non validi dati in input / nessuna mappa trovata
-					if(map_line == -1){
+					if (map_line == -1) {
 						choosing_input = true;
 						continue;
 					}
@@ -298,7 +299,7 @@ int main(int argc, char *argv[]) {
 
 					char map[map_info.row][map_info.column];
 					take_map_cmd_line(&map_info, map);
-					if(check_map_proprieties(&map_info)){
+					if (check_map_proprieties(&map_info)) {
 						choosing_input = true;
 						continue;
 					}
@@ -324,24 +325,24 @@ int main(int argc, char *argv[]) {
 			map map_info;
 			int map_line;
 			bool choosing_input = true;
-			while(choosing_input){
+			while (choosing_input) {
 				choosing_input = false;
 				bool force_quit = false;
 				if (argc > 1 && strcmp(argv[1], "--cpu") == 0) {
 					user_selection[0] = '2';
 					force_quit = true;
 				}
-				else{
+				else {
 					input_type_menu();
 					scanf(" %s", user_selection);
 					clear_screen();
 				}
 
 				//prende la mappa dal file di testo
-				if(user_selection[0] == '1' && user_selection[1] == 0){
+				if (user_selection[0] == '1' && user_selection[1] == 0) {
 					map_line = take_map_text_file(&map_info);
 					//mappa non valida / troppi valori non validi dati in input / nessuna mappa trovata
-					if(map_line == -1){
+					if (map_line == -1) {
 						choosing_input = true;
 						continue;
 					}
@@ -356,7 +357,7 @@ int main(int argc, char *argv[]) {
 
 					char map[map_info.row][map_info.column];
 					take_map_cmd_line(&map_info, map);
-					if(check_map_proprieties(&map_info)){
+					if (check_map_proprieties(&map_info)) {
 						choosing_input = true;
 						continue;
 					}

@@ -27,37 +27,38 @@ int run_ghost(map map_info, char map[map_info.row][map_info.column], char move, 
 		return 9999;
 	}
 
-	if(map[next_row][next_column] != WALL && map[next_row][next_column] != FLAG) { // se nel punto da guardare è libero allora fermati
+	if (map[next_row][next_column] != WALL && map[next_row][next_column] != FLAG) { // se nel punto da guardare è libero allora fermati
 		return 0;
 	}
 /*	continua a muoverti finchè trovi degli ostacoli dove stai guardando o dove ti stai muovendo*/
-	if (move == NORD){
-		if(map[next_row-1][map_info.player_column] == WALL){
+	if (move == NORD) {
+		if (map[next_row-1][map_info.player_column] == WALL) {
 			return 9999;
 		}
 		return run_ghost(map_info, map, move, vert_value - 1, horiz_value) + 1;
 	}
 
-	if (move == EST){
-		if(map[map_info.player_row][next_column+1] == WALL){
+	if (move == EST) {
+		if (map[map_info.player_row][next_column+1] == WALL) {
 			return 9999;
 		}
 		return run_ghost(map_info, map, move, vert_value, horiz_value + 1) + 1;
 	}
 
-	if (move == SUD){
-		if(map[next_row+1][map_info.player_column] == WALL){
+	if (move == SUD) {
+		if (map[next_row+1][map_info.player_column] == WALL) {
 			return 9999;
 		}
 		return run_ghost(map_info, map, move, vert_value + 1, horiz_value) + 1;
 	}
 
-	if (move == OVEST){
-		if(map[map_info.player_row][next_column-1] == WALL){
+	if (move == OVEST) {
+		if (map[map_info.player_row][next_column-1] == WALL) {
 			return 9999;
 		}
 		return run_ghost(map_info, map, move, vert_value, horiz_value - 1) + 1;
 	}
+	return 9999;
 }
 
 /**
@@ -72,7 +73,7 @@ int run_ghost(map map_info, char map[map_info.row][map_info.column], char move, 
  */
 bool green_light_to_target (map* map_info, char map[map_info->row][map_info->column], int target_col, int target_row, char direction) {
 	// se player e target non sono allineati in nessun modo
-	if(map_info->player_row != target_row && map_info->player_column != target_col) {
+	if (map_info->player_row != target_row && map_info->player_column != target_col) {
 		return false;
 	}
 	// se si è trovata una via libera
@@ -99,16 +100,17 @@ bool green_light_to_target (map* map_info, char map[map_info->row][map_info->col
 			return green_light_to_target(map_info, map, target_col, target_row + 1, direction);
 		}
 	}
+	return false;
 }
 
 void mark_dead_end(map* map_info, char map[map_info->row][map_info->column], int ghost1, int ghost2, int start_row, int start_column, char direction) {
-	if(direction == 'v') {
-		for(int i = start_row - ghost1; i <= start_row + ghost2; i++) {
+	if (direction == 'v') {
+		for (int i = start_row - ghost1; i <= start_row + ghost2; i++) {
 			map[i][start_column] = FLAG;
 		}
 	}
-	if(direction == 'h') {
-		for(int i = start_column - ghost1; i <= start_column + ghost2; i++) {
+	if (direction == 'h') {
+		for (int i = start_column - ghost1; i <= start_column + ghost2; i++) {
 			map[start_row][i] = FLAG;
 		}
 	}
@@ -136,13 +138,11 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 	int ghost1_steps, ghost2_steps, better_path;
 
 	bool dead_end = false;
-/*	printf("lancio i fantasmi\n");*/
-/*	printf("voglio andare a %c\n", move);*/
 	int vert_value, horiz_value; // rappresentano la direzione in cui guardare, vedere commento sulla funzione run_ghost
 	if (moving_direction == 'v') {
 		vert_value = 0;
 		horiz_value = 1;
-		if(move == OVEST){
+		if (move == OVEST) {
 			vert_value = 0;
 			horiz_value = -1;
 		}
@@ -151,8 +151,8 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 		ghost2_steps = run_ghost(*map_info, map, SUD, vert_value, horiz_value);
 
 		// se entrambe le strade non hanno uscita allora vado nella direzione opposta al muro
-		if(ghost1_steps >= 9999 && ghost2_steps >= 9999) {
-			if(move == EST) {
+		if (ghost1_steps >= 9999 && ghost2_steps >= 9999) {
+			if (move == EST) {
 				move = OVEST;
 			}
 			else if (move == OVEST) {
@@ -166,28 +166,27 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 			better_path = ghost1_steps;
 
 			//se ghost2 è migliore
-			if(ghost1_steps > ghost2_steps) {
+			if (ghost1_steps > ghost2_steps) {
 				better_path = ghost2_steps;
 				move = SUD;
 				// se però ghost1 è una strada possibile e il target è in alto
-				if (ghost1_steps < 9999 && target_row < map_info->player_row){
+				if (ghost1_steps < 9999 && target_row < map_info->player_row) {
 					better_path = ghost1_steps;
 					move = NORD;
 				}
 			}
 
 			// se ghost1 è meglio però ghost2 è una strada possibile e il target è in basso
-			if (ghost2_steps < 9999 && target_row > map_info->player_row){
+			if (ghost2_steps < 9999 && target_row > map_info->player_row) {
 				better_path = ghost2_steps;
 				move = SUD;
 			}
 		}
-
 	}
 	else if (moving_direction == 'h') {
 		vert_value = 1;
 		horiz_value = 0;
-		if(move == NORD){
+		if (move == NORD){
 			vert_value = -1;
 			horiz_value = 0;
 		}
@@ -195,8 +194,8 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 		ghost2_steps = run_ghost(*map_info, map, EST, vert_value, horiz_value);
 		// se entrambe le strade non hanno uscita allora vado nella direzione opposta al muro
 
-		if(ghost1_steps >= 9999 && ghost2_steps >= 9999) {
-			if(move == NORD) {
+		if (ghost1_steps >= 9999 && ghost2_steps >= 9999) {
+			if (move == NORD) {
 				move = SUD;
 			}
 			else if (move == SUD) {
@@ -210,18 +209,18 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 			move = OVEST;
 			better_path = ghost1_steps;
 			//se ghost2 è migliore
-			if(ghost1_steps > ghost2_steps) {
+			if (ghost1_steps > ghost2_steps) {
 				better_path = ghost2_steps;
 				move = EST;
 				// se però ghost1 è una strada possibile e il target è a sinistra
-				if (ghost1_steps < 9999 && target_col < map_info->player_column){
+				if (ghost1_steps < 9999 && target_col < map_info->player_column) {
 					better_path = ghost1_steps;
 					move = OVEST;
 				}
 			}
 
 			// se ghost1 è meglio però ghost2 è una strada possibile e il target è a destra
-			if (ghost2_steps < 9999 && target_col > map_info->player_column){
+			if (ghost2_steps < 9999 && target_col > map_info->player_column) {
 				better_path = ghost2_steps;
 				move = EST;
 			}
@@ -234,7 +233,7 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 	int player_column = map_info->player_column;
 
 	//eseguo il percorso deciso per raggirare il muro
-	for(int i = 0; i < better_path; i++) {
+	for (int i = 0; i < better_path; i++) {
 		run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 		print_map(map_info, map);
 /*		printf("\nsequenza: %s\n", *all_steps);*/
@@ -242,22 +241,18 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 	if (dead_end) {
 		mark_dead_end(map_info, map, ghost1_steps - 9999, ghost2_steps - 9999, player_row, player_column, moving_direction);
 	}
-	else if(ghost1_steps >= 9999) {
+	else if (ghost1_steps >= 9999) {
 		mark_dead_end(map_info, map, ghost1_steps - 9999, 0, player_row, player_column, moving_direction);
 	}
-	else if(ghost2_steps >= 9999) {
+	else if (ghost2_steps >= 9999) {
 		mark_dead_end(map_info, map, 0, ghost2_steps - 9999, player_row, player_column, moving_direction);
 	}
-/*	print_map(map_info, map);*/
 /*	printf("\nsequenza: %s\n", *all_steps);*/
-
-/*	getchar();*/
-/*	getchar();*/
 
 	return better_path;
 }
 
-/*
+/**
  * Controlla quanti muri ci nelle celle adiacenti ad un item passato per parametro
  * @param map_info contiene le informazioni della mappa
  * @param map la mappa
@@ -268,16 +263,16 @@ int go_around_wall(map* map_info, char map[map_info->row][map_info->column], cha
 int inspect_item(map* map_info, char map[map_info->row][map_info->column], int item_row, int item_col) {
 	int counter = 0;
 
-	if(map[item_row + 1][item_col] == WALL && item_row + 1 < map_info->row) {
+	if (map[item_row + 1][item_col] == WALL && item_row + 1 < map_info->row) {
 		counter++;
 	}
-	if(map[item_row - 1][item_col] == WALL && item_row - 1 >= 0) {
+	if (map[item_row - 1][item_col] == WALL && item_row - 1 >= 0) {
 		counter++;
 	}
-	if(map[item_row][item_col + 1] == WALL && item_col + 1 < map_info->column) {
+	if (map[item_row][item_col + 1] == WALL && item_col + 1 < map_info->column) {
 		counter++;
 	}
-	if(map[item_row][item_col - 1] == WALL && item_col - 1 >= 0) {
+	if (map[item_row][item_col - 1] == WALL && item_col - 1 >= 0) {
 		counter++;
 	}
 	return counter;
@@ -320,7 +315,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 	bool free_horizontal = green_light_to_target(map_info, map, target_col, target_row, 'h');
 	//se il target è una moneta e questa moneta èd è presente una strada retta libera dal player alla moneta
 	if (map[target_row][target_col] == BONUS_POINTS && (free_vertical || free_horizontal)) {
-		if(target_col == map_info->player_column){
+		if (target_col == map_info->player_column) {
 			target_direction = 'v';
 		}
 		else if (target_row == map_info->player_row) {
@@ -342,14 +337,14 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 		panic_counter++;
 		if (target_direction == 'h') { // vogliamo far corrispondere la riga del giocatore con quella dell'uscita
 			// printf("accesso orizzontale\n");
-			if (target_row == map_info->player_row){
+			if (target_row == map_info->player_row) {
 				if (target_col > map_info->player_column) {
 					move = EST;
 				}
 				else if (target_col < map_info->player_column) {
 					move = OVEST;
 				}
-				if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
+				if (!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
 					panic_counter += go_around_wall(map_info, map, 'v', move, all_steps, max_steps_size, points, tail, target_row, target_col);
 					//una volta raggirato il muro esegue la mossa che mi avvicina al target
 					run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
@@ -368,7 +363,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				//mi sposto sù
 				move = NORD;
 			}
-			if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
+			if (!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
 				panic_counter += go_around_wall(map_info, map, 'h', move, all_steps, max_steps_size, points, tail, target_row, target_col);
 				run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 			}
@@ -381,7 +376,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				else if (target_row < map_info->player_row) {
 					move = NORD;
 				}
-				if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
+				if (!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
 					panic_counter += go_around_wall(map_info, map, 'h', move, all_steps, max_steps_size, points, tail, target_row, target_col);
 					//una volta raggirato il muro esegue la mossa che mi avvicina al target
 					run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
@@ -400,7 +395,7 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 				//mi sposto a sinistra
 				move = OVEST;
 			}
-			if(!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
+			if (!run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail)) {
 				panic_counter += go_around_wall(map_info, map, 'v', move, all_steps, max_steps_size, points, tail, target_row, target_col);
 				run_move(map_info, map, move, points, all_steps, max_steps_size, true, tail);
 			}
@@ -411,20 +406,18 @@ bool goto_target(map* map_info, char map[map_info->row][map_info->column], char*
 		print_map(map_info, map);
 		// printf("\nsequenza: %s\n", *all_steps);
 	}
-/*	printf("\nho semaforo verde!!!!\n");*/
 
-
-	if(panic_counter >= (map_info->row + map_info->column)*2){
+	if (panic_counter >= (map_info->row + map_info->column) * 2) {
 		return true;
 	}
 
 	// dopo essersi allineati con il target è possibile andare dritto verso di esso
 	int steps_to_target = 0; // calcolo quanti passi mancano per raggiungere il target
 	if (target_direction == 'h') {
-		if(target_col > map_info->player_column) {
+		if (target_col > map_info->player_column) {
 			steps_to_target = target_col - map_info->player_column;
 		}
-		else{
+		else {
 			steps_to_target = map_info->player_column - target_col;
 		}
 	}
@@ -482,25 +475,25 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 	//calcolo la colonna di arrivo e di partenza per la scannerizzazione
 	if (map_info->player_column > map_info->exit_column) {
 		column = map_info->player_column + 10;
-		if(map_info->exit_column - 10 > 0){
+		if (map_info->exit_column - 10 > 0) {
 			further_column = map_info->exit_column - 10;
 		}
 		else {
 			further_column = 0;
 		}
 	}
-	else{
+	else {
 		column = map_info->player_column - 10;
-		if(map_info->exit_column + 10 <= map_info->column){
+		if (map_info->exit_column + 10 <= map_info->column) {
 			further_column = map_info->exit_column + 10;
 		}
-		else{
+		else {
 			further_column = map_info->column;
 		}
 	}
 
 	//evito di uscire dai limiti della mappa
-	if(column <= 0) {
+	if (column <= 0) {
 		column = 1;
 	}
 	else if (column >= map_info->column) {
@@ -511,24 +504,24 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 	//-> cambio colonna -> dall'alto al basso ecc...
 	int start = 0, end = map_info->row - 1;
 	bool panic = false; // se si avvera il panic interrompe la scannerizzazione e si dirige verso l'uscita
-	while(deep_inspect) {
-		if (panic){
+	while (deep_inspect) {
+		if (panic) {
 			break;
 		}
 		int row = start;
-		while(row != end) {
+		while (row != end) {
 			if (panic){
 				break;
 			}
-			if(map[row][column] == DRILL){
+			if (map[row][column] == DRILL) {
 				// printf("trapano in %d %d\n", row, column);
 				panic = goto_target(map_info, map, &all_steps, &max_steps_size, row, column, &points, &tail);
 			}
-			else if(map[row][column] == BONUS_POINTS) {
+			else if (map[row][column] == BONUS_POINTS) {
 				// printf("\t\tMONETA IN %d %d\n", row, column);
 				panic = goto_target(map_info, map, &all_steps, &max_steps_size, row, column, &points, &tail);
 			}
-			if(row < end){
+			if (row < end){
 				row++;
 			}
 			else {
@@ -552,9 +545,8 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 	}
 
 	//raggiungimento dell'uscita
-/*	printf("\n\n\t\t vado all'uscita\n");*/
 	goto_target(map_info, map, &all_steps, &max_steps_size, map_info->exit_row, map_info->exit_column, &points, &tail);
-	if(!force_quit){
+	if (!force_quit) {
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, tail);
 		print_map(map_info, map);
@@ -563,11 +555,10 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 	printf("\t- Punti: %d\n", points);
 	printf("\t- Sequenza di passi fatti: %s\n", all_steps);
 	printf("\t- Numero di passi fatti: %ld\n", strlen(all_steps));
-	if(!force_quit){
+	if (!force_quit) {
 		printf("premi invio per continuare");
 		getchar();
 		getchar();
 	}
 	free(all_steps);
 }
-

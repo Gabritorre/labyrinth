@@ -11,14 +11,14 @@
  * 2 = comando inserito non valido \n
  * 0 = corretto
  */
-int command_interpreter (char command, char *move) {
-	printf("comando: %d\n", command);
+int command_interpreter(char command, char *move) {
+	// printf("comando: %d\n", command);
 	if (command == QUIT) {
 		return 1;
 	}
 	else {
 		if (toupper(command) != NORD && toupper(command) != SUD && toupper(command) != EST && toupper(command) != OVEST) {
-			printf("\nerrore dato da: %d %c\n", command, command);
+			// printf("\nerrore dato da: %d %c\n", command, command);
 			return 2;
 		}
 		*move = toupper(command);
@@ -38,7 +38,7 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 	map_info->drill_counter = 0;
 	int max_steps_size = map_info->row + map_info->column;
 	char *all_steps = (char*) calloc(max_steps_size, sizeof(char));
-	while(playing) {
+	while (playing) {
 		clear_screen();
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, tail);
@@ -50,15 +50,15 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 		printf("Inserisci mossa > ");
 		scanf(" %c", &command);
 		int ci_result = command_interpreter(command, &move);
-		if(ci_result == 1) {
+		if (ci_result == 1) {
 			printf("Uscito dalla partita\n");
 			playing = false;
 		}
 		else if (ci_result == 2) {
 			printf("La sequenza inserita contiene valori non corretti, riprova");
 		}
-		else{
-			if(run_move(map_info, map, move, &points, &all_steps, &max_steps_size, false, &tail)) {
+		else {
+			if (run_move(map_info, map, move, &points, &all_steps, &max_steps_size, false, &tail)) {
 				clear_screen();
 				clear_map_tail(map_info, map);
 				insert_tail_in_map(map_info, map, tail);

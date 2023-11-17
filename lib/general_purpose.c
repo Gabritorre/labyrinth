@@ -25,14 +25,14 @@ void clear_map_tail(map* map_info, char map[map_info->row][map_info->column]) {
  * @param tail vettore contentente i nodi della coda
 */
 void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column], vector* tail) {
-	if (tail == NULL) // fine lista, cioè lista vuota
+	if (tail == NULL) {// fine lista, cioè lista vuota
 		return;
-	if(tail->row != -1){//le il pezzo di coda esiste
-		if (map[tail->row][tail->column] != FLAG){
+	}
+	if (tail->row != -1) { // le il pezzo di coda esiste
+		if (map[tail->row][tail->column] != FLAG) {
 			map[tail->row][tail->column] = TAIL;
 		}
 	}
-
 	insert_tail_in_map(map_info, map, tail->next);
 }
 
@@ -44,8 +44,7 @@ void insert_tail_in_map(map* map_info, char map[map_info->row][map_info->column]
  * @param move la mossa da appendere
  */
 char* build_sequence (char **steps, int *max_steps_size, char move) {
-	if (strlen(*steps) >= *max_steps_size-1){
-/*		printf("\n\trealloco\n");*/
+	if (strlen(*steps) >= *max_steps_size-1) {
 		*max_steps_size += 5;
 	}
 
@@ -77,9 +76,9 @@ char* build_sequence (char **steps, int *max_steps_size, char move) {
 void check_next_step(map* map_info, char map[map_info->row][map_info->column], char next_step, bool *win, int *points, vector** tail, int next_row, int next_column) {
 	if (next_step == BONUS_POINTS) {
 		*points += QUANTITY_BONUS;
-		vector_append(tail, map_info);
+		tail_append(tail, map_info);
 	}
-	else{
+	else {
 		if (next_step == EXIT) {
 			*win = true;
 		}
@@ -88,7 +87,7 @@ void check_next_step(map* map_info, char map[map_info->row][map_info->column], c
 			//calcolo la metà della coda
 			int middle_node = map_info->tail_len/2;
 			// trovo il nodo che sta in mezzo alla coda
-			if(map_info->tail_len % 2 != 0) {
+			if (map_info->tail_len % 2 != 0) {
 				middle_node = (map_info->tail_len + 1) / 2;
 			}
 			// elimino la coda fino a metà
@@ -140,9 +139,9 @@ int run_move(map* map_info, char map[map_info->row][map_info->column], char move
 	char next_step; //conterrà il contenuto della cella del passo successivo
 	switch (move) {
 		case NORD:
-			if(map_info->player_row - 1 >= 0){
+			if (map_info->player_row - 1 >= 0) {
 				next_step = map[map_info->player_row - 1][map_info->player_column]; // ottengo il carattere contenuto nel nuovo passo da fare
-				if((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
+				if ((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row - 1, map_info->player_column);
 
 					*points -= 1;
@@ -151,72 +150,75 @@ int run_move(map* map_info, char map[map_info->row][map_info->column], char move
 					map[map_info->player_row][map_info->player_column] = PLAYER;
 
 					*steps = build_sequence(steps, steps_size, NORD);
-					if(ai_flag) {
+					if (ai_flag) {
 						return 1;
 					}
 				}
 			}
-			if(ai_flag) {
+			if (ai_flag) {
 				return 0;
 			}
 			break;
 		case EST:
-			if(map_info->player_column + 1 < map_info->column){
+			if (map_info->player_column + 1 < map_info->column) {
 				next_step = map[map_info->player_row][map_info->player_column + 1];
-				if((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
+				if ((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row, map_info->player_column + 1);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column += 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+
 					*steps = build_sequence(steps, steps_size, EST);
-					if(ai_flag) {
+					if (ai_flag) {
 						return 1;
 					}
 				}
 			}
-			if(ai_flag) {
+			if (ai_flag) {
 				return 0;
 			}
 			break;
 		case SUD:
-			if(map_info->player_row + 1 < map_info->row){
+			if (map_info->player_row + 1 < map_info->row) {
 				next_step = map[map_info->player_row + 1][map_info->player_column];
-				if((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
+				if ((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row + 1, map_info->player_column);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_row += 1;
-					map[map_info->player_row][map_info->player_column] = PLAYER, &tail;
+					map[map_info->player_row][map_info->player_column] = PLAYER;
+
 					*steps = build_sequence(steps, steps_size, SUD);
-					if(ai_flag) {
+					if (ai_flag) {
 						return 1;
 					}
 				}
 			}
-			if(ai_flag) {
+			if (ai_flag) {
 				return 0;
 			}
 			break;
 		case OVEST:
-			if(map_info->player_column - 1 >= 0){
+			if (map_info->player_column - 1 >= 0) {
 				next_step = map[map_info->player_row][map_info->player_column - 1];
-				if((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
+				if ((next_step != WALL || map_info->drill_counter > 0) && next_step != FLAG) {
 					check_next_step(map_info, map, next_step, &win, points, tail, map_info->player_row, map_info->player_column - 1);
 
 					*points -= 1;
 					map[map_info->player_row][map_info->player_column] = STEP;
 					map_info->player_column -= 1;
 					map[map_info->player_row][map_info->player_column] = PLAYER;
+
 					*steps = build_sequence(steps, steps_size, OVEST);
-					if(ai_flag) {
+					if (ai_flag) {
 						return 1;
 					}
 				}
 			}
-			if(ai_flag) {
+			if (ai_flag) {
 				return 0;
 			}
 			break;
@@ -311,7 +313,8 @@ void print_map(map* map_info, char map[map_info->row][map_info->column]) {
 	}
 	clear_map_tail(map_info, map);
 }
-/**Pulisce lo schermo
+/**
+ * Pulisce lo schermo
 */
 void clear_screen() {
     #if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
