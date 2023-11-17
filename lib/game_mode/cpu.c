@@ -563,11 +563,11 @@ void cpu_algorithm(map* map_info, char map[map_info->row][map_info->column], boo
 		print_map(map_info, map);
 		printf("\n");
 	}
-	printf("\t- Punti: %d\n", points);
-	printf("\t- Sequenza di passi fatti: %s\n", all_steps);
-	printf("\t- Numero di passi fatti: %ld\n", strlen(all_steps));
+	printf("\t- Score: %d\n", points);
+	printf("\t- Sequence of steps: %s\n", all_steps);
+	printf("\t- Number of steps: %ld\n", strlen(all_steps));
 	if (!force_quit) {
-		printf("premi invio per continuare");
+		printf("Press enter to continue");
 		getchar();
 		getchar();
 	}

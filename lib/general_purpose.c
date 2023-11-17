@@ -242,54 +242,54 @@ void title() {
 
 /**Stampa il menu principale del gioco*/
 void main_menu() {
-	printf("Scegli modalita' di gioco:\n");
-	printf("1: Modalita' interattiva\n");
-	printf("2: Modalita' IA\n");
-	printf("3: Info sul gioco\n");
-	printf("4: Esci\n");
-	printf("Premi il numero corrispondente > ");
+	printf("Choose the game mode:\n");
+	printf("1: Interactive mode\n");
+	printf("2: CPU mode\n");
+	printf("3: About the game\n");
+	printf("4: Quit\n");
+	printf("Insert the corresponding number > ");
 }
 
 /**Stampa il menu di scelta di come impostare la mappa (se sceglierne una esistente oppure passarne una da input)*/
 void input_type_menu() {
-	printf("Scegli tipo di input della mappa:\n");
-	printf("1: Scegli mappe del gioco\n");
-	printf("2: Inserisci mappa da linea di comando\n");
-	printf("3: Indietro\n");
-	printf("Premi il numero corrispondente > ");
+	printf("Choose how to insert the map:\n");
+	printf("1: Choose from predefined maps\n");
+	printf("2: Insert map by command line\n");
+	printf("3: Back\n");
+	printf("Insert the corresponding number > ");
 }
 
 /**Stampa le informazione del gioco*/
 void print_game_info() {
 	title();
-	printf("Snake labyrinth è un gioco che presenta due modalità:\n");
-	printf("\tModalità interattiva: si tratta di far uscire il proprio personaggio dal labirinto muovendonsi in quattro direzioni.\n"
-			"\tLe direzioni sono associate ai seguenti tasti:\n"
-				"\t\t- 'W'/'w' nord (movimento verso l'alto)\n"
-				"\t\t- 'A'/'a' ovest (movimento verso sinistra)\n"
-				"\t\t- 'S'/'s' sud (movimento verso il basso)\n"
-				"\t\t- 'D'/'d' est (movimento verso destra)\n");
-	printf("\tIl personaggio parte da una base di 1000 punti.\n\tUna volta usciti dal labirinto si ottiene un punteggio che si basa su quanti movimenti sono stati fatti e in base a dei modificatori che si trovano nella mappa:\n"
-			"\tI modificatori sono i seguenti:\n"
-				"\t\t- '$' aggiunge 10 punti al punteggio, e aggiunge un pezzo di coda a Snake\n"
-				"\t\t- '!' dimezza il punteggio ottenuto dalle monete, quindi dimezza la dimensione della coda\n"
-				"\t\t- ogni movimento toglie un punto\n");
-	printf("\tAltri simboli che sono presenti nel gioco sono:\n"
-				"\t\t- 'o' il proprio personaggio\n"
-				"\t\t- 'x' un pezzo della coda di Snake\n"
-				"\t\t- '#' parete della mappa\n"
-				"\t\t- '/' (solo in modalità cpu) flag che vengono messi per marcare vicoli ciechi\n"
-				"\t\t- '_' uscita della mappa\n"
-				"\t\t- 'T' trapano, una volta preso da la possibilità di bucare tre muri\n\n");
+	printf("Snake labyrinth is a game with two game mode:\n");
+	printf("\tInteractive mode: your goal is to get Snake out of the labyrinth by moving in four directions.\n"
+			"\tThe directions with the corresponding keybindings are:\n"
+				"\t\t- 'W'/'w' north (upward movement)\n"
+				"\t\t- 'A'/'a' west (leftward movement)\n"
+				"\t\t- 'S'/'s' south (downward movement)\n"
+				"\t\t- 'D'/'d' east (rightward movement)\n");
+	printf("\tYou start with a base of 1000 points.\n\tOnce you exit the labyrinth, you will receive the total score based on your path and on some modifiers that are placed in the map:\n"
+			"\tThe modifiers are the following:\n"
+				"\t\t- '$' you get 10 extra points, and a piece of tail is added to Snake\n"
+				"\t\t- '!' halves the points earned with the coins, and also halves the length of Snake's tail\n"
+				"\t\t- Each movement decreases the score by 1\n");
+	printf("\tOther symbols present in the game are:\n"
+				"\t\t- 'o' The head of Snake\n"
+				"\t\t- 'x' A piece of Snake's tail\n" 
+				"\t\t- '#' A piece of wall\n"
+				"\t\t- '/' (only in CPU mode) A flag placed to mark dead ends\n"
+				"\t\t- '_' The exit of the labyrinth\n"
+				"\t\t- 'T' Drill, Once you get it, allows you to break three walls\n\n");
 
-	printf("\tModalità CPU: in questa modalità la CPU proverà ad uscire da un labirinto che gli viene dato.\n");
-	printf("\t\te' possibile aggiungere o creare le proprie mappe inserendole nel file di testo \"maps.txt\" (separare ogni mappa da una riga vuota e lasciare due righe vuote alla fine del file)\n"
-			"\t\toppure si puo' inserire direttamente una mappa da linea di comando seguendo il seguente formato:\n");
+	printf("\tCPU Mode: In this mode, an algorithm attempts to solve a given labyrinth\n");
+	printf("\t\tIt is possible to add your own maps by including them in the \"maps.txt\" file (ensure to separate each map with an empty line and leave 2 empty line at the end of the file)\n"
+			"\t\talternatively, you can insert a temporary map directly through the command line using the following format:\n");
 
-	printf("\t\t<numero di colonne>\n"
-			"\t\t<numero di righe>\n"
-			"\t\t<caratteri della mappa> inseriti una riga alla volta\n\n");
-	printf("\t\tesempio:\n"
+	printf("\t\t<number of columns>\n"
+			"\t\t<number of rows>\n"
+			"\t\t<lines of the map> one line at a time\n\n");
+	printf("\t\texample:\n"
 			"\t\t13\n"
 			"\t\t5\n"
 			"\t\t#o##########\n"

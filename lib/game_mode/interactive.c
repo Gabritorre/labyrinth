@@ -44,19 +44,19 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 		clear_map_tail(map_info, map);
 		insert_tail_in_map(map_info, map, tail);
 		print_map(map_info, map);
-		printf("\nPUNTEGGIO: %d\n", points);
-		printf("TRAPANI: %d\n", map_info->drill_counter);
+		printf("\nSCORE: %d\n", points);
+		printf("DRILL: %d\n", map_info->drill_counter);
 		char move;
 		char command;
-		printf("Inserisci mossa > ");
+		printf("Insert next move > ");
 		scanf(" %c", &command);
 		int ci_result = command_interpreter(command, &move);
 		if (ci_result == 1) {
-			printf("Uscito dalla partita\n");
+			printf("Exited the game\n");
 			playing = false;
 		}
 		else if (ci_result == 2) {
-			printf("La sequenza inserita contiene valori non corretti, riprova");
+			printf("The inserted sequence contains illegal values. Please retry");
 		}
 		else {
 			if (run_move(map_info, map, move, &points, &all_steps, &max_steps_size, false, &tail)) {
@@ -64,13 +64,13 @@ void start_interactive_mode(map* map_info, char map[map_info->row][map_info->col
 				clear_map_tail(map_info, map);
 				insert_tail_in_map(map_info, map, tail);
 				print_map(map_info, map);
-				printf("\n\tHAI RAGGIUNTO L'USCITA!\n");
-				printf("\t- Hai fatto %d punti\n", points);
-				printf("\t- Sequenza di passi fatti: %s\n", all_steps);
-				printf("\t- Numero di passi fatti: %ld\n", strlen(all_steps));
+				printf("\n\tYOU REACHED THE EXIT!\n");
+				printf("\t- You scored %d points\n", points);
+				printf("\t- Sequence of steps: %s\n", all_steps);
+				printf("\t- Number of steps: %ld\n", strlen(all_steps));
 				playing = false;
-				while(getchar() != '\n');
-				printf("(Premi invio per continuare)");
+				while (getchar() != '\n');
+				printf("(Press enter to continue)");
 				getchar();
 			}
 		}

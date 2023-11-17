@@ -16,7 +16,7 @@
 int list_maps(FILE *file) {
 	char character = fgetc(file);
 	int map_counter = 0;
-	printf("MAPPE:\n");
+	printf("MAPS:\n");
 
 	if (character != EOF) {
 		printf("%d)\n", ++map_counter);
@@ -124,7 +124,7 @@ void save_map(map* map_info, int map_line, char map[map_info->row][map_info->col
 	FILE *file;
 	file = fopen("maps.txt", "r");
 	if (NULL == file) {
-		printf("\n\tErrore nell'apertura del file. \n\tcontrollare che ci sia il file delle mappe nella stessa cartella del file eseguibile\n");
+		printf("\n\tError while opening the file. \n\tPlease check if the maps.txt file is in the same directory of the executable file\n");
 		exit(1);
 	}
 	fseek(file, map_line, SEEK_SET); //rileggo il file dalla mappa scelta dall'utente
@@ -158,15 +158,15 @@ void save_map(map* map_info, int map_line, char map[map_info->row][map_info->col
 */
 int check_map_proprieties(map* map_info) {
 	if (map_info->row <= 2 || map_info->column <= 2) {
-		printf("\tDimensioni della mappa non sufficienti\n");
+		printf("\tThe map dimensions are not large enough\n");
 		return 1;
 	}
 	if (map_info->player_row == -1 || map_info->player_column == -1) {
-		printf("\tGiocatore non trovato nella mappa\n");
+		printf("\tPlayer not found in the map\n");
 		return 1;
 	}
 	if (map_info->exit_row == -1 || map_info->exit_column == -1) {
-		printf("\tUscita non trovata nella mappa\n");
+		printf("\tExit not found in the map\n");
 		return 1;
 	}
 	return 0;
@@ -208,7 +208,7 @@ int take_map_text_file(map* map_info) {
 	FILE *file;
 	file = fopen("maps.txt", "r");
 	if (NULL == file) {
-		printf("\n\tErrore nell'apertura del file\n");
+		printf("\n\tError while opening the file\n");
 		exit(1);
 	}
 	int map_quantity = list_maps(file);
@@ -218,24 +218,24 @@ int take_map_text_file(map* map_info) {
 		bool choose_map = true;
 		short counter_error = 0; // in caso di input errato il programma resetta per evitare cicli infiniti
 		while (choose_map && counter_error != 10) {
-			printf("scegli la mappa con il numero corrispondente > ");
+			printf("Choose the map using the corresponding number > ");
 			scanf(" %d", &user_map_number);
 			if (user_map_number > 0 && user_map_number <= map_quantity) {
 				choose_map = false;
 			}
 			else {
-				printf("valore inserito non valido. Riprova...\n");
+				printf("The inserted value is not valid. Please retry...\n");
 				counter_error++;
 			}
 		}
 		if (counter_error == 10) {
-			printf("Troppi valori errati inseriti\n");
+			printf("Error: Too many invalid values inserted\n");
 			getchar(); // pulisce l'input buffer
 			return -1;
 		}
 	}
 	else {
-		printf("nessuna mappa trovata\n");
+		printf("No maps found");
 		fclose(file);
 		return -1;
 	}
@@ -256,7 +256,7 @@ int take_map_text_file(map* map_info) {
 int main(int argc, char *argv[]) {
 	bool play = true;
 	while (play) {
-		printf("inzio!\n");
+		printf("Game started!\n");
 		char user_selection[50];
 		if (argc > 1 && strcmp(argv[1], "--cpu") == 0) {
 			user_selection[0] = '2';
@@ -272,7 +272,7 @@ int main(int argc, char *argv[]) {
 
 		//modalità interativa
 		if (user_selection[0] == '1' && user_selection[1] == 0) {
-			printf("\thai selezionato modalita' interattiva\n");
+			printf("\tInteractive mode selected\n");
 			map map_info;
 			int map_line;
 			bool choosing_input = true;
@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
 				else if (user_selection[0] == '3' && user_selection[1] == 0) {}
 
 				else {
-					printf("\n\tL'input inserito non e' valido, riprova...(premi invio)\n");
+					printf("\n\tInput not valid, please retry...(press enter)\n");
 					choosing_input = true;
 					getchar();
 					getchar();
@@ -320,7 +320,7 @@ int main(int argc, char *argv[]) {
 		//modalità CPU
 		else if (user_selection[0] == '2' && user_selection[1] == 0) {
 			if (!(argc > 1 && strcmp(argv[1], "--cpu") == 0)) {
-				printf("\thai selezionato modalita' CPU\n");
+				printf("\tCPU mode selected\n");
 			}
 			map map_info;
 			int map_line;
@@ -367,7 +367,7 @@ int main(int argc, char *argv[]) {
 				else if (user_selection[0] == '3' && user_selection[1] == 0) {}
 
 				else {
-					printf("\n\tL'input inserito non e' valido, riprova...\n\n");
+					printf("\n\tInput not valid, please retry...(press enter)\n");
 					choosing_input = true;
 					getchar();
 					getchar();
@@ -377,18 +377,18 @@ int main(int argc, char *argv[]) {
 
 		else if (user_selection[0] == '3' && user_selection[1] == 0) {
 			print_game_info();
-			printf("\npremi invio per continuare");
+			printf("\nPress enter to continue");
 			getchar();
 			getchar();
 		}
 
 		else if (user_selection[0] == '4' && user_selection[1] == 0) {
-			printf("Ciao ciao!\n");
+			printf("bye bye!\n");
 			play = false;
 		}
 
 		else {
-			printf("\n\tL'input inserito non e' valido, riprova...(premi invio)\n\n");
+			printf("\n\tInput not valid, please retry...(press enter)\n");
 			getchar();
 			getchar();
 		}

@@ -1,4 +1,33 @@
-﻿# Spiegazione algoritmo cpu
+﻿# CPU algorithm
+
+## General description
+
+I tried to build my own algorithm to solve a given labyrinth with a decent score.
+Since I didn't want to copy existing algorithms that solve mazes, I tried to write one on my own. I wasn't able to make it perfect (it may fail to solve some, and it doesn't achieve the best score), but I am still satisfied with it.
+
+here is a brief explanation of how it works:
+
+1. Analyze the map column by column in search of a target, which can be either a drill or a coin.
+2. Once the coordinates of the target are found, the algorithm identifies whether that target is accessible horizontally (right or left) or vertically (up or down).
+For example, if the target has walls on the left and right, then it is accessible vertically.
+3. After doing this, the algorithm tries to align Snake with the target either vertically or horizontally, depending on the result of step 2. If, in the attempt to align, a wall is encountered, the algorithm tries to navigate around it.
+	- For the circumvention, the algorithm 'launches' two ghosts in opposite directions, both attempting to see which side can bypass the wall. If both indicate that it's possible to bypass the wall, the algorithm chooses the more convenient route (determined based on the target's position). However, if both routes are not viable (leading to dead ends), then Snake backtracks by one step and places a flag '/' at that point and also on the paths taken by the ghosts, indicating that those points are not valid.
+4. After aligning itself and verifying that there are no obstacles between Snake and the target, Snake moves directly toward the target.
+5. Steps 1 to 4 are repeated until the map analysis is complete. Once finished, the exit of the labyrinth is set as the target, and steps 2 to 4 are executed one last time.
+
+## algorithm limitations
+
+Here are some notes and limitations that I am aware of in my algorithm:
+
+1. Difficulty in handling dead ends:
+With the implementation of the '/' flags to recognize dead ends, it is possible to navigate away from a dead end and explore other paths. However, in cases where the path leading to a dead end is sufficiently complex, it is possible for Snake to inadvertently trap itself in an area from which it cannot escape.
+2. Self-eating by Snake:
+Given the intrinsic characteristic of the algorithm to frequently backtrack, to avoid falling into infinite loops, I opted to allow Snake to eat its own tail, resulting in a loss of bonus points.
+3. Panic counter:
+To reduce the possibility of infinite loops, I implemented a 'panic counter', which is a step counter to reach a target. If this counter exceeds a maximum limit (determined based on the size of the map) to reach the target, the algorithm stops and is forced to reach the exit, ignoring any other remaining targets on the map.
+
+
+# Spiegazione algoritmo cpu
 
 ## Descrizione generale
 
